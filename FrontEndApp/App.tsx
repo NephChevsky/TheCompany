@@ -1,9 +1,13 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React from "react";
+import {
+	Text,
+	View
+} from "react-native";
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {CompanyName} from "@env";
 import LoginScreen from "./screens/Login";
+import HomeScreen from "./screens/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,8 +26,13 @@ export default function App() {
 			<Stack.Screen
 				name="LoginScreen"
 				component={LoginScreen}
-				options={{ title: CompanyName + ' - Login' }}
+				options={{ title: CompanyName + ' - Login'}}
 			/>
+			<Stack.Screen
+				name="HomeScreen"
+				component={HomeScreen}
+				options={{ title: CompanyName + ' - Home'}}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

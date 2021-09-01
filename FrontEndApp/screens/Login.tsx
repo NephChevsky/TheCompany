@@ -12,8 +12,12 @@ import { User } from "../models/User";
 import {ApiUrl} from "@env";
 import axios from 'axios';
 import DeviceStorage from "../services/DeviceStorage";
+import { useNavigation } from '@react-navigation/native'
+
+import HomeScreen from "./Home";
 
 export default function LoginScreen() {
+	const navigation = useNavigation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
@@ -33,6 +37,7 @@ export default function LoginScreen() {
 	const signup = () => {
 		if (!signUpToggle)
 		{
+			initErrors();
 			setSignUpToggle(true);
 		}
 		else
@@ -46,7 +51,7 @@ export default function LoginScreen() {
 
 				const headers = {
 					'Content-Type': 'application/json',
-					//'Authorization': 'JWT fefege...'
+					//'Authorization': 'JWT fefege..'
 				}
 				axios.post(ApiUrl + "User/Register/", user, { headers: headers})
 					.then((response) => {
@@ -61,7 +66,7 @@ export default function LoginScreen() {
 						}
 					})
 					.catch((error) => {
-						if (error.response.status == 409)
+						if (error.response && error.response.status == 409)
 						{
 							errors.emailAlreadyExists = true;
 							setErrors({...errors});
@@ -84,13 +89,13 @@ export default function LoginScreen() {
 
 			const headers = {
 				'Content-Type': 'application/json',
-				//'Authorization': 'JWT fefege...'
+				//'Authorization': 'JWT fefege..'
 			}
 			axios.post(ApiUrl + "User/Login/", user, { headers: headers})
 				.then((response) => {
 					if (response.status == 200)
 					{
-						handleLogin(user);
+						handleLogin(response.data);
 					}
 					else
 					{
@@ -99,7 +104,7 @@ export default function LoginScreen() {
 					}
 				})
 				.catch((error) => {
-					if (error.response.status == 401)
+					if (error.response && error.response.status == 401)
 					{
 						errors.wrongCredentials = true;
 						setErrors({...errors});
@@ -115,9 +120,10 @@ export default function LoginScreen() {
 	const handleLogin = (user: object) => {
 		DeviceStorage.saveItem("currentUser", user);
 		setCurrentUser({...user});
-		
+		navigation.navigate("HomeScreen");
 	}
 	const cancel = () => {
+		initErrors();
 		setSignUpToggle(false);
 		setForgotPasswordToggle(false);
 	}
