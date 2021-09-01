@@ -6,7 +6,8 @@ import {
 	Image,
 	TextInput,
 	Platform,
-	TouchableOpacity
+	TouchableOpacity,
+	ActivityIndicator
 } from "react-native";
 import { User } from "../models/User";
 import {ApiUrl} from "@env";
@@ -34,6 +35,9 @@ export default function LoginScreen() {
 		wrongCredentials: false
 	})
 	const [currentUser, setCurrentUser] = useState({});
+	const [loginRequestPending, setLoginRequestPending] = useState(false);
+	const [signUpRequestPending, setSignUpRequestPending] = useState(false);
+	const [forgotPasswordRequestPending, setForgotPasswordRequestPending] = useState(false);
 	const signup = () => {
 		if (!signUpToggle)
 		{
@@ -53,6 +57,7 @@ export default function LoginScreen() {
 					'Content-Type': 'application/json',
 					//'Authorization': 'JWT fefege..'
 				}
+				setSignUpRequestPending(true);
 				axios.post(ApiUrl + "User/Register/", user, { headers: headers})
 					.then((response) => {
 						if (response.status == 200)
@@ -76,6 +81,7 @@ export default function LoginScreen() {
 							errors.unknownError = true;
 							setErrors({...errors});
 						}
+						setSignUpRequestPending(false);
 					});
 			}
 		}
@@ -91,6 +97,7 @@ export default function LoginScreen() {
 				'Content-Type': 'application/json',
 				//'Authorization': 'JWT fefege..'
 			}
+			setLoginRequestPending(true);
 			axios.post(ApiUrl + "User/Login/", user, { headers: headers})
 				.then((response) => {
 					if (response.status == 200)
@@ -114,6 +121,7 @@ export default function LoginScreen() {
 						errors.unknownError = true;
 						setErrors({...errors});
 					}
+					setLoginRequestPending(false);
 				});
 		}
 	}
@@ -332,8 +340,17 @@ export default function LoginScreen() {
 			{
 				!signUpToggle && !forgotPasswordToggle ?
 				(
-				<TouchableOpacity style={styles.btnContainer} onPress={login}>
-					<Text style={styles.button}>LOGIN</Text>
+				<TouchableOpacity style={[styles.btnContainer, loginRequestPending ? styles.disabled : null]} onPress={login} disabled={loginRequestPending}>
+					
+					<Text style={styles.button}>
+						{
+							loginRequestPending ? 
+							(
+								<ActivityIndicator style={[styles.spinner]} color="#0000ff"/>
+							) : null
+						}
+						LOGIN
+					</Text>
 				</TouchableOpacity>
 				) : null
 			}
@@ -341,7 +358,13 @@ export default function LoginScreen() {
 			{
 				!forgotPasswordToggle ?
 				(
-					<TouchableOpacity style={[styles.btnContainer, signUpToggle ? styles.spacer : null]} onPress={signup}>
+					<TouchableOpacity style={[styles.btnContainer, signUpToggle ? styles.spacer : null, signUpRequestPending ? styles.disabled : null]} onPress={signup} disabled={signUpRequestPending}>
+						{
+							signUpRequestPending ? 
+							(
+								<ActivityIndicator style={[styles.spinner]} color="#0000ff"/>
+							) : null
+						}
 						<Text style={styles.button}>SIGN UP</Text>
 					</TouchableOpacity>
 				) : null
@@ -350,7 +373,13 @@ export default function LoginScreen() {
 			{
 				forgotPasswordToggle ?
 				(
-				<TouchableOpacity style={styles.btnContainer} onPress={retrievePassword}>
+				<TouchableOpacity style={[styles.btnContainer, forgotPasswordRequestPending ? styles.disabled : null]} onPress={retrievePassword}  disabled={forgotPasswordRequestPending}>
+					{
+						forgotPasswordRequestPending ? 
+						(
+							<ActivityIndicator style={[styles.spinner]} color="#0000ff"/>
+						) : null
+					}
 					<Text style={styles.button}>SEND PASSWORD</Text>
 				</TouchableOpacity>
 				) : null
@@ -432,11 +461,24 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 
+	disabled: {
+		opacity: 0.5
+	},
+
 	spacer: {
 		marginTop: 30
 	},
 
 	error: {
 		color: "#ff0000"
+	},
+
+	spinner: {
+		position: "absolute",
+		left: "-80%",
+		right: 0,
+		top: 0,
+		bottom: 0,
+		justifyContent: "center"
 	}
 });
