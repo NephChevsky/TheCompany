@@ -15,9 +15,7 @@ import axios from 'axios';
 import DeviceStorage from "../services/DeviceStorage";
 import { useNavigation } from '@react-navigation/native'
 
-import HomeScreen from "./Home";
-
-export default function LoginScreen() {
+export default function LoginScreen(route: any) {
 	const navigation = useNavigation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -34,7 +32,6 @@ export default function LoginScreen() {
 		unknownError: false,
 		wrongCredentials: false
 	})
-	const [currentUser, setCurrentUser] = useState({});
 	const [loginRequestPending, setLoginRequestPending] = useState(false);
 	const [signUpRequestPending, setSignUpRequestPending] = useState(false);
 	const [forgotPasswordRequestPending, setForgotPasswordRequestPending] = useState(false);
@@ -127,7 +124,7 @@ export default function LoginScreen() {
 	}
 	const handleLogin = (user: object) => {
 		DeviceStorage.saveItem("currentUser", user);
-		setCurrentUser({...user});
+		//setCurrentUser();
 		navigation.navigate("HomeScreen");
 	}
 	const cancel = () => {
@@ -205,7 +202,9 @@ export default function LoginScreen() {
 		setForgotPasswordToggle(true);
 	}
 	const retrievePassword = () => {
+		setForgotPasswordRequestPending(true);
 		console.log("TODO: validate data and retrieve password");
+		setForgotPasswordRequestPending(false);
 	}
 
 	return (

@@ -7,7 +7,7 @@ import HomeScreen from "./screens/Home";
 
 const Stack = createNativeStackNavigator();
 
-const MyTheme = {
+const myTheme = {
 	...DefaultTheme,
 	colors: {
 	  ...DefaultTheme.colors,
@@ -15,9 +15,19 @@ const MyTheme = {
 	},
   };
 
+const linking = {
+	prefixes: [],
+	  config: {
+		screens: {
+			LoginScreen: "Login",
+			HomeScreen: "Home"
+		}
+	  },
+}
+
 export default function App() {
 	return (
-		<NavigationContainer theme={MyTheme}>
+		<NavigationContainer theme={myTheme} linking={linking}>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
 			<Stack.Screen
 				name="LoginScreen"
