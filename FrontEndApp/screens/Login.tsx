@@ -7,16 +7,18 @@ import {
 	TextInput,
 	Platform,
 	TouchableOpacity,
-	ActivityIndicator
+	ActivityIndicator,
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from "../models/User";
 import {ApiUrl} from "@env";
 import axios from 'axios';
-import DeviceStorage from "../services/DeviceStorage";
 import { useNavigation } from '@react-navigation/native'
+import { useMyContext } from "../services/Context";
 
-export default function LoginScreen(route: any) {
+export default function LoginScreen() {
 	const navigation = useNavigation();
+	const { setCurrentUser } = useMyContext();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
@@ -59,7 +61,7 @@ export default function LoginScreen(route: any) {
 					.then((response) => {
 						if (response.status == 200)
 						{
-							handleLogin(user);
+							handleLogin(response.data);
 						}
 						else
 						{
@@ -123,8 +125,8 @@ export default function LoginScreen(route: any) {
 		}
 	}
 	const handleLogin = (user: object) => {
-		DeviceStorage.saveItem("currentUser", user);
-		//setCurrentUser();
+		AsyncStorage.setItem("currentUser", JSON.stringify(user));
+		setCurrentUser(user);
 		navigation.navigate("HomeScreen");
 	}
 	const cancel = () => {
