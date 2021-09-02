@@ -13,11 +13,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from "../models/User";
 import {ApiUrl} from "@env";
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'
 import { useMyContext } from "../services/Context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/routes";
 
-export default function LoginScreen() {
-	const navigation = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+export default function Login({ route, navigation }: Props) {
 	const { setCurrentUser } = useMyContext();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -127,7 +129,7 @@ export default function LoginScreen() {
 	const handleLogin = (user: object) => {
 		AsyncStorage.setItem("currentUser", JSON.stringify(user));
 		setCurrentUser(user);
-		navigation.navigate("HomeScreen");
+		navigation.navigate("Home");
 	}
 	const cancel = () => {
 		initErrors();

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DeviceStorage from "./services/DeviceStorage";
 import {CompanyName} from "@env";
-import LoginScreen from "./screens/Login";
-import HomeScreen from "./screens/Home";
+import Login from "./screens/Login";
+import Home from "./screens/Home";
 import { Context } from "./services/Context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootStackParamList } from "./types/routes";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const myTheme = {
 	...DefaultTheme,
@@ -22,8 +22,8 @@ const linking = {
 	prefixes: [],
 	  config: {
 		screens: {
-			LoginScreen: "Login",
-			HomeScreen: "Home"
+			Login: "Login",
+			Home: "Home"
 		}
 	  },
 }
@@ -39,13 +39,13 @@ export default function App() {
 			<NavigationContainer theme={myTheme} linking={linking}>
 				<Stack.Navigator screenOptions={{headerShown: false}}>
 				<Stack.Screen
-					name="LoginScreen"
-					component={LoginScreen}
+					name="Login"
+					component={Login}
 					options={{ title: CompanyName + ' - Login'}}
 				/>
 				<Stack.Screen
-					name="HomeScreen"
-					component={HomeScreen}
+					name="Home"
+					component={Home}
 					options={{ title: CompanyName + ' - Home'}}
 					/>
 				</Stack.Navigator>
