@@ -222,6 +222,7 @@ export default function Login({ route, navigation }: Props) {
 						placeholder="Email"
 						placeholderTextColor="#003f5c"
 						onChangeText={(email) => setEmail(email)}
+						autoCompleteType="email"
 					/>
 				</View>
 				{
@@ -260,6 +261,7 @@ export default function Login({ route, navigation }: Props) {
 								placeholderTextColor="#003f5c"
 								secureTextEntry={true}
 								onChangeText={(password) => setPassword(password)}
+								autoCompleteType="password"
 							/>
 						</View>
 						{
