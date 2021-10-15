@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -16,11 +16,12 @@ import axios from 'axios';
 import { useMyContext } from "../services/Context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/routes";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 export default function Login({ route, navigation }: Props) {
-	const { setCurrentUser } = useMyContext();
+	const myContext = useMyContext();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
@@ -128,7 +129,7 @@ export default function Login({ route, navigation }: Props) {
 	}
 	const handleLogin = (user: object) => {
 		AsyncStorage.setItem("currentUser", JSON.stringify(user));
-		setCurrentUser(user);
+		myContext.setCurrentUser(user);
 		navigation.navigate("Home");
 	}
 	const cancel = () => {
@@ -212,7 +213,7 @@ export default function Login({ route, navigation }: Props) {
 	}
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<Image style={styles.image} source={require("../assets/company-logo.png")} />
 
 			<View style={styles.inputContainer}>
@@ -398,7 +399,7 @@ export default function Login({ route, navigation }: Props) {
 				</TouchableOpacity>
 				) : null
 			}
-		</View>
+		</SafeAreaView>
 	);
 }
 
