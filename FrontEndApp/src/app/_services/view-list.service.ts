@@ -13,6 +13,9 @@ export class ViewListService
 
 	getResults(dataSource: string)
 	{
-		return this.http.post<any>(environment.baseUrl + `ViewList/Get`, {dataSource: dataSource});
+		var obj = {
+			dataSource: dataSource
+		}
+		return this.http.post<any>(environment.baseUrl + `ViewList/Get`, obj);
 	}
 }

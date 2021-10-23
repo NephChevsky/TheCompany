@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoices',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvoicesComponent implements OnInit {
 
-  constructor() { }
+	public dataSource: string = "Invoices";
+	constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
+	ngOnInit(): void {
+	}
 
+	importInvoice() {
+		this.router.navigate(['invoices/import']);
+	}
 }

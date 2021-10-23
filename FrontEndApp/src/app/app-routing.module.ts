@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
 import { CustomersComponent } from './customers/customers.component';
 import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
+import { InvoicesComponent } from './invoices/invoices.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
 	{ path: 'signup', component: SignUpComponent },
 	{ path: 'customers', component: CustomersComponent, canActivate: [AuthGuard]},
 	{ path: 'customers/create', component: CreateCustomerComponent, canActivate: [AuthGuard]},
+	{ path: 'invoices', component: InvoicesComponent, canActivate: [AuthGuard]},
 	{ path: '**', redirectTo: '' }
 ];
 

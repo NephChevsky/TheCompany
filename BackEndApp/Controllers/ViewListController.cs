@@ -36,12 +36,17 @@ namespace BackEndApp.Controllers
 				List<Individual> individuals = db.Customers_Individual.Where(obj => obj.Owner == owner)
 																	.OrderBy(obj => obj.CustomerId)
 																	.ToList();
+				Dictionary<string, string> header = new Dictionary<string, string>();
+				header.Add("0", "CustomerId");
+				header.Add("1", "LastName");
+				header.Add("2", "FirstName");
+				values.Add(header);
 				individuals.ForEach(individual =>
 				{
 					Dictionary<string, string> value = new Dictionary<string, string>();
-					value.Add("CustomerId", individual.CustomerId);
-					value.Add("LastName", individual.LastName);
-					value.Add("FirstName", individual.FirstName);
+					value.Add("0", individual.CustomerId);
+					value.Add("1", individual.LastName);
+					value.Add("2", individual.FirstName);
 					values.Add(value);
 				});
 			}
