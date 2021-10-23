@@ -20,8 +20,9 @@ namespace BackEndApp.Models
 		}
 
 		public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Individual> Customers_Individual { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
 			var builder = new ConfigurationBuilder()
@@ -63,10 +64,45 @@ namespace BackEndApp.Models
 
             modelBuilder.Entity<User>().HasIndex(t => new { t.Login }).IsUnique(true);
 
+            modelBuilder.Entity<Individual>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CustomerId)
+                    .IsRequired();
+
+                entity.Property(e => e.LastName)
+                    .IsRequired();
+
+                entity.Property(e => e.FirstName);
+
+                entity.Property(e => e.Email);
+
+                entity.Property(e => e.PhoneNumber);
+
+                entity.Property(e => e.MobilePhoneNumber);
+
+                entity.OwnsOne(e => e.Address);
+
+                entity.Property(e => e.Owner);
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
             foreach (var type in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDeleteable).IsAssignableFrom(type.ClrType))
                     modelBuilder.SetSoftDeleteFilter(type.ClrType);
+                /*if (typeof(IOwnable).IsAssignableFrom(type.ClrType))
+                    modelBuilder.SetOwnerFilter(type.ClrType);*/
             }
 
             OnModelCreatingPartial(modelBuilder);
@@ -138,5 +174,21 @@ namespace BackEndApp.Models
         {
             modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.Deleted);
         }
+
+        /*public static void SetOwnerFilter(this ModelBuilder modelBuilder, Type entityType)
+        {
+            SetOwnerMethod.MakeGenericMethod(entityType)
+                .Invoke(null, new object[] { modelBuilder });
+        }
+
+        static readonly MethodInfo SetOwnerMethod = typeof(EFFilterExtensions)
+                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                   .Single(t => t.IsGenericMethod && t.Name == "SetOwner");
+
+        public static void SetOwnerFilter<TEntity>(this ModelBuilder modelBuilder)
+            where TEntity : class, ISoftDeleteable
+        {
+            modelBuilder.Entity<TEntity>().HasQueryFilter(x => x.Owner == );
+        }*/
     }
 }

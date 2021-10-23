@@ -1,0 +1,27 @@
+mat-card {
+	width: 500px;
+	margin: auto;
+	top: 20%;
+}
+
+mat-form-field {
+	width: 100%;
+	min-width: 300px;
+}
+
+mat-card-title,
+mat-card-content {
+	display: flex;
+	justify-content: center;
+}
+
+button {
+	display: inline-block;
+}
+
+.errorMessage {
+	color: red;
+	margin-left:30px;
+	display: inline-block;
+}
+  

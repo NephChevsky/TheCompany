@@ -71,13 +71,14 @@ namespace BackEndApp.Controllers
 		[AllowAnonymous]
 		public ActionResult Register([FromBody] User user)
 		{
-			if (user == null || user.Login == null || user.Password == null || user.Email == null)
+			if (user == null || user.Login == null || user.Password == null)
 			{
 				return BadRequest();
 			}
 			string salt = BCrypt.Net.BCrypt.GenerateSalt(10);
 			string password = user.Password;
 			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
+			user.Email = user.Login;
 			using (var db = new TheCompanyDbContext())
 			{
 				db.Users.Add(user);
@@ -99,75 +100,5 @@ namespace BackEndApp.Controllers
 			user.Password = password;
 			return Login(user);
 		}
-
-		/*
-		// GET: UserController/Details/5
-		public ActionResult Details(int id)
-		{
-			return View();
-		}
-
-		// GET: UserController/Create
-		public ActionResult Create()
-		{
-			return View();
-		}
-
-		// POST: UserController/Create
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
-
-		// GET: UserController/Edit/5
-		public ActionResult Edit(int id)
-		{
-			return View();
-		}
-
-		// POST: UserController/Edit/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
-
-		// GET: UserController/Delete/5
-		public ActionResult Delete(int id)
-		{
-			return View();
-		}
-
-		// POST: UserController/Delete/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}*/
 	}
 }

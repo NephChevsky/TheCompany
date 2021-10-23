@@ -1,0 +1,22 @@
+<mat-toolbar>
+	<span [routerLink]="['/']" class="item">TheCompany</span>
+	<span class="filler"></span>
+	<span *ngIf="guest" [routerLink]="['/login']" class="item">Log in</span>
+	<span *ngIf="guest" [routerLink]="['/signup']" class="item">Sign up</span>
+	<span *ngIf="!guest" (click)="logout()" class="item material-icons exit">logout</span>
+</mat-toolbar>
+<mat-sidenav-container>
+	<mat-sidenav #sidenav mode="side" [opened]="!guest">
+		<mat-list>
+		<mat-list-item [routerLink]="['/customers']" routerLinkActive="active-tab">
+			Customers
+		</mat-list-item>
+		<mat-list-item>
+			Incomming
+		</mat-list-item>
+		</mat-list>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<router-outlet></router-outlet>
+	</mat-sidenav-content>
+</mat-sidenav-container>

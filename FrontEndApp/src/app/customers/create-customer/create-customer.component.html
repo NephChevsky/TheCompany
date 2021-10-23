@@ -1,0 +1,107 @@
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+	<table>
+		<tr>
+			<td>
+				Type:
+			</td>
+			<td>
+				<div>
+					<input id="individual" type="radio" value="individual" name="type" formControlName="type">
+					<label>Individual</label>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Customer Id:
+			</td>
+			<td>
+				<input id="customerId" type="text" formControlName="customerId">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Last name:
+			</td>
+			<td>
+				<input id="lastName" type="text" formControlName="lastName">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				First name:
+			</td>
+			<td>
+				<input id="firstName" type="text" formControlName="firstName">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Email:
+			</td>
+			<td>
+				<input id="email" type="text" formControlName="email">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Phone number:
+			</td>
+			<td>
+				<input id="phoneNumber" type="text" formControlName="phoneNumber">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Mobile phone number:
+			</td>
+			<td>
+				<input id="mobilePhoneNumber" type="text" formControlName="mobilePhoneNumber">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Address:
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="subtd">Number:</td>
+			<td formGroupName="address">
+				<input id="address_Number" type="text" formControlName="number">
+			</td>
+		</tr>
+		<tr>
+			<td class="subtd">Street:</td>
+			<td formGroupName="address">
+				<input id="address_Street" type="text" formControlName="street">
+			</td>
+		</tr>
+		<tr>
+			<td class="subtd">Zip code:</td>
+			<td formGroupName="address">
+				<input id="address_ZipCode" type="text" formControlName="zipCode">
+			</td>
+		</tr>
+		<tr>
+			<td class="subtd">City:</td>
+			<td formGroupName="address">
+				<input id="address_City" type="text" formControlName="city">
+			</td>
+		</tr>
+		<tr>
+			<td class="subtd">Country:</td>
+			<td formGroupName="address">
+				<input id="address_Country" type="text" formControlName="country">
+			</td>
+		</tr>
+		<tr class="buttons">
+			<td>
+				<button class="btn btn-secondary">Cancel</button>
+			</td>
+			<td>
+				<button class="btn btn-primary">Create</button>
+			</td>
+		</tr>
+	</table>
+</form>

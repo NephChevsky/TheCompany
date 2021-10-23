@@ -1,0 +1,31 @@
+table
+{
+	width: 600px;
+}
+
+td
+{
+	padding: 10px;
+	vertical-align: top;
+}
+
+.subtd
+{
+	padding-left: 50px;
+}
+
+input[type="text"]
+{
+	width: 300px;
+}
+
+input[type="radio"]
+{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+tr.buttons td
+{
+	text-align: center;
+}
