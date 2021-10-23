@@ -15,6 +15,7 @@ import { JwtInterceptor } from './_services/jwt.interceptor';
 import { CustomersComponent } from './customers/customers.component';
 import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
 import { ViewListComponent } from './_modules/view-list/view-list.component';
+import { InvoicesComponent } from './invoices/invoices.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ViewListComponent } from './_modules/view-list/view-list.component';
     LoginComponent,
     CustomersComponent,
     CreateCustomerComponent,
-    ViewListComponent
+    ViewListComponent,
+    InvoicesComponent
   ],
   imports: [
     BrowserModule,

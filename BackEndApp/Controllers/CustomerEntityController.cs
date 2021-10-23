@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace BackEndApp.Controllers
 
 			using (var db = new TheCompanyDbContext())
 			{
+				entity.Owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 				db.Customers_Individual.Add(entity);
 				try
 				{
