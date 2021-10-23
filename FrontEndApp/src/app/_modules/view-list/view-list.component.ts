@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ViewListService } from 'src/app/_services/view-list.service';
 
 @Component({
   selector: 'app-view-list',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewListComponent implements OnInit {
 
-  constructor() { }
+	@Input()
+    public dataSource: string = "";
 
-  ngOnInit(): void {
-  }
+	public data: any;
 
+	constructor(private viewListService: ViewListService) {
+	}
+
+	ngOnInit(): void
+	{
+		this.viewListService.getResults(this.dataSource).subscribe(x => {
+			this.data = x;
+		});
+	}
 }

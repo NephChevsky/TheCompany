@@ -1,1 +1,10 @@
-<p>Here is the list of customers</p>
+<table>
+	<tr>
+		<th>CustomerId</th>
+		<th>FirstName</th>
+		<th>LastName</th>
+	</tr>
+	<tr *ngFor="let entry of data">
+		<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
+	</tr>
+</table>

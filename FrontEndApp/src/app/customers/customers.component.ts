@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class CustomersComponent implements OnInit
 {
+	public dataSource: string = "Individual";
 	constructor(private router: Router) { }
 
 	ngOnInit(): void {
