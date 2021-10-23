@@ -21,6 +21,7 @@ namespace BackEndApp.Models
 
 		public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Customers_Individual { get; set; }
+        public virtual DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -84,6 +85,23 @@ namespace BackEndApp.Models
                 entity.Property(e => e.MobilePhoneNumber);
 
                 entity.OwnsOne(e => e.Address);
+
+                entity.Property(e => e.Owner); // TODO: handle owner automatically
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<Invoice>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Owner); // TODO: handle owner automatically
 
