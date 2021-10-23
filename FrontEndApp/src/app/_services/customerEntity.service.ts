@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { CustomerEntity } from '../_models/customerEntity';
 
 @Injectable({ providedIn: 'root' })
-export class CustomerService
+export class CustomerEntityService
 {
 	constructor(private http: HttpClient)
 	{
@@ -13,6 +13,6 @@ export class CustomerService
 
 	createCustomer(customer: CustomerEntity)
 	{
-		this.http.post<CustomerEntity>(environment.baseUrl + `Customer/Create`, customer);
+		return this.http.post<CustomerEntity>(environment.baseUrl + `CustomerEntity/Create`, customer);
 	}
 }

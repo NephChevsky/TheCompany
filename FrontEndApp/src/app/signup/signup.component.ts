@@ -72,8 +72,8 @@ export class SignUpComponent implements OnInit
 				error =>
 				{
 					this.loading = false;
-          if (error.status == 409)
-					  this.registerForm.controls['login'].setErrors({ taken: true });
+         			if (error.status == 409)
+						this.registerForm.controls['login'].setErrors({ taken: true });
 				});
 	}
 }

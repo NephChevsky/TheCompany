@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomerService } from 'src/app/_services/customer.service';
+import { Router } from '@angular/router';
+import { CustomerEntityService } from 'src/app/_services/customerEntity.service';
 
 @Component({
 	selector: 'app-create-customer',
@@ -12,7 +13,8 @@ export class CreateCustomerComponent implements OnInit {
 	customerForm: FormGroup = new FormGroup({});
 
 	constructor(private formBuilder: FormBuilder, 
-				private customerService: CustomerService)
+				private customerEntityService: CustomerEntityService,
+				private router: Router)
 	{
 
 	}
@@ -39,13 +41,26 @@ export class CreateCustomerComponent implements OnInit {
 
 	onSubmit()
 	{
-		debugger;
 		if (this.customerForm.invalid)
 		{
 			return;
 		}
 		if (this.customerForm.value.type == "individual")
 			this.customerForm.value.type = 1;
-		this.customerService.createCustomer(this.customerForm.value);
+		this.customerEntityService.createCustomer(this.customerForm.value)
+			.subscribe(
+				data =>
+				{
+					this.router.navigate(['customers']);
+				},
+				error =>
+				{
+					/* TODO: set errors on field */
+				});
+	}
+
+	onCancel()
+	{
+		this.router.navigate(['customers']);
 	}
 }

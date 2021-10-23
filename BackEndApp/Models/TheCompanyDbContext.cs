@@ -85,7 +85,7 @@ namespace BackEndApp.Models
 
                 entity.OwnsOne(e => e.Address);
 
-                entity.Property(e => e.Owner);
+                entity.Property(e => e.Owner); // TODO: handle owner automatically
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -101,8 +101,6 @@ namespace BackEndApp.Models
             {
                 if (typeof(ISoftDeleteable).IsAssignableFrom(type.ClrType))
                     modelBuilder.SetSoftDeleteFilter(type.ClrType);
-                /*if (typeof(IOwnable).IsAssignableFrom(type.ClrType))
-                    modelBuilder.SetOwnerFilter(type.ClrType);*/
             }
 
             OnModelCreatingPartial(modelBuilder);
@@ -174,21 +172,5 @@ namespace BackEndApp.Models
         {
             modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.Deleted);
         }
-
-        /*public static void SetOwnerFilter(this ModelBuilder modelBuilder, Type entityType)
-        {
-            SetOwnerMethod.MakeGenericMethod(entityType)
-                .Invoke(null, new object[] { modelBuilder });
-        }
-
-        static readonly MethodInfo SetOwnerMethod = typeof(EFFilterExtensions)
-                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                   .Single(t => t.IsGenericMethod && t.Name == "SetOwner");
-
-        public static void SetOwnerFilter<TEntity>(this ModelBuilder modelBuilder)
-            where TEntity : class, ISoftDeleteable
-        {
-            modelBuilder.Entity<TEntity>().HasQueryFilter(x => x.Owner == );
-        }*/
     }
 }
