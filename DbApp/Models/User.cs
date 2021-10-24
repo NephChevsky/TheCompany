@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BackEndApp.Models
+namespace DbApp.Models
 {
 	public partial class User : ISoftDeleteable, IDateTimeTrackable
 	{
@@ -14,12 +11,12 @@ namespace BackEndApp.Models
 
 		public string Email { get; set; }
 
-		public string Password { get; set; }
+		public string Password { get; set; } // TODO: hide password in http request
 
 		[NotMapped]
 		public string Token { get; set; }
 
-		public string LastLoginDateTime { get; set; }
+		public DateTime LastLoginDateTime { get; set; }
 
 		// ISoftDeleteable
 		public bool Deleted { get; set; }

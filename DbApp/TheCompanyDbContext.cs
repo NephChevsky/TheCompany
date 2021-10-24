@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BackEndApp.Models
+namespace DbApp.Models
 {
 	public partial class TheCompanyDbContext : DbContext
 	{
@@ -26,7 +26,7 @@ namespace BackEndApp.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
-			optionsBuilder.UseSqlServer("Server=localhost;Database=TheCompany;Trusted_Connection=True;");
+			optionsBuilder.UseSqlServer("Server=localhost;Database=TheCompany;Trusted_Connection=True;"); // TODO: use configuration file
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

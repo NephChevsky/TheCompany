@@ -1,4 +1,4 @@
-﻿using BackEndApp.Models;
+﻿using DbApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -50,6 +50,8 @@ namespace BackEndApp.Controllers
 						};
 						var token = tokenHandler.CreateToken(tokenDescriptor);
 						dbUser.Token = tokenHandler.WriteToken(token);
+						dbUser.LastLoginDateTime = DateTime.Now;
+						db.SaveChanges();
 						return Ok(dbUser);
 					}
 					else
