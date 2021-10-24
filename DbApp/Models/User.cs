@@ -14,7 +14,7 @@ namespace BackEndApp.Models
 
 		public string Email { get; set; }
 
-		public string Password { internal get; set; }
+		public string Password { get; set; }
 
 		[NotMapped]
 		public string Token { get; set; }

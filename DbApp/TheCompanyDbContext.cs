@@ -26,10 +26,7 @@ namespace BackEndApp.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
-			var builder = new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-			IConfigurationRoot config = builder.Build();
-			optionsBuilder.UseSqlServer(config.GetConnectionString("Database"));
+			optionsBuilder.UseSqlServer("Server=localhost;Database=TheCompany;Trusted_Connection=True;");
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -103,8 +100,17 @@ namespace BackEndApp.Models
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CustomerId)
-                    .IsRequired();
+                entity.Property(e => e.InvoiceNumber);
+
+                entity.Property(e => e.CustomerId);
+
+                entity.Property(e => e.ShouldBeExtracted)
+                    .IsRequired()
+                    .HasDefaultValue(true);
+
+                entity.Property(e => e.IsExtracted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
 
                 entity.Property(e => e.FileId)
                     .IsRequired();

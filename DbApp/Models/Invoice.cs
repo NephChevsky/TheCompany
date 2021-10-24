@@ -8,7 +8,14 @@ namespace BackEndApp.Models
 	public class Invoice : IAttachment, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		public Guid Id { get; set; }
+
+		public string InvoiceNumber { get; set; }
+
 		public Guid CustomerId { get; set; }
+
+		public bool? ShouldBeExtracted { get; set; }
+
+		public bool? IsExtracted { get; set; }
 		
 		// IAttachement
 		public Guid FileId { get; set; }

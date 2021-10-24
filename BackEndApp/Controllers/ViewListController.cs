@@ -22,6 +22,8 @@ namespace BackEndApp.Controllers
 			{
 				case "Individual":
 					return Ok(GetIndividuals());
+				case "Invoices":
+					return Ok(GetInvoices());
 				default:
 					return BadRequest();
 			}
@@ -47,6 +49,30 @@ namespace BackEndApp.Controllers
 					value.Add("0", individual.CustomerId);
 					value.Add("1", individual.LastName);
 					value.Add("2", individual.FirstName);
+					values.Add(value);
+				});
+			}
+			return values;
+		}
+
+		private List<Dictionary<string, string>> GetInvoices()
+		{
+			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
+			using (var db = new TheCompanyDbContext())
+			{
+				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				List<Invoice> invoices = db.Invoices.Where(obj => obj.Owner == owner)
+																	.OrderBy(obj => obj.InvoiceNumber)
+																	.ToList();
+				Dictionary<string, string> header = new Dictionary<string, string>();
+				header.Add("0", "InvoiceNumber");
+				header.Add("1", "CustomerId");
+				values.Add(header);
+				invoices.ForEach(invoice =>
+				{
+					Dictionary<string, string> value = new Dictionary<string, string>();
+					value.Add("0", invoice.InvoiceNumber);
+					value.Add("1", invoice.CustomerId.ToString());
 					values.Add(value);
 				});
 			}
