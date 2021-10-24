@@ -103,6 +103,18 @@ namespace BackEndApp.Models
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
 
+                entity.Property(e => e.CustomerId)
+                    .IsRequired();
+
+                entity.Property(e => e.FileId)
+                    .IsRequired();
+
+                entity.Property(e => e.FileName)
+                    .IsRequired();
+
+                entity.Property(e => e.FileSize)
+                    .IsRequired();
+
                 entity.Property(e => e.Owner); // TODO: handle owner automatically
 
                 entity.Property(e => e.Deleted)

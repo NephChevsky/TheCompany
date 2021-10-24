@@ -16,6 +16,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
 import { ViewListComponent } from './_modules/view-list/view-list.component';
 import { InvoicesComponent } from './invoices/invoices.component';
+import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { InvoicesComponent } from './invoices/invoices.component';
     CustomersComponent,
     CreateCustomerComponent,
     ViewListComponent,
-    InvoicesComponent
+    InvoicesComponent,
+    ImportInvoiceComponent
   ],
   imports: [
     BrowserModule,

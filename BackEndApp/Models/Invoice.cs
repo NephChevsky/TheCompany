@@ -5,9 +5,16 @@ using System.Threading.Tasks;
 
 namespace BackEndApp.Models
 {
-	public class Invoice : IOwnable, ISoftDeleteable, IDateTimeTrackable
+	public class Invoice : IAttachment, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		public Guid Id { get; set; }
+		public Guid CustomerId { get; set; }
+		
+		// IAttachement
+		public Guid FileId { get; set; }
+		public string FileName { get; set; }
+
+		public long FileSize { get; set; }
 
 		// IOwnable
 		public Guid Owner { get; set; }
@@ -19,5 +26,13 @@ namespace BackEndApp.Models
 		public DateTime CreationDateTime { get; set; }
 
 		public DateTime LastModificationDateTime { get; set; }
+
+		public Invoice (Guid owner, Guid id, string fileName, long fileSize)
+		{
+			Owner = owner;
+			FileId = id;
+			FileName = fileName;
+			FileSize = fileSize;
+		}
 	}
 }

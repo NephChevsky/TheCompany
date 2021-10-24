@@ -1,0 +1,17 @@
+<div class="content">
+	<form [formGroup]="form" (ngSubmit)="submit()">
+		<div mat-dialog-content>
+			<div>
+			<input type="file" name="file" (change)="onFileChange($event)" />
+			<div *ngIf="error != ''" style="color:red">
+				{{ errorMessage }}
+			</div>
+			<mat-progress-bar *ngIf="inProgress" mode="determinate" [value]="progress"></mat-progress-bar>
+			</div>
+		</div>
+		<div class="buttons">
+			<button class="btn btn-secondary" (click)="onCancel()">Close</button>
+			<button class="btn btn-primary">Ok</button>
+		</div>
+	</form>
+</div>
