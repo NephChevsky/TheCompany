@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211024151306_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,12 +85,6 @@ namespace DbApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<DateTime>("ExtractDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ExtractId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");

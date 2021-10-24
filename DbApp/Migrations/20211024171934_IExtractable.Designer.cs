@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211024121246_Init")]
-    partial class Init
+    [Migration("20211024171934_IExtractable")]
+    partial class IExtractable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("ProductVersion", "3.1.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DbApp.Models.Individual", b =>
@@ -86,6 +86,12 @@ namespace DbApp.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<DateTime>("ExtractDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExtractId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");
 
@@ -107,6 +113,9 @@ namespace DbApp.Migrations
 
                     b.Property<DateTime>("LastModificationDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LockedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
@@ -138,8 +147,8 @@ namespace DbApp.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
 
                     b.Property<DateTime>("LastLoginDateTime")
                         .HasColumnType("datetime2");
@@ -149,13 +158,13 @@ namespace DbApp.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
 
                     b.HasKey("Id");
 
@@ -194,8 +203,6 @@ namespace DbApp.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("IndividualId");
                         });
-
-                    b.Navigation("Address");
                 });
 #pragma warning restore 612, 618
         }

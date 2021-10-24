@@ -104,13 +104,7 @@ namespace DbApp.Models
 
                 entity.Property(e => e.CustomerId);
 
-                entity.Property(e => e.ShouldBeExtracted)
-                    .IsRequired()
-                    .HasDefaultValue(true);
-
-                entity.Property(e => e.IsExtracted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
+                entity.Property(e => e.LockedBy);
 
                 entity.Property(e => e.FileId)
                     .IsRequired();
@@ -120,6 +114,18 @@ namespace DbApp.Models
 
                 entity.Property(e => e.FileSize)
                     .IsRequired();
+
+                entity.Property(e => e.ShouldBeExtracted)
+                    .IsRequired()
+                    .HasDefaultValue(true);
+
+                entity.Property(e => e.IsExtracted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.ExtractId);
+
+                entity.Property(e => e.ExtractDateTime);
 
                 entity.Property(e => e.Owner); // TODO: handle owner automatically
 

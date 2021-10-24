@@ -1,27 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DbApp.Models
 {
-	public class Invoice : IAttachment, IOwnable, ISoftDeleteable, IDateTimeTrackable
+	public class Invoice : ILockable, IAttachment, IExtractable, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid Id { get; set; }
-
 		public string InvoiceNumber { get; set; }
-
 		public Guid CustomerId { get; set; }
 
-		public bool? ShouldBeExtracted { get; set; }
+		// ILockable
+		public string LockedBy { get; set; }
 
-		public bool? IsExtracted { get; set; }
-		
 		// IAttachement
 		public Guid FileId { get; set; }
 		public string FileName { get; set; }
-
 		public long FileSize { get; set; }
+
+		// IExtractable
+		public bool? ShouldBeExtracted { get; set; }
+		public bool? IsExtracted { get; set; }
+		public Guid ExtractId { get; set; }
+		public DateTime ExtractDateTime { get; set; }
 
 		// IOwnable
 		public Guid Owner { get; set; }
@@ -31,8 +35,9 @@ namespace DbApp.Models
 
 		// IDateTimeTrackable
 		public DateTime CreationDateTime { get; set; }
-
 		public DateTime LastModificationDateTime { get; set; }
+
+		public Invoice() { }
 
 		public Invoice (Guid owner, Guid id, string fileName, long fileSize)
 		{

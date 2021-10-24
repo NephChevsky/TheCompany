@@ -39,7 +39,7 @@ namespace BackEndApp.Controllers
 				Guid id = Guid.NewGuid();
 				using (System.IO.Stream input = File.OpenReadStream())
 				{
-					Azure.Response<BlobContentInfo> response = containerClient.UploadBlob(id.ToString(), input);
+					containerClient.UploadBlob(id.ToString(), input);
 				}
 				
 				Invoice newInvoice = new Invoice(owner, id, File.FileName, File.Length);
