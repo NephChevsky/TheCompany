@@ -22,6 +22,7 @@ namespace DbApp.Models
 		public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Customers_Individual { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
+        public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -126,6 +127,29 @@ namespace DbApp.Models
                 entity.Property(e => e.ExtractId);
 
                 entity.Property(e => e.ExtractDateTime);
+
+                entity.Property(e => e.Owner); // TODO: handle owner automatically
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<ExtractionSettings>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.DataSource)
+                    .IsRequired();
+
+                entity.Property(e => e.Field)
+                    .IsRequired();
 
                 entity.Property(e => e.Owner); // TODO: handle owner automatically
 

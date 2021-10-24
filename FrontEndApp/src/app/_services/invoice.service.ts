@@ -18,4 +18,14 @@ export class InvoiceService
 		observe: 'events'
 		})
 	}
+
+	saveExtractionSettings(data: any)
+	{
+		return this.http.post(environment.baseUrl + `Invoice/SaveExtractionSettings`, data);
+	}
+
+	getExtractionSettings()
+	{
+		return this.http.get<any>(environment.baseUrl + `Invoice/GetExtractionSettings`);
+	}
 }

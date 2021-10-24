@@ -10,6 +10,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
 	{ path: 'customers/create', component: CreateCustomerComponent, canActivate: [AuthGuard]},
 	{ path: 'invoices', component: InvoicesComponent, canActivate: [AuthGuard]},
 	{ path: 'invoices/import', component: ImportInvoiceComponent, canActivate: [AuthGuard]},
+	{ path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
 	{ path: '**', redirectTo: '' }
 ];
 

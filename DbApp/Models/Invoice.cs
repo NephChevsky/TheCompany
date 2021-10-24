@@ -8,7 +8,6 @@ namespace DbApp.Models
 {
 	public class Invoice : ILockable, IAttachment, IExtractable, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid Id { get; set; }
 		public string InvoiceNumber { get; set; }
 		public Guid CustomerId { get; set; }

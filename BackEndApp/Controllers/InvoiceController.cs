@@ -7,7 +7,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace BackEndApp.Controllers
 {
@@ -41,7 +44,7 @@ namespace BackEndApp.Controllers
 				{
 					containerClient.UploadBlob(id.ToString(), input);
 				}
-				
+
 				Invoice newInvoice = new Invoice(owner, id, File.FileName, File.Length);
 				db.Invoices.Add(newInvoice);
 				try
@@ -63,6 +66,46 @@ namespace BackEndApp.Controllers
 
 				return Ok();
 			}
+		}
+
+		[HttpPost]
+		public ActionResult SaveExtractionSettings([FromBody] dynamic json)
+		{
+			JsonElement invoiceNumber = json.GetProperty("invoiceNumber");
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			ExtractionSettings extSet = new ExtractionSettings("Invoices", "InvoiceNumber", Convert.ToInt32(invoiceNumber.GetProperty("x").GetString()),
+																Convert.ToInt32(invoiceNumber.GetProperty("y").GetString()),
+																Convert.ToInt32(invoiceNumber.GetProperty("width").GetString()),
+																Convert.ToInt32(invoiceNumber.GetProperty("height").GetString()),
+																owner);
+			using (var db = new TheCompanyDbContext())
+			{
+				ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Field == "InvoiceNumber" && x.Owner == owner).SingleOrDefault();
+				if (dbExtSet == null)
+				{
+					db.Add(extSet);
+					db.SaveChanges();
+				}
+				else
+				{
+					dbExtSet.Deleted = true;
+					db.Add(extSet);
+					db.SaveChanges();
+				}
+			}
+			return Ok();
+		}
+
+		[HttpGet]
+		public ActionResult GetExtractionSettings()
+		{
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			List<ExtractionSettings> results = new List<ExtractionSettings>();
+			using (var db = new TheCompanyDbContext())
+			{
+				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Owner == owner).ToList();
+			}
+			return Ok(results);
 		}
 	}
 }

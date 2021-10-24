@@ -17,6 +17,7 @@ import { CreateCustomerComponent } from './customers/create-customer/create-cust
 import { ViewListComponent } from './_modules/view-list/view-list.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice
     CreateCustomerComponent,
     ViewListComponent,
     InvoicesComponent,
-    ImportInvoiceComponent
+    ImportInvoiceComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
