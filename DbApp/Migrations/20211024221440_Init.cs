@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DbApp.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,18 +35,41 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExtractionSettings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DataSource = table.Column<string>(nullable: false),
+                    Field = table.Column<string>(nullable: false),
+                    X = table.Column<int>(nullable: false),
+                    Y = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    Width = table.Column<int>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExtractionSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     InvoiceNumber = table.Column<string>(nullable: true),
                     CustomerId = table.Column<Guid>(nullable: false),
-                    ShouldBeExtracted = table.Column<bool>(nullable: false, defaultValue: true),
-                    IsExtracted = table.Column<bool>(nullable: false, defaultValue: false),
                     LockedBy = table.Column<string>(nullable: true),
                     FileId = table.Column<Guid>(nullable: false),
                     FileName = table.Column<string>(nullable: false),
                     FileSize = table.Column<long>(nullable: false),
+                    ShouldBeExtracted = table.Column<bool>(nullable: false, defaultValue: true),
+                    IsExtracted = table.Column<bool>(nullable: false, defaultValue: false),
+                    ExtractId = table.Column<Guid>(nullable: false),
+                    ExtractDateTime = table.Column<DateTime>(nullable: false),
                     Owner = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),
@@ -86,6 +109,9 @@ namespace DbApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customers_Individual");
+
+            migrationBuilder.DropTable(
+                name: "ExtractionSettings");
 
             migrationBuilder.DropTable(
                 name: "Invoices");

@@ -12,6 +12,11 @@ namespace AzureFunctionsApp.Models
 		public int Width { get; set; }
 		public string Text { get; set; }
 
+		public ExtractBlock()
+		{
+
+		}
+
 		public ExtractBlock(int x, int y, int height, int width, string text)
 		{
 			X = x;
