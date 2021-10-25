@@ -11,6 +11,7 @@ using IronOcr;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using ModelsApp;
 using Newtonsoft.Json;
 using static IronOcr.OcrResult;
 
@@ -72,8 +73,13 @@ namespace AzureFunctionsApp
                                 OcrResult tmp = Ocr.Read(Input);
                                 if (item.Field == "InvoiceNumber") // TODO: reflection
                                 {
-                                    string result = ResolveText(rect, tmp.Words);
-                                    invoice.InvoiceNumber = result;
+                                    invoice.InvoiceNumber = tmp.Text;
+                                }
+                                else if (item.Field == "Address")
+                                {
+                                    string address = String.Join(System.Environment.NewLine, tmp.Text.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                                    address = String.Join(" ", tmp.Text.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+                                    invoice.CustomerAddress = new Address(address);
                                 }
                             }
                         });
@@ -93,16 +99,6 @@ namespace AzureFunctionsApp
                 }
             }
             log.LogInformation($"End of function \"ExtractDocument\" at: {DateTime.Now}");
-        }
-
-        private static string ResolveText(Rectangle rect, Word[] words)
-        {
-            string result = "";
-            if (words.Length == 1)
-			{
-                result = words[0].Text;
-			} // TODO: multiple words
-            return result;
         }
     }
 }

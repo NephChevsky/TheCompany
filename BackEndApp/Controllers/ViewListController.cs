@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using ModelsApp;
 
 namespace BackEndApp.Controllers
 {
@@ -40,6 +41,7 @@ namespace BackEndApp.Controllers
 				header.Add("0", "CustomerId");
 				header.Add("1", "LastName");
 				header.Add("2", "FirstName");
+				header.Add("3", "Address");
 				values.Add(header);
 				individuals.ForEach(individual =>
 				{
@@ -47,6 +49,7 @@ namespace BackEndApp.Controllers
 					value.Add("0", individual.CustomerId);
 					value.Add("1", individual.LastName);
 					value.Add("2", individual.FirstName);
+					value.Add("3", individual.Address);
 					values.Add(value);
 				});
 			}

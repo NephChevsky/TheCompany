@@ -16,6 +16,9 @@
     <Reference Include="DbApp">
       <HintPath>..\DbApp\bin\Debug\netcoreapp3.1\DbApp.dll</HintPath>
     </Reference>
+    <Reference Include="ModelsApp">
+      <HintPath>..\ModelsApp\bin\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 

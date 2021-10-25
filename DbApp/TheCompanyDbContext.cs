@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using ModelsApp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -82,7 +81,7 @@ namespace DbApp.Models
 
                 entity.Property(e => e.MobilePhoneNumber);
 
-                entity.OwnsOne(e => e.Address);
+                entity.Property(e => e.Address);
 
                 entity.Property(e => e.Owner); // TODO: handle owner automatically
 
@@ -104,6 +103,8 @@ namespace DbApp.Models
                 entity.Property(e => e.InvoiceNumber);
 
                 entity.Property(e => e.CustomerId);
+
+                entity.Property(e => e.CustomerAddress);
 
                 entity.Property(e => e.LockedBy);
 

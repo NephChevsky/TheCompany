@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DbApp.Models
+namespace ModelsApp
 {
 	public class Invoice : ILockable, IAttachment, IExtractable, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		public Guid Id { get; set; }
 		public string InvoiceNumber { get; set; }
 		public Guid CustomerId { get; set; }
+		public string CustomerAddress { get; set; }
 
 		// ILockable
 		public string LockedBy { get; set; }

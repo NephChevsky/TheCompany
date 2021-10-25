@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211024221440_Init")]
-    partial class Init
+    [Migration("20211025152127_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace DbApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DbApp.Models.ExtractionSettings", b =>
+            modelBuilder.Entity("ModelsApp.ExtractionSettings", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,11 +66,14 @@ namespace DbApp.Migrations
                     b.ToTable("ExtractionSettings");
                 });
 
-            modelBuilder.Entity("DbApp.Models.Individual", b =>
+            modelBuilder.Entity("ModelsApp.Individual", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("datetime2");
@@ -114,7 +117,7 @@ namespace DbApp.Migrations
                     b.ToTable("Customers_Individual");
                 });
 
-            modelBuilder.Entity("DbApp.Models.Invoice", b =>
+            modelBuilder.Entity("ModelsApp.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,6 +125,9 @@ namespace DbApp.Migrations
 
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerAddress")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
@@ -176,7 +182,7 @@ namespace DbApp.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("DbApp.Models.User", b =>
+            modelBuilder.Entity("ModelsApp.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,37 +223,6 @@ namespace DbApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("DbApp.Models.Individual", b =>
-                {
-                    b.OwnsOne("DbApp.Models.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("IndividualId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Country")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Number")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Street")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("ZipCode")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("IndividualId");
-
-                            b1.ToTable("Customers_Individual");
-
-                            b1.WithOwner()
-                                .HasForeignKey("IndividualId");
-                        });
                 });
 #pragma warning restore 612, 618
         }

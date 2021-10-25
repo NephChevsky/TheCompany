@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DbApp.Models
+namespace ModelsApp
 {
 	public class ExtractionSettings : IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{

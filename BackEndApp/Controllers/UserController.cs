@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ModelsApp;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;

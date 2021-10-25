@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DbApp.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,11 +23,7 @@ namespace DbApp.Migrations
                     Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     MobilePhoneNumber = table.Column<string>(nullable: true),
-                    Address_Number = table.Column<string>(nullable: true),
-                    Address_Street = table.Column<string>(nullable: true),
-                    Address_ZipCode = table.Column<string>(nullable: true),
-                    Address_City = table.Column<string>(nullable: true),
-                    Address_Country = table.Column<string>(nullable: true)
+                    Address = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,6 +58,7 @@ namespace DbApp.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     InvoiceNumber = table.Column<string>(nullable: true),
                     CustomerId = table.Column<Guid>(nullable: false),
+                    CustomerAddress = table.Column<string>(nullable: true),
                     LockedBy = table.Column<string>(nullable: true),
                     FileId = table.Column<Guid>(nullable: false),
                     FileName = table.Column<string>(nullable: false),

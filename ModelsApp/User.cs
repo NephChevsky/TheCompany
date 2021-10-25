@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DbApp.Models
+namespace ModelsApp
 {
 	public partial class User : ISoftDeleteable, IDateTimeTrackable
 	{
