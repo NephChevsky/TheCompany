@@ -66,14 +66,16 @@ namespace BackEndApp.Controllers
 																	.OrderBy(obj => obj.InvoiceNumber)
 																	.ToList();
 				Dictionary<string, string> header = new Dictionary<string, string>();
-				header.Add("0", "InvoiceNumber");
-				header.Add("1", "CustomerId");
+				header.Add("0", "Id");
+				header.Add("1", "InvoiceNumber");
+				header.Add("2", "CustomerId");
 				values.Add(header);
 				invoices.ForEach(invoice =>
 				{
 					Dictionary<string, string> value = new Dictionary<string, string>();
-					value.Add("0", invoice.InvoiceNumber);
-					value.Add("1", invoice.CustomerId.ToString());
+					value.Add("0", invoice.Id.ToString());
+					value.Add("1", invoice.InvoiceNumber);
+					value.Add("2", invoice.CustomerId.ToString());
 					values.Add(value);
 				});
 			}

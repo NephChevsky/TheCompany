@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using DbApp.Models;
+using MagickApp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -9,13 +10,16 @@ using Microsoft.Extensions.Configuration;
 using ModelsApp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace BackEndApp.Controllers
 {
-	public class InvoiceController : Controller
+	[Route("[controller]")]
+	public class InvoiceController : ControllerBase
 	{
 		private IConfiguration Configuration { get; }
 
@@ -99,7 +103,7 @@ namespace BackEndApp.Controllers
 			return Ok();
 		}
 
-		[HttpGet]
+		[HttpGet("GetExtractionSettings")]
 		public ActionResult GetExtractionSettings()
 		{
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
@@ -109,6 +113,48 @@ namespace BackEndApp.Controllers
 				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Owner == owner).ToList();
 			}
 			return Ok(results);
+		}
+
+		[HttpGet("Show/{id}")]
+		public ActionResult Show(string id)
+		{
+			using (var db = new TheCompanyDbContext())
+			{
+				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+				if (dbInvoice == null)
+				{
+					return UnprocessableEntity("NotFound");
+				}
+				else
+				{
+					return Ok(dbInvoice);
+				}
+			}
+		}
+
+		[HttpGet("Preview/{id}/{page}")]
+		public ActionResult Preview(string id, int page)
+		{
+			using (var db = new TheCompanyDbContext())
+			{
+				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+				if (dbInvoice == null)
+				{
+					return UnprocessableEntity("NotFound");
+				}
+				else
+				{
+					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
+					MemoryStream stream = new MemoryStream();
+					containerClient.GetBlobClient(dbInvoice.FileId.ToString()).DownloadTo(stream);
+					MagickEngine magickEngine = new MagickEngine();
+					byte[] output = magickEngine.ConvertToPng(stream, page);
+					return Ok(Convert.ToBase64String(output));
+				}
+			}
+			
 		}
 	}
 }

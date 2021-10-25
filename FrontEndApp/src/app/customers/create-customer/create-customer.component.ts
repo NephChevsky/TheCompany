@@ -52,6 +52,7 @@ export class CreateCustomerComponent implements OnInit {
 				data =>
 				{
 					this.router.navigate(['customers']);
+					return;
 				},
 				error =>
 				{

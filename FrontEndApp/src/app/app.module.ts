@@ -18,6 +18,7 @@ import { ViewListComponent } from './_modules/view-list/view-list.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SettingsComponent } from './settings/settings.component';
     ViewListComponent,
     InvoicesComponent,
     ImportInvoiceComponent,
-    SettingsComponent
+    SettingsComponent,
+    ShowInvoiceComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,13 @@
+<div class="content">
+	<div class="invoiceFields">
+		<table>
+			<tr *ngFor="let field of invoiceData | keyvalue">
+				<td>{{field.key}}</td>
+				<td>{{field.value}}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="invoicePreview">
+		<img class="imgPreview" [src]="preview" />
+	</div>
+</div>

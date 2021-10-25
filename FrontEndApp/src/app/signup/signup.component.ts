@@ -68,6 +68,7 @@ export class SignUpComponent implements OnInit
 				data =>
 				{
 					this.router.navigate(['/']);
+					return;
 				},
 				error =>
 				{

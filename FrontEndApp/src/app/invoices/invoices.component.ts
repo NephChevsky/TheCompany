@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class InvoicesComponent implements OnInit {
 
 	public dataSource: string = "Invoices";
+	public linkField: string = "Id;"
 	constructor(private router: Router) { }
 
 	ngOnInit(): void {

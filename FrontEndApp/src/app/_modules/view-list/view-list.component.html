@@ -2,7 +2,9 @@
 	<tr>
 		<th *ngFor="let item of fields | keyvalue">{{item.value}}</th>
 	</tr>
-	<tr *ngFor="let entry of data">
-		<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
-	</tr>
+	<tbody *ngFor="let entry of data">
+		<tr (click)="linkable && show(entry[0])" [ngClass]="{'linkable' : linkable}">
+			<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
+		</tr>
+	</tbody>
 </table>

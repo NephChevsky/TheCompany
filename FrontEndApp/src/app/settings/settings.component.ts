@@ -68,6 +68,7 @@ export class SettingsComponent implements OnInit {
 				data =>
 				{
 					this.router.navigate(['home']);
+					return;
 				},
 				error =>
 				{
