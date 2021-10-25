@@ -61,6 +61,8 @@ namespace AzureFunctionsApp
                             byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
                             
                             MemoryStream stream = new MemoryStream(byteArray);
+                            if (invoice.ExtractId != Guid.Empty)
+                                containerClient.DeleteBlob(invoice.ExtractId.ToString());
                             containerClient.UploadBlob(id.ToString(), stream);
                             invoice.ExtractId = id;
                         }
@@ -78,15 +80,14 @@ namespace AzureFunctionsApp
                                 else if (item.Field == "Address")
                                 {
                                     string address = String.Join(System.Environment.NewLine, tmp.Text.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                                    address = String.Join(" ", tmp.Text.Split(" ", StringSplitOptions.RemoveEmptyEntries));
-                                    invoice.CustomerAddress = new Address(address);
+                                    address = String.Join(" ", address.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+                                    invoice.CustomerAddress = address;
                                 }
                             }
                         });
 
                         File.Delete(tempFileName);
-                        // TODO: delete previous OCR file
-                        
+
                         invoice.ExtractDateTime = DateTime.Now;
                         invoice.LockedBy = null;
                         invoice.IsExtracted = true;
