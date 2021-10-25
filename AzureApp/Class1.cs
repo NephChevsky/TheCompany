@@ -2,8 +2,8 @@
 
 namespace AzureApp
 {
-	public class AddressParser
+	public class Class1
 	{
-
+		
 	}
 }
