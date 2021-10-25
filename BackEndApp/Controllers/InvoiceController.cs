@@ -71,24 +71,26 @@ namespace BackEndApp.Controllers
 		[HttpPost]
 		public ActionResult SaveExtractionSettings([FromBody] dynamic json)
 		{
-			JsonElement invoiceNumber = json.GetProperty("invoiceNumber");
+			JsonElement fields = json.GetProperty("fields");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			ExtractionSettings extSet = new ExtractionSettings("Invoices", "InvoiceNumber", Convert.ToInt32(invoiceNumber.GetProperty("x").GetString()),
-																Convert.ToInt32(invoiceNumber.GetProperty("y").GetString()),
-																Convert.ToInt32(invoiceNumber.GetProperty("width").GetString()),
-																Convert.ToInt32(invoiceNumber.GetProperty("height").GetString()),
-																owner);
 			using (var db = new TheCompanyDbContext())
 			{
-				ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Field == "InvoiceNumber" && x.Owner == owner).SingleOrDefault();
-				if (dbExtSet == null)
+				foreach (JsonElement field in fields.EnumerateArray())
 				{
-					db.Add(extSet);
-					db.SaveChanges();
-				}
-				else
-				{
-					dbExtSet.Deleted = true;
+					string fieldName = field.GetProperty("name").GetString();
+					ExtractionSettings extSet = new ExtractionSettings("Invoices",
+																	fieldName,
+																	field.GetProperty("x").GetInt32(),
+																	field.GetProperty("y").GetInt32(),
+																	field.GetProperty("width").GetInt32(),
+																	field.GetProperty("height").GetInt32(),
+																	owner);
+
+					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+					if (dbExtSet != null)
+					{
+						dbExtSet.Deleted = true;
+					}
 					db.Add(extSet);
 					db.SaveChanges();
 				}

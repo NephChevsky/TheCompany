@@ -2,25 +2,25 @@
 	<h5>Extraction</h5>
 	<form [formGroup]="invoiceSettingsForm" (ngSubmit)="onSubmit()">
 		<table class="main">
-			<tr>
-				<td>Invoice number:</td>
+			<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">
+				<td>{{item.get("name")?.value}}</td>
 				<td>
-					<table>
+					<table [formGroupName]="i">
 						<tr>
 							<td>X:</td>
-							<td formGroupName="invoiceNumber"><input id="x" type="text" formControlName="x"></td>
+							<td><input id="{{'x'+i}}" type="number" formControlName="x"></td>
 						</tr>
 						<tr>
 							<td>Y:</td>
-							<td formGroupName="invoiceNumber"><input id="y" type="text" formControlName="y"></td>
+							<td><input id="{{'y'+i}}" type="number" formControlName="y"></td>
 						</tr>
 						<tr>
 							<td>Height:</td>
-							<td formGroupName="invoiceNumber"><input id="height" type="text" formControlName="height"></td>
+							<td><input id="{{'height'+i}}" type="number" formControlName="height"></td>
 						</tr>
 						<tr>
 							<td>Width:</td>
-							<td formGroupName="invoiceNumber"><input id="width" type="text" formControlName="width"></td>
+							<td><input id="{{'width'+i}}" type="number" formControlName="width"></td>
 						</tr>
 					</table>
 				</td>
