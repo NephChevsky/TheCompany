@@ -67,6 +67,7 @@ namespace AzureFunctionsApp
                             invoice.ExtractId = id;
                         }
 
+                        string newCustomerNumber = "";
                         List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoices").ToList();
                         extractSettings.ForEach(item => {
                             Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
@@ -77,6 +78,14 @@ namespace AzureFunctionsApp
                                 {
                                     invoice.InvoiceNumber = tmp.Text;
                                 }
+                                else if (item.Field == "CustomerId")
+                                {
+                                    Individual dbInvidual = db.Customers_Individual.Where(x => x.CustomerId == tmp.Text).SingleOrDefault();
+                                    if (dbInvidual != null)
+                                        invoice.CustomerId = dbInvidual.Id;
+                                    else
+                                        newCustomerNumber = tmp.Text;
+                                }
                                 else if (item.Field == "Address")
                                 {
                                     string address = String.Join(System.Environment.NewLine, tmp.Text.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
@@ -85,6 +94,16 @@ namespace AzureFunctionsApp
                                 }
                             }
                         });
+
+                        if (!string.IsNullOrEmpty(newCustomerNumber))
+						{
+                            Individual newCustomer = new Individual();
+                            newCustomer.CustomerId = newCustomerNumber;
+                            newCustomer.LastName = "Test";
+                            newCustomer.Address = invoice.CustomerAddress;
+                            newCustomer = db.Customers_Individual.Add(newCustomer).Entity;
+                            invoice.CustomerId = newCustomer.Id;
+						}
 
                         File.Delete(tempFileName);
 

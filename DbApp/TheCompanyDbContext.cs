@@ -83,7 +83,8 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Address);
 
-                entity.Property(e => e.Owner); // TODO: handle owner automatically
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
+                    .IsRequired(); 
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -129,7 +130,8 @@ namespace DbApp.Models
 
                 entity.Property(e => e.ExtractDateTime);
 
-                entity.Property(e => e.Owner); // TODO: handle owner automatically
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
+                    .IsRequired(); 
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -152,7 +154,8 @@ namespace DbApp.Models
                 entity.Property(e => e.Field)
                     .IsRequired();
 
-                entity.Property(e => e.Owner); // TODO: handle owner automatically
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
+                    .IsRequired(); 
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
