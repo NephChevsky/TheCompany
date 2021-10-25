@@ -10,7 +10,7 @@ import { InvoiceService } from '../_services/invoice.service';
 })
 export class SettingsComponent implements OnInit {
 
-	fieldsName: string[] = ["InvoiceNumber", "CustomerId", "Address"];
+	fieldsName: string[] = ["InvoiceNumber", "CustomerId", "LastName", "Address"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 
 	constructor(private formBuilder: FormBuilder,
