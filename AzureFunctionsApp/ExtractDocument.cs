@@ -69,6 +69,7 @@ namespace AzureFunctionsApp
 
                         string newCustomerNumber = "";
                         string newCustomerLastName = "";
+                        string newCustomerFirstName = "";
                         List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoices").ToList();
                         extractSettings.ForEach(item => {
                             Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
@@ -97,6 +98,10 @@ namespace AzureFunctionsApp
 								{
                                     newCustomerLastName = tmp.Text;
 								}
+                                else if (item.Field == "FirstName")
+                                {
+                                    newCustomerFirstName = tmp.Text;
+                                }
                             }
                         });
 
@@ -105,6 +110,7 @@ namespace AzureFunctionsApp
                             Individual newCustomer = new Individual();
                             newCustomer.CustomerId = newCustomerNumber;
                             newCustomer.LastName = newCustomerLastName;
+                            newCustomer.FirstName = newCustomerFirstName;
                             newCustomer.Owner = invoice.Owner;
                             newCustomer.Address = invoice.CustomerAddress;
                             newCustomer = db.Customers_Individual.Add(newCustomer).Entity;
