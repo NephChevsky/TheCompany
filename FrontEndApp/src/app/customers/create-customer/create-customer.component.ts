@@ -29,13 +29,7 @@ export class CreateCustomerComponent implements OnInit {
 			email: ['', [Validators.email]],
 			phoneNumber: ['', []],
 			mobilePhoneNumber: ['', []],
-			address: this.formBuilder.group({
-				number: ['', []],
-				street: ['', []],
-				zipCode: ['', []],
-				city: ['', []],
-				country: ['', []]
-			})
+			address: ['', []]
 		});
 	}
 
