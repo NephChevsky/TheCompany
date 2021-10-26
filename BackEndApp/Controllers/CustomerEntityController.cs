@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ModelsApp;
 using System;
 using System.Security.Claims;
@@ -10,9 +11,17 @@ namespace BackEndApp.Controllers
 {
 	public class CustomerEntityController : Controller
 	{
+		private readonly ILogger<CustomerEntityController> _logger;
+
+		public CustomerEntityController(ILogger<CustomerEntityController> logger)
+		{
+			_logger = logger;
+		}
+
 		[HttpPost]
 		public ActionResult Create([FromBody] Individual entity)
 		{
+			_logger.LogInformation("Start of Create method");
 			if (entity == null)
 			{
 				return BadRequest();
@@ -38,6 +47,7 @@ namespace BackEndApp.Controllers
 				}
 			}
 
+			_logger.LogInformation("End of Create method");
 			return Ok();
 		}
 	}

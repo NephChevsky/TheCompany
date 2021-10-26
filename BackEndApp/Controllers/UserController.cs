@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ModelsApp;
 using System;
@@ -16,17 +17,21 @@ namespace BackEndApp.Controllers
 {
 	public class UserController : Controller
 	{
+		private readonly ILogger<UserController> _logger;
 		private IConfiguration Configuration { get; }
 
-		public UserController(IConfiguration configuration)
+
+		public UserController(IConfiguration configuration, ILogger<UserController> logger)
 		{
 			Configuration = configuration;
+			_logger = logger;
 		}
 
 		[HttpPost]
 		[AllowAnonymous]
 		public ActionResult Login([FromBody] User user)
 		{
+			_logger.LogInformation("Start of Login method");
 			if (user == null || user.Login == null || user.Password == null)
 			{
 				return BadRequest();
@@ -53,6 +58,7 @@ namespace BackEndApp.Controllers
 						dbUser.Token = tokenHandler.WriteToken(token);
 						dbUser.LastLoginDateTime = DateTime.Now;
 						db.SaveChanges();
+						_logger.LogInformation("End of Login method");
 						return Ok(dbUser);
 					}
 					else
@@ -71,6 +77,7 @@ namespace BackEndApp.Controllers
 		[AllowAnonymous]
 		public ActionResult Register([FromBody] User user)
 		{
+			_logger.LogInformation("Start of Register method");
 			if (user == null || user.Login == null || user.Password == null)
 			{
 				return BadRequest();
@@ -98,6 +105,7 @@ namespace BackEndApp.Controllers
 				}
 			}
 			user.Password = password;
+			_logger.LogInformation("End of Register method");
 			return Login(user);
 		}
 	}

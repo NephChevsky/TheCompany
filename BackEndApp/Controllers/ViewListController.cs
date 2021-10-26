@@ -6,14 +6,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using ModelsApp;
+using Microsoft.Extensions.Logging;
 
 namespace BackEndApp.Controllers
 {
 	public class ViewListController : Controller
 	{
+		private readonly ILogger<ViewListController> _logger;
+
+		public ViewListController(ILogger<ViewListController> logger)
+		{
+			_logger = logger;
+		}
+
 		[HttpPost]
 		public ActionResult Get([FromBody] ViewListQuery query)
 		{
+			_logger.LogInformation("Start of Get method");
 			if (query == null)
 				return BadRequest();
 
@@ -26,10 +35,12 @@ namespace BackEndApp.Controllers
 				default:
 					return BadRequest();
 			}
+			_logger.LogInformation("End of Get method");
 		}
 
 		private List<Dictionary<string, string>> GetIndividuals()
 		{
+			_logger.LogInformation("Start of GetIndividuals method");
 			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
 			using (var db = new TheCompanyDbContext())
 			{
@@ -53,11 +64,13 @@ namespace BackEndApp.Controllers
 					values.Add(value);
 				});
 			}
+			_logger.LogInformation("End of GetIndividuals method");
 			return values;
 		}
 
 		private List<Dictionary<string, string>> GetInvoices()
 		{
+			_logger.LogInformation("Start of GetInvoices method");
 			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
 			using (var db = new TheCompanyDbContext())
 			{
@@ -79,6 +92,7 @@ namespace BackEndApp.Controllers
 					values.Add(value);
 				});
 			}
+			_logger.LogInformation("End of GetInvoices method");
 			return values;
 		}
 	}

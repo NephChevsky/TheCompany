@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using ModelsApp;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,20 @@ namespace BackEndApp.Controllers
 	[Route("[controller]")]
 	public class InvoiceController : ControllerBase
 	{
+		private readonly ILogger<InvoiceController> _logger;
 		private IConfiguration Configuration { get; }
 
-		public InvoiceController(IConfiguration configuration)
+
+		public InvoiceController(IConfiguration configuration, ILogger<InvoiceController> logger)
 		{
 			Configuration = configuration;
+			_logger = logger;
 		}
 
 		[HttpPost("Import")]
 		public ActionResult Import([FromForm] IFormFile File)
 		{
+			_logger.LogInformation("Start of Import method");
 			if (File.FileName.IndexOfAny(System.IO.Path.GetInvalidPathChars()) >= 0
 				|| File.FileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
 			{
@@ -68,14 +73,15 @@ namespace BackEndApp.Controllers
 						throw e;
 					}
 				}
-
-				return Ok();
 			}
+			_logger.LogInformation("End of Import method");
+			return Ok();
 		}
 
 		[HttpPost("SaveExtractionSettings")]
 		public ActionResult SaveExtractionSettings([FromBody] dynamic json)
 		{
+			_logger.LogInformation("Start of SaveExtractionSettings method");
 			JsonElement fields = json.GetProperty("fields");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext())
@@ -100,24 +106,28 @@ namespace BackEndApp.Controllers
 					db.SaveChanges();
 				}
 			}
+			_logger.LogInformation("End of SaveExtractionSettings method");
 			return Ok();
 		}
 
 		[HttpGet("GetExtractionSettings")]
 		public ActionResult GetExtractionSettings()
 		{
+			_logger.LogInformation("Start of GetExtractionSettings method");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			List<ExtractionSettings> results = new List<ExtractionSettings>();
 			using (var db = new TheCompanyDbContext())
 			{
 				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Owner == owner).ToList();
 			}
+			_logger.LogInformation("End of GetExtractionSettings method");
 			return Ok(results);
 		}
 
 		[HttpGet("Show/{id}")]
 		public ActionResult Show(string id)
 		{
+			_logger.LogInformation("Start of Show method");
 			using (var db = new TheCompanyDbContext())
 			{
 				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
@@ -128,6 +138,7 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
+					_logger.LogInformation("End of Show method");
 					return Ok(dbInvoice);
 				}
 			}
@@ -136,6 +147,7 @@ namespace BackEndApp.Controllers
 		[HttpGet("Preview/{id}/{page}")]
 		public ActionResult Preview(string id, int page)
 		{
+			_logger.LogInformation("Start of Preview method");
 			using (var db = new TheCompanyDbContext())
 			{
 				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
@@ -151,6 +163,7 @@ namespace BackEndApp.Controllers
 					containerClient.GetBlobClient(dbInvoice.FileId.ToString()).DownloadTo(stream);
 					MagickEngine magickEngine = new MagickEngine();
 					byte[] output = magickEngine.ConvertToPng(stream, page);
+					_logger.LogInformation("End of Preview method");
 					return Ok(Convert.ToBase64String(output));
 				}
 			}
