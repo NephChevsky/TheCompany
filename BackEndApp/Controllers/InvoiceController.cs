@@ -28,7 +28,7 @@ namespace BackEndApp.Controllers
 			Configuration = configuration;
 		}
 
-		[HttpPost]
+		[HttpPost("Import")]
 		public ActionResult Import([FromForm] IFormFile File)
 		{
 			if (File.FileName.IndexOfAny(System.IO.Path.GetInvalidPathChars()) >= 0
@@ -73,7 +73,7 @@ namespace BackEndApp.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpPost("SaveExtractionSettings")]
 		public ActionResult SaveExtractionSettings([FromBody] dynamic json)
 		{
 			JsonElement fields = json.GetProperty("fields");

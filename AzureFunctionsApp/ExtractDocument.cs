@@ -20,7 +20,7 @@ namespace AzureFunctionsApp
     public static class ExtractDocument
     {
         [FunctionName("ExtractDocument")]
-        public static void Run([TimerTrigger("0 */5 * * * *"
+        public static void Run([TimerTrigger("0 */1 * * * *"
 #if DEBUG
             , RunOnStartup=true
 #endif
