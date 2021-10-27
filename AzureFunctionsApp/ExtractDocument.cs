@@ -17,16 +17,23 @@ using static IronOcr.OcrResult;
 
 namespace AzureFunctionsApp
 {
-    public static class ExtractDocument
+    public class ExtractDocument
     {
+        private readonly ILogger<ExtractDocument> _logger;
+        public ExtractDocument(ILogger<ExtractDocument> logger)
+        {
+            _logger = logger;
+        }
+
+
         [FunctionName("ExtractDocument")]
-        public static void Run([TimerTrigger("0 */5 * * * *"
+        public void Run([TimerTrigger("0 */5 * * * *"
 #if DEBUG
             , RunOnStartup=true
 #endif
-            )]TimerInfo myTimer, ILogger log)
+            )]TimerInfo myTimer)
         {
-            log.LogInformation($"C# Timer trigger function \"ExtractDocument\" executed at: {DateTime.Now}");
+            _logger.LogInformation("Function \"ExtractDocument\" triggered by time");
             using (var db = new TheCompanyDbContext())
             {
                 bool stop = false;
@@ -130,7 +137,7 @@ namespace AzureFunctionsApp
                     }
                 }
             }
-            log.LogInformation($"End of function \"ExtractDocument\" at: {DateTime.Now}");
+            _logger.LogInformation("Function \"ExtractDocument\" triggered by time");
         }
     }
 }
