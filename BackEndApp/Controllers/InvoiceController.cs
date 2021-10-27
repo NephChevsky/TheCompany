@@ -64,7 +64,7 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
-					UploadFile(db, containerClient, File.OpenReadStream(), owner, File.Name, File.Length);
+					UploadFile(db, containerClient, File.OpenReadStream(), owner, File.FileName, File.Length);
 				}
 
 				
@@ -180,8 +180,8 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
-					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
 					MemoryStream stream = new MemoryStream();
+					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
 					containerClient.GetBlobClient(dbInvoice.FileId.ToString()).DownloadTo(stream);
 					MagickEngine magickEngine = new MagickEngine();
 					byte[] output = magickEngine.ConvertToPng(stream, page);
