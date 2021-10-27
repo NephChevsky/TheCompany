@@ -38,7 +38,7 @@ namespace AzureFunctionsApp
                         invoice.LockedBy = "ExtractDocument-0000";
                         db.SaveChanges();
 
-                        // TODO: run in a task
+                        // TODO: run in a task (not sure if it's worth it in azure function since it will be parallelized by kubernets
                         BlobContainerClient containerClient = new BlobContainerClient("UseDevelopmentStorage=true", invoice.Owner.ToString()); //TODO use Azure dll
                         string contentType;
                         new FileExtensionContentTypeProvider().TryGetContentType(invoice.FileName, out contentType);
