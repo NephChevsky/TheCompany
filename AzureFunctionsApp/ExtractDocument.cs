@@ -33,16 +33,18 @@ namespace AzureFunctionsApp
 #endif
             )]TimerInfo myTimer)
         {
-            _logger.LogInformation("Function \"ExtractDocument\" triggered by time");
+            Guid appId = Guid.NewGuid();
+            _logger.LogInformation(string.Concat("Function \"ExtractDocument\" triggered by time (Id: ", appId, ")"));
             using (var db = new TheCompanyDbContext())
             {
+                
                 bool stop = false;
                 while (!stop)
                 {
                     Invoice invoice = db.Invoices.Where(x => x.ShouldBeExtracted == true && x.IsExtracted == false && string.IsNullOrEmpty(x.LockedBy)).FirstOrDefault();
                     if (invoice != null)
                     {
-                        invoice.LockedBy = "ExtractDocument-0000";
+                        invoice.LockedBy = string.Concat("ExtractDocument-", appId);
                         db.SaveChanges();
 
                         // TODO: run in a task (not sure if it's worth it in azure function since it will be parallelized by kubernets
@@ -137,7 +139,7 @@ namespace AzureFunctionsApp
                     }
                 }
             }
-            _logger.LogInformation("Function \"ExtractDocument\" triggered by time");
+            _logger.LogInformation(string.Concat("Function \"ExtractDocument\" ended (Id: ", appId, ")"));
         }
     }
 }
