@@ -12,6 +12,7 @@ using ModelsApp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -43,38 +44,59 @@ namespace BackEndApp.Controllers
 			}
 
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
+			containerClient.CreateIfNotExists(); // TODO implement as singleton
 
 			using (var db = new TheCompanyDbContext())
 			{
-				BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-				containerClient.CreateIfNotExists(); // TODO implement as singleton
-
-				Guid id = Guid.NewGuid();
-				using (System.IO.Stream input = File.OpenReadStream())
+				if (File.ContentType == "application/x-zip-compressed")
 				{
-					containerClient.UploadBlob(id.ToString(), input);
-				}
-
-				Invoice newInvoice = new Invoice(owner, id, File.FileName, File.Length);
-				db.Invoices.Add(newInvoice);
-				try
-				{
-					db.SaveChanges();
-				}
-				catch (Exception e)
-				{
-					containerClient.DeleteBlob(id.ToString());
-					if (e.GetType().IsAssignableFrom(typeof(DbUpdateException)) && ((e.InnerException as SqlException)?.Number == 2601 || (e.InnerException as SqlException)?.Number == 2627))
+					using (var zip = new ZipArchive(File.OpenReadStream(), ZipArchiveMode.Read))
 					{
-						return Conflict("AlreadyExists");
-					}
-					else
-					{
-						throw e;
+						foreach (var entry in zip.Entries)
+						{
+							using (Stream stream = entry.Open())
+							{
+								UploadFile(db, containerClient, stream, owner, entry.Name, entry.Length);
+							}
+						}
 					}
 				}
+				else
+				{
+					UploadFile(db, containerClient, File.OpenReadStream(), owner, File.Name, File.Length);
+				}
+
+				
 			}
 			_logger.LogInformation("End of Import method");
+			return Ok();
+		}
+
+		private ActionResult UploadFile(TheCompanyDbContext db, BlobContainerClient containerClient, Stream stream, Guid owner, string fileName, long fileSize)
+		{
+			Guid id = Guid.NewGuid();
+			containerClient.UploadBlob(id.ToString(), stream);
+
+			Invoice newInvoice = new Invoice(owner, id, fileName, fileSize);
+			db.Invoices.Add(newInvoice);
+			try
+			{
+				db.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				containerClient.DeleteBlob(id.ToString());
+				if (e.GetType().IsAssignableFrom(typeof(DbUpdateException)) && ((e.InnerException as SqlException)?.Number == 2601 || (e.InnerException as SqlException)?.Number == 2627))
+				{
+					return Conflict("AlreadyExists");
+				}
+				else
+				{
+					throw e;
+				}
+			}
+
 			return Ok();
 		}
 
