@@ -13,6 +13,7 @@ import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice
 import { InvoiceExtractionComponent } from './settings/invoiceextraction/invoiceextraction.component';
 import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ClearAllComponent } from './settings/clear-all/clear-all.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
 	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard]},
 	{ path: 'Settings', component: SettingsComponent, canActivate: [AuthGuard]},
 	{ path: 'Settings/InvoiceExtraction', component: InvoiceExtractionComponent, canActivate: [AuthGuard]},
+	{ path: 'Settings/ClearAll', component: ClearAllComponent, canActivate: [AuthGuard]},
 	{ path: '**', redirectTo: '' }
 ];
 

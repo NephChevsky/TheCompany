@@ -1,0 +1,24 @@
+<div class="content">
+	<form [formGroup]="clearAllForm" (ngSubmit)="onSubmit()">
+		<div>
+			<table>
+				<tr>
+					<td>Customers:</td>
+					<td><input type="checkbox" id="customers" formControlName="customers" /></td>
+				</tr>
+				<tr>
+					<td>Invoices:</td>
+					<td><input type="checkbox" id="invoices" formControlName="invoices" /></td>
+				</tr>
+				<tr>
+					<td>Extraction settings:</td>
+					<td><input type="checkbox" id="extractionSettings" formControlName="extractionSettings" /></td>
+				</tr>
+			</table>
+		</div>
+		<div class="buttons">
+			<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+			<button class="btn btn-primary">Clear</button>
+		</div>
+	</form>
+</div>

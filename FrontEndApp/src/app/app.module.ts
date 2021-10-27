@@ -20,6 +20,7 @@ import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice
 import { SettingsComponent } from './settings/settings.component';
 import { InvoiceExtractionComponent } from './settings/invoiceextraction/invoiceextraction.component';
 import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.component';
+import { ClearAllComponent } from './settings/clear-all/clear-all.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.compo
     ImportInvoiceComponent,
 	SettingsComponent,
     InvoiceExtractionComponent,
-    ShowInvoiceComponent
+    ShowInvoiceComponent,
+    ClearAllComponent
   ],
   imports: [
     BrowserModule,
