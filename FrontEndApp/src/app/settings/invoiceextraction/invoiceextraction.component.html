@@ -1,0 +1,38 @@
+<div class="content">
+	<h5>Extraction</h5>
+	<form [formGroup]="invoiceSettingsForm" (ngSubmit)="onSubmit()">
+		<table class="main">
+			<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">
+				<td>{{item.get("name")?.value}}</td>
+				<td>
+					<table [formGroupName]="i">
+						<tr>
+							<td>X:</td>
+							<td><input id="{{'x'+i}}" type="number" formControlName="x"></td>
+						</tr>
+						<tr>
+							<td>Y:</td>
+							<td><input id="{{'y'+i}}" type="number" formControlName="y"></td>
+						</tr>
+						<tr>
+							<td>Height:</td>
+							<td><input id="{{'height'+i}}" type="number" formControlName="height"></td>
+						</tr>
+						<tr>
+							<td>Width:</td>
+							<td><input id="{{'width'+i}}" type="number" formControlName="width"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="buttons">
+				<td>
+					<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+				</td>
+				<td>
+					<button class="btn btn-primary">Save</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

@@ -45,7 +45,7 @@ export class CreateCustomerComponent implements OnInit {
 			.subscribe(
 				data =>
 				{
-					this.router.navigate(['customers']);
+					this.router.navigate(['Customers']);
 					return;
 				},
 				error =>
@@ -56,6 +56,6 @@ export class CreateCustomerComponent implements OnInit {
 
 	onCancel()
 	{
-		this.router.navigate(['customers']);
+		this.router.navigate(['Customers']);
 	}
 }

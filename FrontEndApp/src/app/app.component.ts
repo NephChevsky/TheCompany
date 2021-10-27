@@ -11,6 +11,21 @@ export class AppComponent
 {
 	title: string = 'TheCompany';
 	guest: boolean = true;
+	menu: any[] = [
+		{name: "Home", route: ""},
+		{name: "Customers", route: "Customers"},
+		{name: "Invoices", route: "Invoices"},
+		{name: "Settings", route: "Settings", childrens: [
+			{
+				name: "Invoice Extraction",
+				route: "Settings/InvoiceExtraction"
+			},
+			{
+				name: "Clear All",
+				route: "Settings/ClearAll"
+			}]
+		}
+	];
 
 	constructor(
 		private userService: UserService,
@@ -26,6 +41,6 @@ export class AppComponent
 	logout()
 	{
 		this.userService.logout();
-		this.router.navigate(['/login']);
+		this.router.navigate(['/Login']);
 	}
 }

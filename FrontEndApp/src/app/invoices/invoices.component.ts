@@ -16,6 +16,6 @@ export class InvoicesComponent implements OnInit {
 	}
 
 	importInvoice() {
-		this.router.navigate(['invoices/import']);
+		this.router.navigate(['Invoices/Import']);
 	}
 }

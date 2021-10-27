@@ -39,6 +39,6 @@ export class ViewListComponent implements OnInit {
 
 	show(id: string)
 	{
-		this.router.navigate([this.dataSource.toLocaleLowerCase() + "/show/" + id]);
+		this.router.navigate([this.dataSource + "/Show/" + id]);
 	}
 }

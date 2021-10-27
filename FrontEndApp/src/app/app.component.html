@@ -7,17 +7,31 @@
 </mat-toolbar>
 <mat-sidenav-container>
 	<mat-sidenav #sidenav mode="side" [opened]="!guest">
-		<mat-list>
-		<mat-list-item [routerLink]="['/customers']" routerLinkActive="active-tab">
-			Customers
-		</mat-list-item>
-		<mat-list-item [routerLink]="['/invoices']" routerLinkActive="active-tab">
-			Invoices
-		</mat-list-item>
-		<mat-list-item [routerLink]="['/settings']" routerLinkActive="active-tab">
-			Settings
-		</mat-list-item>
-		</mat-list>
+		<mat-nav-list>
+			<span *ngFor="let item of menu">
+				<span *ngIf="item.childrens && item.childrens.length > 0">
+					<mat-accordion>
+						<mat-expansion-panel class="mat-elevation-z0">
+							<mat-expansion-panel-header>
+								<mat-panel-title>
+									<div>{{item.name}}</div>
+								</mat-panel-title>
+							</mat-expansion-panel-header>
+							<span *ngFor="let child of item.childrens">
+								<mat-list-item [routerLink]="child.route">
+									<div>{{child.name}}</div>
+								</mat-list-item>
+							</span>
+						</mat-expansion-panel>
+					</mat-accordion>
+				</span>
+				<span *ngIf="!item.childrens || item.childrens.length === 0">
+					<mat-list-item [routerLink]="item.route">
+						<div>{{item.name}}</div>
+					</mat-list-item>
+				</span>
+			</span>
+		</mat-nav-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<router-outlet></router-outlet>

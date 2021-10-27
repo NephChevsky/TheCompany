@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './settings.component';
+import { InvoiceExtractionComponent } from './settings.component';
 
-describe('HomeComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+describe('InvoiceExtractionComponent', () => {
+  let component: InvoiceExtractionComponent;
+  let fixture: ComponentFixture<InvoiceExtractionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ]
+      declarations: [ InvoiceExtractionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
+    fixture = TestBed.createComponent(InvoiceExtractionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -10,19 +10,21 @@ import { CustomersComponent } from './customers/customers.component';
 import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
-import { SettingsComponent } from './settings/settings.component';
+import { InvoiceExtractionComponent } from './settings/invoiceextraction/invoiceextraction.component';
 import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
-	{ path: 'login', component: LoginComponent },
-	{ path: 'signup', component: SignUpComponent },
-	{ path: 'customers', component: CustomersComponent, canActivate: [AuthGuard]},
-	{ path: 'customers/create', component: CreateCustomerComponent, canActivate: [AuthGuard]},
-	{ path: 'invoices', component: InvoicesComponent, canActivate: [AuthGuard]},
-	{ path: 'invoices/import', component: ImportInvoiceComponent, canActivate: [AuthGuard]},
-	{ path: 'invoices/show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard]},
-	{ path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
+	{ path: 'Login', component: LoginComponent },
+	{ path: 'SignUp', component: SignUpComponent },
+	{ path: 'Customers', component: CustomersComponent, canActivate: [AuthGuard]},
+	{ path: 'Customers/Create', component: CreateCustomerComponent, canActivate: [AuthGuard]},
+	{ path: 'Invoices', component: InvoicesComponent, canActivate: [AuthGuard]},
+	{ path: 'Invoices/Import', component: ImportInvoiceComponent, canActivate: [AuthGuard]},
+	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard]},
+	{ path: 'Settings', component: SettingsComponent, canActivate: [AuthGuard]},
+	{ path: 'Settings/InvoiceExtraction', component: InvoiceExtractionComponent, canActivate: [AuthGuard]},
 	{ path: '**', redirectTo: '' }
 ];
 

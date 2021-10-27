@@ -63,7 +63,7 @@ export class ImportInvoiceComponent implements OnInit {
 						return;
 					case HttpEventType.Response:
 						this.inProgress = false;
-						this.router.navigate(['invoices']);
+						this.router.navigate(['Invoices']);
 						return;
 					case HttpEventType.Sent:
 						return;
@@ -81,7 +81,7 @@ export class ImportInvoiceComponent implements OnInit {
 
 	onCancel()
 	{
-		this.router.navigate(['invoices']);
+		this.router.navigate(['Invoices']);
 	}
 
 	get errorMessage(): string

@@ -15,7 +15,7 @@ export class CustomersComponent implements OnInit
 	}
 
 	createCustomer() {
-		this.router.navigate(['customers/create']);
+		this.router.navigate(['Customers/Create']);
 	}
 
 }

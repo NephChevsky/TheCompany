@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatTreeModule,
     MatProgressBarModule,
-    MatSelectModule],
+    MatSelectModule,
+	MatExpansionModule],
   exports: [MatToolbarModule,
     MatCardModule,
     MatIconModule,
@@ -37,7 +39,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatTreeModule,
     MatProgressBarModule,
-    MatSelectModule]
+    MatSelectModule,
+	MatExpansionModule]
 })
 
 export class AngularMaterialModule { }
