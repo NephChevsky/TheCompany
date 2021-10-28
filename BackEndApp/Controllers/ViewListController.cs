@@ -33,13 +33,13 @@ namespace BackEndApp.Controllers
 			{
 				case "Individual":
 					_logger.LogInformation("End of Get method");
-					return Ok(GetIndividuals());
+					return Ok(GetIndividuals(query));
 				case "Invoice":
 					_logger.LogInformation("End of Get method");
-					return Ok(GetInvoices());
+					return Ok(GetInvoices(query));
 				case "AdditionalField":
 					_logger.LogInformation("End of Get method");
-					return Ok(GetAdditionalFields());
+					return Ok(GetAdditionalFields(query));
 				default:
 					_logger.LogInformation("End of Get method");
 					return BadRequest();
@@ -47,7 +47,7 @@ namespace BackEndApp.Controllers
 			
 		}
 
-		private List<Dictionary<string, string>> GetIndividuals()
+		private List<Dictionary<string, string>> GetIndividuals(ViewListQuery query)
 		{
 			_logger.LogInformation("Start of GetIndividuals method");
 			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
@@ -77,7 +77,7 @@ namespace BackEndApp.Controllers
 			return values;
 		}
 
-		private List<Dictionary<string, string>> GetInvoices()
+		private List<Dictionary<string, string>> GetInvoices(ViewListQuery query)
 		{
 			_logger.LogInformation("Start of GetInvoices method");
 			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
@@ -105,7 +105,7 @@ namespace BackEndApp.Controllers
 			return values;
 		}
 
-		private List<Dictionary<string, string>> GetAdditionalFields()
+		private List<Dictionary<string, string>> GetAdditionalFields(ViewListQuery query)
 		{
 			_logger.LogInformation("Start of GetAdditionalFields method");
 			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
@@ -114,6 +114,7 @@ namespace BackEndApp.Controllers
 				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 				List<AdditionalField> additionalFields = db.AdditionalFields.Where(obj => obj.Owner == owner)
 																	.OrderBy(obj => obj.Name)
+																	.FilterDynamic(query.Filters)
 																	.ToList();
 				Dictionary<string, string> header = new Dictionary<string, string>();
 				header.Add("0", "Id");
