@@ -1,8 +1,8 @@
 <mat-toolbar>
 	<span [routerLink]="['/']" class="item">TheCompany</span>
 	<span class="filler"></span>
-	<span *ngIf="guest" [routerLink]="['/login']" class="item">Log in</span>
-	<span *ngIf="guest" [routerLink]="['/signup']" class="item">Sign up</span>
+	<span *ngIf="guest" [routerLink]="['/Login']" class="item">Log in</span>
+	<span *ngIf="guest" [routerLink]="['/SignUp']" class="item">Sign up</span>
 	<span *ngIf="!guest" (click)="logout()" class="item material-icons exit">logout</span>
 </mat-toolbar>
 <mat-sidenav-container>
