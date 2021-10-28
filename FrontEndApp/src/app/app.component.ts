@@ -17,6 +17,14 @@ export class AppComponent
 		{name: "Invoices", route: "Invoices"},
 		{name: "Settings", route: "Settings", childrens: [
 			{
+				name: "Customer",
+				route: "Settings/Customer"
+			},
+			{
+				name: "Invoice",
+				route: "Settings/Invoice"
+			},
+			{
 				name: "Invoice Extraction",
 				route: "Settings/InvoiceExtraction"
 			},

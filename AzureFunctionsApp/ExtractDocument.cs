@@ -79,7 +79,7 @@ namespace AzureFunctionsApp
                         string newCustomerNumber = "";
                         string newCustomerLastName = "";
                         string newCustomerFirstName = "";
-                        List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoices").ToList();
+                        List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice").ToList();
                         extractSettings.ForEach(item => {
                             Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
                             using (OcrInput Input = new OcrInput(rect, tempFileName))

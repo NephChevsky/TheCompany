@@ -34,9 +34,12 @@ namespace BackEndApp.Controllers
 				case "Individual":
 					_logger.LogInformation("End of Get method");
 					return Ok(GetIndividuals());
-				case "Invoices":
+				case "Invoice":
 					_logger.LogInformation("End of Get method");
 					return Ok(GetInvoices());
+				case "AdditionalField":
+					_logger.LogInformation("End of Get method");
+					return Ok(GetAdditionalFields());
 				default:
 					_logger.LogInformation("End of Get method");
 					return BadRequest();
@@ -99,6 +102,32 @@ namespace BackEndApp.Controllers
 				});
 			}
 			_logger.LogInformation("End of GetInvoices method");
+			return values;
+		}
+
+		private List<Dictionary<string, string>> GetAdditionalFields()
+		{
+			_logger.LogInformation("Start of GetAdditionalFields method");
+			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
+			using (var db = new TheCompanyDbContext())
+			{
+				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				List<AdditionalField> additionalFields = db.AdditionalFields.Where(obj => obj.Owner == owner)
+																	.OrderBy(obj => obj.Name)
+																	.ToList();
+				Dictionary<string, string> header = new Dictionary<string, string>();
+				header.Add("0", "Id");
+				header.Add("1", "Name");
+				values.Add(header);
+				additionalFields.ForEach(additionalField =>
+				{
+					Dictionary<string, string> value = new Dictionary<string, string>();
+					value.Add("0", additionalField.Id.ToString());
+					value.Add("1", additionalField.Name);
+					values.Add(value);
+				});
+			}
+			_logger.LogInformation("End of GetAdditionalFields method");
 			return values;
 		}
 	}

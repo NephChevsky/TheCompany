@@ -14,6 +14,8 @@ export class ViewListComponent implements OnInit {
     public dataSource: string = "";
 	@Input()
 	public linkField: string = "";
+	@Input()
+	public linkRoute: string = "";
 
 	public linkable: boolean = false;
 	public fields: string[] = [];
@@ -39,6 +41,6 @@ export class ViewListComponent implements OnInit {
 
 	show(id: string)
 	{
-		this.router.navigate([this.dataSource + "/Show/" + id]);
+		this.router.navigate([this.linkRoute + id]);
 	}
 }

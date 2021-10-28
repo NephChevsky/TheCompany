@@ -16,8 +16,7 @@ export class ShowInvoiceComponent implements OnInit {
 	preview: any;
 
 	constructor(private invoiceService: InvoiceService,
-				private route: ActivatedRoute,
-				private domSanitizer: DomSanitizer) { }
+				private route: ActivatedRoute) { }
 
 	ngOnInit(): void {
 		this.id = this.route.snapshot.paramMap.get('id');

@@ -111,7 +111,7 @@ namespace BackEndApp.Controllers
 				foreach (JsonElement field in fields.EnumerateArray())
 				{
 					string fieldName = field.GetProperty("name").GetString();
-					ExtractionSettings extSet = new ExtractionSettings("Invoices",
+					ExtractionSettings extSet = new ExtractionSettings("Invoice",
 																	fieldName,
 																	field.GetProperty("x").GetInt32(),
 																	field.GetProperty("y").GetInt32(),
@@ -119,7 +119,7 @@ namespace BackEndApp.Controllers
 																	field.GetProperty("height").GetInt32(),
 																	owner);
 
-					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
 					if (dbExtSet != null)
 					{
 						dbExtSet.Deleted = true;
