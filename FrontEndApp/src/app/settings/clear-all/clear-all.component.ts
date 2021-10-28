@@ -25,7 +25,6 @@ export class ClearAllComponent implements OnInit {
 	}
 
 	onSubmit() {
-		debugger;
 		this.clearAllService.clearAll(this.clearAllForm.value).subscribe(result => {
 			this.router.navigate(["Home"]);
 		}, error => {
