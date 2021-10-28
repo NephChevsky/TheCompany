@@ -25,9 +25,9 @@ export class InvoiceService
 		return this.http.post(environment.baseUrl + `Invoice/SaveExtractionSettings`, data);
 	}
 
-	getExtractionSettings()
+	getExtractionSettings(ids: string[] = [])
 	{
-		return this.http.get<any>(environment.baseUrl + `Invoice/GetExtractionSettings`);
+		return this.http.post<any>(environment.baseUrl + `Invoice/GetExtractionSettings`, ids);
 	}
 
 	getInvoice(id: string)

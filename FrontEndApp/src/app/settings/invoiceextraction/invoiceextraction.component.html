@@ -1,5 +1,4 @@
 <div class="content">
-	<h5>Extraction</h5>
 	<form [formGroup]="invoiceSettingsForm" (ngSubmit)="onSubmit()">
 		<table class="main">
 			<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">

@@ -111,36 +111,65 @@ namespace BackEndApp.Controllers
 				foreach (JsonElement field in fields.EnumerateArray())
 				{
 					string fieldName = field.GetProperty("name").GetString();
-					ExtractionSettings extSet = new ExtractionSettings("Invoice",
-																	fieldName,
-																	field.GetProperty("x").GetInt32(),
-																	field.GetProperty("y").GetInt32(),
-																	field.GetProperty("width").GetInt32(),
-																	field.GetProperty("height").GetInt32(),
-																	owner);
+					int x = ExtractPositon(field.GetProperty("x"));
+					int y = ExtractPositon(field.GetProperty("y"));
+					int width = ExtractPositon(field.GetProperty("width"));
+					int height = ExtractPositon(field.GetProperty("height"));
 
-					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
-					if (dbExtSet != null)
+					if (x != -1 && y != -1 && width != -1 && height != -1)
 					{
-						dbExtSet.Deleted = true;
+						string name = field.GetProperty("id").GetString();
+						if (string.IsNullOrEmpty(name))
+							name = fieldName;
+						ExtractionSettings extSet = new ExtractionSettings("Invoice", name, x, y, width, height, owner);
+						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+						if (dbExtSet != null)
+						{
+							dbExtSet.Deleted = true;
+						}
+						db.Add(extSet);
+						db.SaveChanges();
 					}
-					db.Add(extSet);
-					db.SaveChanges();
+					else if (x == -1 && y == -1 && width == -1 && height == -1)
+					{
+						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+						if (dbExtSet != null)
+						{
+							dbExtSet.Deleted = true;
+							db.SaveChanges();
+						}
+					}
 				}
 			}
 			_logger.LogInformation("End of SaveExtractionSettings method");
 			return Ok();
 		}
 
-		[HttpGet("GetExtractionSettings")]
-		public ActionResult GetExtractionSettings()
+		private int ExtractPositon(JsonElement elem)
+		{
+			int result = -1;
+			if (elem.ValueKind == JsonValueKind.Number)
+				result = elem.GetInt32();
+			else if (elem.ValueKind == JsonValueKind.String)
+			{
+				string tmp = elem.GetString();
+				if (!string.IsNullOrEmpty(tmp))
+				{
+					result = Convert.ToInt32(tmp);
+				}
+			}
+			return result;
+		}
+
+		[HttpPost("GetExtractionSettings")]
+		public ActionResult GetExtractionSettings([FromBody] List<string> ids)
 		{
 			_logger.LogInformation("Start of GetExtractionSettings method");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			List<ExtractionSettings> results = new List<ExtractionSettings>();
 			using (var db = new TheCompanyDbContext())
 			{
-				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoices" && x.Owner == owner).ToList();
+				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Owner == owner && ids.Contains(x.Field)).ToList();
 			}
 			_logger.LogInformation("End of GetExtractionSettings method");
 			return Ok(results);

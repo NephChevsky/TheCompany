@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ModelsApp;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace BackEndApp.Controllers
 {
-	public class AdditionalFieldController : Controller
+	[Route("[controller]")]
+	public class AdditionalFieldController : ControllerBase
 	{
 		private readonly ILogger<AdditionalFieldController> _logger;
 
@@ -20,7 +22,7 @@ namespace BackEndApp.Controllers
 			_logger = logger;
 		}
 
-		[HttpPost]
+		[HttpPost("Add")]
 		public ActionResult Add([FromBody] JsonElement json)
 		{
 			_logger.LogInformation("Start of Add method");
@@ -51,6 +53,19 @@ namespace BackEndApp.Controllers
 
 			_logger.LogInformation("End of Add method");
 			return Ok();
+		}
+
+		[HttpGet("Get/{dataSource}")]
+		public ActionResult Get(string dataSource)
+		{
+			_logger.LogInformation("Start of Get method");
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			using (var db = new TheCompanyDbContext())
+			{
+				List<AdditionalField> dbAdditionalFields = db.AdditionalFields.Where(x => x.Owner == owner && x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
+				_logger.LogInformation("End of Get method");
+				return Ok(dbAdditionalFields);
+			}
 		}
 	}
 }

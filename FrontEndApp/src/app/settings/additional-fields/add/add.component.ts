@@ -31,7 +31,7 @@ export class AddComponent implements OnInit
 		{
 			return;
 		}
-		this.additionalFieldService.createCustomer(this.addFieldForm.value)
+		this.additionalFieldService.createField(this.addFieldForm.value)
 			.subscribe(
 				data =>
 				{
