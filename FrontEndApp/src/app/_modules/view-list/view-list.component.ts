@@ -1,6 +1,7 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Filter } from 'src/app/_models/filter';
 import { ViewListService } from 'src/app/_services/view-list.service';
 
 @Component({
@@ -16,6 +17,8 @@ export class ViewListComponent implements OnInit {
 	public linkField: string = "";
 	@Input()
 	public linkRoute: string = "";
+	@Input()
+	public filters: Filter[] = [];
 
 	public linkable: boolean = false;
 	public fields: string[] = [];
@@ -32,7 +35,7 @@ export class ViewListComponent implements OnInit {
 			this.linkable = true;
 		}
 
-		this.viewListService.getResults(this.dataSource).subscribe(x => {
+		this.viewListService.getResults(this.dataSource, this.filters).subscribe(x => {
 			this.fields = x[0];
 			x.shift();
 			this.data = x;

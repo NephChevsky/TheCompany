@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Filter } from 'src/app/_models/filter';
 
 @Component({
   selector: 'app-invoice',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 export class InvoiceComponent implements OnInit {
 
 	public dataSource: string = "AdditionalField";
+	public filters: Filter[] = [new Filter("DataSource", "=", "Invoice")];
 
 	constructor(private router: Router) { }
 

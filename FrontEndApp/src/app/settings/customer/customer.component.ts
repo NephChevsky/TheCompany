@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Filter } from 'src/app/_models/filter';
 
 @Component({
   selector: 'app-customer',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 export class CustomerComponent implements OnInit
 {
 	public dataSource: string = "AdditionalField";
+	public filters: Filter[] = [new Filter("DataSource", "=", "Customer")];
 
 	constructor(private router: Router) { }
 

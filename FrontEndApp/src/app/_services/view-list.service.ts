@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
+import { Filter } from '../_models/filter';
 
 @Injectable({ providedIn: 'root' })
 export class ViewListService
@@ -11,10 +12,11 @@ export class ViewListService
 		
 	}
 
-	getResults(dataSource: string)
+	getResults(dataSource: string, filters: Filter[])
 	{
 		var obj = {
-			dataSource: dataSource
+			dataSource: dataSource,
+			filters: filters
 		}
 		return this.http.post<any>(environment.baseUrl + `ViewList/Get`, obj);
 	}
