@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsApp;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -267,6 +269,36 @@ namespace DbApp.Models
             where TEntity : class, ISoftDeleteable
         {
             modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.Deleted);
+        }
+    }
+
+    public static class QueryableExtensions
+    {
+        public static IQueryable<T> FilterDynamic<T>(this IQueryable<T> query, List<Filter> filters)
+        {
+            if (filters != null)
+			{
+                filters.ForEach(x =>
+                {
+                    var param = Expression.Parameter(typeof(T), "e");
+                    var prop = Expression.PropertyOrField(param, x.FieldName);
+                    Expression<Func<T, bool>> predicate;
+                    switch (x.Operator)
+                    {
+                        case "=":
+                            Expression left = prop;
+                            Expression right = Expression.Constant(x.FieldValue);
+                            Expression exp = Expression.Equal(left, right);
+                            predicate = Expression.Lambda<Func<T, bool>>(exp, param);
+                            break;
+                        default:
+                            throw new Exception("InvalidOperator");
+                    }
+                    query = query.Where(predicate);
+                });
+            }
+            
+            return query;
         }
     }
 }
