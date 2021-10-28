@@ -24,18 +24,24 @@ namespace BackEndApp.Controllers
 		{
 			_logger.LogInformation("Start of Get method");
 			if (query == null)
+			{
+				_logger.LogInformation("End of Get method");
 				return BadRequest();
+			}
 
 			switch (query.DataSource)
 			{
 				case "Individual":
+					_logger.LogInformation("End of Get method");
 					return Ok(GetIndividuals());
 				case "Invoices":
+					_logger.LogInformation("End of Get method");
 					return Ok(GetInvoices());
 				default:
+					_logger.LogInformation("End of Get method");
 					return BadRequest();
 			}
-			_logger.LogInformation("End of Get method");
+			
 		}
 
 		private List<Dictionary<string, string>> GetIndividuals()
