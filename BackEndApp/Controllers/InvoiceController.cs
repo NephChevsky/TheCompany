@@ -209,6 +209,7 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
+					// TODO: store preview in Azure Storage for faster load the next time
 					MemoryStream stream = new MemoryStream();
 					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
 					containerClient.GetBlobClient(dbInvoice.FileId.ToString()).DownloadTo(stream);
