@@ -1,4 +1,5 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
 import { InvoiceService } from 'src/app/_services/invoice.service';
@@ -14,6 +15,8 @@ export class ShowInvoiceComponent implements OnInit {
 	invoiceData: any;
 	page: number = 1;
 	public filters: Filter[] = [];
+	editMode: boolean = false;
+	dataForm: FormGroup = new FormGroup({});
 
 	constructor(private invoiceService: InvoiceService,
 				private route: ActivatedRoute) { }
@@ -26,10 +29,29 @@ export class ShowInvoiceComponent implements OnInit {
 			this.invoiceService.getInvoice(this.id)
 				.subscribe(data =>{
 					this.invoiceData = data;
+					for (var field in this.invoiceData)
+					{
+						this.dataForm.addControl(field, new FormControl(this.invoiceData[field], Validators.required));
+					}
 				}, error =>
 				{
 					// TODO: handle errors
 				});
 		}
+	}
+
+	setEditMode()
+	{
+		this.editMode = true;
+	}
+
+	save()
+	{
+		
+	}
+
+	cancel()
+	{
+		this.editMode = false;
 	}
 }

@@ -1,15 +1,23 @@
 <div class="content">
 	<div class="invoiceFields">
 		<h4>Invoice details</h4>
-		<table>
-			<tr *ngFor="let field of invoiceData | keyvalue">
-				<td>{{field.key}}</td>
-				<td>{{field.value}}</td>
-			</tr>
-		</table>
+		<form [formGroup]="dataForm">
+			<table>
+				<tr *ngFor="let field of invoiceData | keyvalue">
+					<td>{{field.key}}</td>
+					<td><input type="text" [readonly]="!editMode" id="{{field.key}}" value="{{field.value}}" formControlName="{{field.key}}" size="50" /></td>
+				</tr>
+			</table>
+			<br /><br />
+			<h4>Line items</h4>
+			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [addLine]="editMode"></app-view-list>
+		</form>
 		<br /><br />
-		<h4>Line items</h4>
-		<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [addLine]="true"></app-view-list>
+		<div class="buttons">
+			<button class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
+			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">Cancel</button>
+			<button class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
+		</div>
 	</div>
 	<div class="invoicePreview">
 		<app-preview dataSource="Invoice" [id]="id" [page]="page"></app-preview>
