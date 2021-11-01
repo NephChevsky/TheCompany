@@ -40,6 +40,9 @@ namespace BackEndApp.Controllers
 				case "AdditionalField":
 					_logger.LogInformation("End of Get method");
 					return Ok(GetAdditionalFields(query));
+				case "InvoiceLineItem":
+					_logger.LogInformation("End of Get method");
+					return Ok(GetInvoiceLineItems(query));
 				default:
 					_logger.LogInformation("End of Get method");
 					return BadRequest();
@@ -129,6 +132,39 @@ namespace BackEndApp.Controllers
 				});
 			}
 			_logger.LogInformation("End of GetAdditionalFields method");
+			return values;
+		}
+
+		private List<Dictionary<string, string>> GetInvoiceLineItems(ViewListQuery query)
+		{
+			_logger.LogInformation("Start of GetInvoiceLineItems method");
+			List<Dictionary<string, string>> values = new List<Dictionary<string, string>>();
+			using (var db = new TheCompanyDbContext())
+			{
+				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				List<InvoiceLineItem> invoiceLineItems = db.InvoiceLineItems.Where(obj => obj.Owner == owner)
+																	.OrderBy(obj => obj.CreationDateTime)
+																	.FilterDynamic(query.Filters)
+																	.ToList();
+				Dictionary<string, string> header = new Dictionary<string, string>();
+				header.Add("0", "Reference");
+				header.Add("1", "Description");
+				header.Add("2", "Quantity");
+				header.Add("3", "UnitaryPrice");
+				header.Add("4", "Price");
+				values.Add(header);
+				invoiceLineItems.ForEach(invoiceLineItem =>
+				{
+					Dictionary<string, string> value = new Dictionary<string, string>();
+					value.Add("0", invoiceLineItem.Reference);
+					value.Add("1", invoiceLineItem.Description);
+					value.Add("2", invoiceLineItem.Quantity.ToString());
+					value.Add("3", invoiceLineItem.UnitaryPrice.ToString());
+					value.Add("4", invoiceLineItem.Price.ToString());
+					values.Add(value);
+				});
+			}
+			_logger.LogInformation("End of GetInvoiceLineItems method");
 			return values;
 		}
 	}

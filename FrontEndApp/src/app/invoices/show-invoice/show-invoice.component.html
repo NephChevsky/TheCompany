@@ -1,11 +1,15 @@
 <div class="content">
 	<div class="invoiceFields">
+		<h4>Invoice details</h4>
 		<table>
 			<tr *ngFor="let field of invoiceData | keyvalue">
 				<td>{{field.key}}</td>
 				<td>{{field.value}}</td>
 			</tr>
 		</table>
+		<br /><br />
+		<h4>Line items</h4>
+		<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [addLine]="true"></app-view-list>
 	</div>
 	<div class="invoicePreview">
 		<app-preview dataSource="Invoice" [id]="id" [page]="page"></app-preview>

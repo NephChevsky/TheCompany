@@ -12,7 +12,7 @@ namespace ModelsApp
 		public string Description { get; set; }
 		public double Quantity { get; set; }
 		public double UnitaryPrice { get; set; }
-		public string Price { get; set; }
+		public double Price { get; set; }
 
 		// IOwnable
 		public Guid Owner { get; set; }

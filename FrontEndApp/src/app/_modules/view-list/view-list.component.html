@@ -1,10 +1,24 @@
-<table>
-	<tr>
-		<th *ngFor="let item of fields | keyvalue">{{item.value}}</th>
-	</tr>
-	<tbody *ngFor="let entry of data">
-		<tr (click)="linkable && show(entry[0])" [ngClass]="{'linkable' : linkable}">
-			<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
+<form [formGroup]="addedDataForm">
+	<table>
+		<tr>
+			<th *ngFor="let item of fieldsName | keyvalue">{{item.value}}</th>
 		</tr>
-	</tbody>
-</table>
+		<tbody *ngFor="let entry of data">
+			<tr (click)="linkable && show(entry[0])" [ngClass]="{'linkable' : linkable}">
+				<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
+			</tr>
+		</tbody>
+		<tbody formArrayName="lines" *ngFor="let item of lines.controls; let i = index">
+			<tr [formGroupName]="i">
+				<td><input type="text" id="{{'reference'+i}}" size="10" formControlName="reference"></td>
+				<td><input type="text" id="{{'description'+i}}" formControlName="description"></td>
+				<td><input type="text" id="{{'quantity'+i}}" size="5" formControlName="quantity"></td>
+				<td><input type="text" id="{{'unitaryprice'+i}}" size="5" formControlName="unitaryprice"></td>
+				<td><input type="text" id="{{'price'+i}}" size="5" formControlName="price"></td>
+			</tr>
+		</tbody>
+		<tr *ngIf="addLine">
+			<td colspan="100%"><button (click)="createNewLine()">Add line</button></td>
+		</tr>
+	</table>
+</form>
