@@ -319,7 +319,15 @@ namespace DbApp.Models
                     {
                         case "=":
                             Expression left = prop;
-                            Expression right = Expression.Constant(x.FieldValue);
+                            Expression right;
+                            if (prop.Type == typeof(Guid))
+							{
+                                right = Expression.Constant(Guid.Parse(x.FieldValue));
+                            }
+                            else
+							{
+                                right = Expression.Constant(x.FieldValue);
+                            }
                             Expression exp = Expression.Equal(left, right);
                             predicate = Expression.Lambda<Func<T, bool>>(exp, param);
                             break;

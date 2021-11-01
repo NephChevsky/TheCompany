@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211101100801_line-item")]
-    partial class lineitem
+    [Migration("20211101142906_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -241,8 +241,8 @@ namespace DbApp.Migrations
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Price")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
@@ -255,7 +255,7 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceLineItem");
+                    b.ToTable("InvoiceLineItems");
                 });
 
             modelBuilder.Entity("ModelsApp.User", b =>

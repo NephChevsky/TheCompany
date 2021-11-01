@@ -239,8 +239,8 @@ namespace DbApp.Migrations
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Price")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
