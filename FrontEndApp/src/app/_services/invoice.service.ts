@@ -39,4 +39,9 @@ export class InvoiceService
 	{
 		return this.http.get(environment.baseUrl + `Invoice/Preview/` + id + "/" + page, {responseType: 'arraybuffer'});
 	}
+
+	getExtraction(id: string)
+	{
+		return this.http.get(environment.baseUrl + `Invoice/Extraction/` + id, {responseType: 'arraybuffer'});
+	}
 }

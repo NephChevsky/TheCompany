@@ -24,6 +24,7 @@ import { ClearAllComponent } from './settings/clear-all/clear-all.component';
 import { InvoiceComponent } from './settings/invoice/invoice.component';
 import { AddComponent } from './settings/additional-fields/add/add.component';
 import { CustomerComponent } from './settings/customer/customer.component';
+import { PreviewComponent } from './_modules/preview/preview.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CustomerComponent } from './settings/customer/customer.component';
     ClearAllComponent,
     InvoiceComponent,
     AddComponent,
-    CustomerComponent
+    CustomerComponent,
+    PreviewComponent
   ],
   imports: [
     BrowserModule,

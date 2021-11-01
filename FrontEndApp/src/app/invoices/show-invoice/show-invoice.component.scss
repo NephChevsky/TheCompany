@@ -1,7 +1,8 @@
 .content
 {
-	margin: 10px;
+	padding: 10px;
 	width:100%;
+	height:100%;
 	display: flex;
 }
 
@@ -19,9 +20,4 @@
 td
 {
 	border: 1px black solid;
-}
-
-.imgPreview
-{
-	height: 85vh;
 }

@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211101100801_line-item")]
+    partial class lineitem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,7 +255,7 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceLineItems");
+                    b.ToTable("InvoiceLineItem");
                 });
 
             modelBuilder.Entity("ModelsApp.User", b =>

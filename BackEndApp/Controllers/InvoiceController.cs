@@ -219,7 +219,28 @@ namespace BackEndApp.Controllers
 					return Ok(Convert.ToBase64String(output));
 				}
 			}
-			
+		}
+
+		[HttpGet("Extraction/{id}")]
+		public ActionResult Extraction(string id)
+		{
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			using (var db = new TheCompanyDbContext())
+			{
+				Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+				if (dbInvoice == null)
+				{
+					return UnprocessableEntity("NotFound");
+				}
+				else
+				{
+					MemoryStream stream = new MemoryStream();
+					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
+					containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
+					_logger.LogInformation("End of Preview method");
+					return Ok(Convert.ToBase64String(stream.ToArray()));
+				}
+			}
 		}
 	}
 }

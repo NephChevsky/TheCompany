@@ -26,6 +26,7 @@ namespace DbApp.Models
 
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
+        public virtual DbSet<InvoiceLineItem> InvoiceLineItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -184,6 +185,37 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
                     .IsRequired(); 
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<InvoiceLineItem>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.InvoiceId)
+                    .IsRequired();
+
+                entity.Property(e => e.Reference);
+
+                entity.Property(e => e.Description);
+
+                entity.Property(e => e.Quantity);
+
+                entity.Property(e => e.UnitaryPrice);
+
+                entity.Property(e => e.Price);
+
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
+                    .IsRequired();
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()

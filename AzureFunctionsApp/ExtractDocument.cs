@@ -63,6 +63,8 @@ namespace AzureFunctionsApp
                             // Input.Deskew();  // use if image not straight
                             // Input.DeNoise(); // use if image contains digital noise
                             OcrResult Result = Ocr.Read(Input);
+                            ExtractBlock size = new ExtractBlock(Result.Pages[0].ContentArea.X, Result.Pages[0].ContentArea.Y, Result.Pages[0].ContentArea.Height, Result.Pages[0].ContentArea.Width, "");
+                            result.Add(size);
                             Array.ForEach(Result.Words, delegate (OcrResult.Word word) {
                                 ExtractBlock extractBlock = new ExtractBlock(word.X, word.Y, word.Height, word.Width, word.Text);
                                 result.Add(extractBlock);

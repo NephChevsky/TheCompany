@@ -1,0 +1,19 @@
+.previewContainer{
+    display:inline-block;
+    height: 100%;
+	width: 100%;
+    position:relative;
+}
+
+.imgPreview
+{
+	height: 100%;
+	position:absolute;
+	z-index:1;
+}
+
+.canvasPreview
+{
+	position:relative;
+    z-index: 20;
+}
