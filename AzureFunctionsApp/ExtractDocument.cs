@@ -93,9 +93,13 @@ namespace AzureFunctionsApp
                                 }
                                 else if (item.Field == "CustomerId")
                                 {
+                                    invoice.CustomerNumber = tmp.Text;
                                     Individual dbInvidual = db.Customers_Individual.Where(x => x.CustomerId == tmp.Text && x.Owner == invoice.Owner).SingleOrDefault();
                                     if (dbInvidual != null)
+                                    {
+                                        
                                         invoice.CustomerId = dbInvidual.Id;
+                                    }
                                     else
                                         newCustomerNumber = tmp.Text;
                                 }

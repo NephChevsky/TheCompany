@@ -108,6 +108,8 @@ namespace DbApp.Models
 
                 entity.Property(e => e.InvoiceNumber);
 
+                entity.Property(e => e.CustomerNumber);
+
                 entity.Property(e => e.CustomerId);
 
                 entity.Property(e => e.CustomerAddress);

@@ -224,6 +224,7 @@ namespace BackEndApp.Controllers
 		[HttpGet("Extraction/{id}")]
 		public ActionResult Extraction(string id)
 		{
+			_logger.LogInformation("Start of Extraction method");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext())
 			{
@@ -234,13 +235,53 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
-					MemoryStream stream = new MemoryStream();
-					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-					containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
-					_logger.LogInformation("End of Preview method");
-					return Ok(Convert.ToBase64String(stream.ToArray()));
+					if (dbInvoice.ExtractId != Guid.Empty)
+					{
+						MemoryStream stream = new MemoryStream();
+						BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
+						containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
+						_logger.LogInformation("End of Extraction method");
+						return Ok(Convert.ToBase64String(stream.ToArray()));
+					}
+					else
+					{
+						string result = "[]";
+						_logger.LogInformation("End of Extraction method");
+						return Ok(Convert.ToBase64String(Encoding.ASCII.GetBytes(result)));
+					}
 				}
 			}
+		}
+
+		[HttpPost("SaveInvoice")]
+		public ActionResult SaveInvoice([FromBody] JsonElement json) // TODO: implement DTO
+		{
+			_logger.LogInformation("Start of SaveInvoice method");
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			using (var db = new TheCompanyDbContext())
+			{
+				JsonElement data = json.GetProperty("data");
+				Guid invoiceId = Guid.Parse(data.GetProperty("id").GetString());
+				Invoice invoice = db.Invoices.Where(x => x.Owner == owner && x.Id == invoiceId).SingleOrDefault();
+				invoice.InvoiceNumber = data.GetProperty("invoiceNumber").GetString();
+				invoice.CustomerNumber = data.GetProperty("customerNumber").GetString();
+				invoice.CustomerAddress = data.GetProperty("customerAddress").GetString();
+				JsonElement addedLineItems = json.GetProperty("addedLineItems").GetProperty("lines");
+				foreach (JsonElement line in addedLineItems.EnumerateArray())
+				{
+					string reference = line.GetProperty("reference").GetString();
+					string description = line.GetProperty("description").GetString();
+					double quantity = Convert.ToDouble(line.GetProperty("quantity").GetString());
+					double unitaryprice = Convert.ToDouble(line.GetProperty("unitaryprice").GetString());
+					double price = Convert.ToDouble(line.GetProperty("price").GetString());
+					InvoiceLineItem newItem = new InvoiceLineItem(invoice.Id, owner, reference, description, quantity, unitaryprice, price);
+					db.InvoiceLineItems.Add(newItem);
+				}
+				db.SaveChanges();
+			}
+			
+			_logger.LogInformation("End of SaveInvoice method");
+			return Ok();
 		}
 	}
 }

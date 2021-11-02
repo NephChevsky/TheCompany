@@ -1,5 +1,5 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
 import { InvoiceService } from 'src/app/_services/invoice.service';
@@ -11,17 +11,25 @@ import { InvoiceService } from 'src/app/_services/invoice.service';
 })
 export class ShowInvoiceComponent implements OnInit {
 
-	id: string = "";
-	invoiceData: any;
-	page: number = 1;
+	public id: string = "";
+	public invoiceData: any;
+	public page: number = 1;
 	public filters: Filter[] = [];
-	editMode: boolean = false;
-	dataForm: FormGroup = new FormGroup({});
+	public editMode: boolean = false;
+	public dataForm: FormGroup = new FormGroup({});
+	public lineItemsDataForm: FormGroup;
 
 	constructor(private invoiceService: InvoiceService,
-				private route: ActivatedRoute) { }
+				private route: ActivatedRoute,
+				private formBuilder: FormBuilder)
+	{	
+	}
 
-	ngOnInit(): void {
+	ngOnInit(): void
+	{
+		this.lineItemsDataForm = this.formBuilder.group({
+			"lines": new FormArray([])
+		});
 		this.id = this.route.snapshot.paramMap.get('id');
 		this.filters.push(new Filter("InvoiceId", "=", this.id));
 		if (this.id)
@@ -47,7 +55,13 @@ export class ShowInvoiceComponent implements OnInit {
 
 	save()
 	{
-		
+		this.invoiceService.saveInvoice(this.dataForm.value, this.lineItemsDataForm.value)
+			.subscribe(data =>{
+				window.location.reload()
+			}, error =>
+			{
+				// TODO: handle errors
+			});
 	}
 
 	cancel()

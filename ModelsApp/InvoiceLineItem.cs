@@ -23,5 +23,20 @@ namespace ModelsApp
 		// IDateTimeTrackable
 		public DateTime CreationDateTime { get; set; }
 		public DateTime LastModificationDateTime { get; set; }
+
+		public InvoiceLineItem()
+		{
+		}
+
+		public InvoiceLineItem(Guid invoiceId, Guid owner, string reference, string description, double quantity, double unitaryprice, double price)
+		{
+			InvoiceId = invoiceId;
+			Owner = owner;
+			Reference = reference;
+			Description = description;
+			Quantity = quantity;
+			UnitaryPrice = unitaryprice;
+			Price = price;
+		}
 	}
 }

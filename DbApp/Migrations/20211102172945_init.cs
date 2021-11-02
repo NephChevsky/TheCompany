@@ -95,6 +95,7 @@ namespace DbApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     InvoiceNumber = table.Column<string>(nullable: true),
+                    CustomerNumber = table.Column<string>(nullable: true),
                     CustomerId = table.Column<Guid>(nullable: false),
                     CustomerAddress = table.Column<string>(nullable: true),
                     LockedBy = table.Column<string>(nullable: true),

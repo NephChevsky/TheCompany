@@ -10,7 +10,9 @@
 			</table>
 			<br /><br />
 			<h4>Line items</h4>
-			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [addLine]="editMode"></app-view-list>
+		</form>
+		<form [formGroup]="lineItemsDataForm">
+			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [editMode]="editMode" [addedLines]="lineItemsDataForm"></app-view-list>
 		</form>
 		<br /><br />
 		<div class="buttons">

@@ -1,4 +1,4 @@
-<form [formGroup]="addedDataForm">
+<form [formGroup]="addedLines">
 	<table>
 		<tr>
 			<th *ngFor="let item of fieldsName | keyvalue">{{item.value}}</th>
@@ -17,7 +17,7 @@
 				<td><input type="text" id="{{'price'+i}}" size="5" formControlName="price"></td>
 			</tr>
 		</tbody>
-		<tr *ngIf="addLine">
+		<tr *ngIf="editMode">
 			<td colspan="100%"><button (click)="createNewLine()">Add line</button></td>
 		</tr>
 	</table>

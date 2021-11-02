@@ -20,12 +20,13 @@ export class ViewListComponent implements OnInit {
 	@Input()
 	public filters: Filter[] = [];
 	@Input()
-	public addLine: boolean = false;
+	public editMode: boolean = false;
+	@Input()
+	public addedLines: FormGroup;
 
 	public linkable: boolean = false;
 	public fieldsName: string[] = [];
 	public data: any[] = [];
-	public addedDataForm: FormGroup = new FormGroup({});
 
 	constructor(private viewListService: ViewListService,
 				private router: Router,
@@ -34,10 +35,6 @@ export class ViewListComponent implements OnInit {
 
 	ngOnInit(): void
 	{
-		this.addedDataForm = this.formBuilder.group({
-			"lines": new FormArray([])
-		});
-
 		if (this.linkField)
 		{
 			this.linkable = true;
@@ -58,17 +55,21 @@ export class ViewListComponent implements OnInit {
 	createNewLine()
 	{
 		const tmpForm = this.formBuilder.group({
-			reference: ['', []],
-			description: ['', []],
-			quantity: ['', []],
-			unitaryprice: ['', []],
-			price: ['',[]]
+			reference: ['1', []],
+			description: ['2', []],
+			quantity: ['3', []],
+			unitaryprice: ['4', []],
+			price: ['5',[]]
 		});
 		this.lines.push(tmpForm);
 	}
 
 	get lines()
 	{
-		return this.addedDataForm.controls["lines"] as FormArray;
+		if (!this.addedLines)
+			this.addedLines = this.formBuilder.group({
+				"lines": new FormArray([])
+			});
+		return this.addedLines.controls["lines"] as FormArray;
 	}
 }

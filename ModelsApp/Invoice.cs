@@ -10,6 +10,7 @@ namespace ModelsApp
 	{
 		public Guid Id { get; set; }
 		public string InvoiceNumber { get; set; }
+		public string CustomerNumber { get; set; }
 		public Guid CustomerId { get; set; }
 		public string CustomerAddress { get; set; }
 
