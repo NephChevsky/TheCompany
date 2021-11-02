@@ -5,14 +5,14 @@
 			<table>
 				<tr *ngFor="let field of invoiceData | keyvalue">
 					<td>{{field.key}}</td>
-					<td><input type="text" [readonly]="!editMode" id="{{field.key}}" value="{{field.value}}" formControlName="{{field.key}}" size="50" /></td>
+					<td><input type="text" [readonly]="!editMode" id="{{field.key}}" value="{{field.value}}" formControlName="{{field.key}}" size="50" (focus)="onFocus($event.target)" /></td>
 				</tr>
 			</table>
 			<br /><br />
 			<h4>Line items</h4>
 		</form>
 		<form [formGroup]="lineItemsDataForm">
-			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [editMode]="editMode" [addedLines]="lineItemsDataForm"></app-view-list>
+			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [editMode]="editMode" [addedLines]="lineItemsDataForm" (focusEvent)="onFocus($event)"></app-view-list>
 		</form>
 		<br /><br />
 		<div class="buttons">
@@ -21,7 +21,7 @@
 			<button class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
 		</div>
 	</div>
-	<div class="invoicePreview">
-		<app-preview dataSource="Invoice" [id]="id" [page]="page"></app-preview>
+	<div class="invoicePreview" (focus)="onFocus($event.target)">
+		<app-preview dataSource="Invoice" [id]="id" [page]="page" (extractedTextEvent)="fillExtractedText($event)"></app-preview>
 	</div>
 </div>

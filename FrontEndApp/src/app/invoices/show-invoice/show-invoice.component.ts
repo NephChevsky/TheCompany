@@ -18,6 +18,7 @@ export class ShowInvoiceComponent implements OnInit {
 	public editMode: boolean = false;
 	public dataForm: FormGroup = new FormGroup({});
 	public lineItemsDataForm: FormGroup;
+	public focusedFieldId: string;
 
 	constructor(private invoiceService: InvoiceService,
 				private route: ActivatedRoute,
@@ -67,5 +68,20 @@ export class ShowInvoiceComponent implements OnInit {
 	cancel()
 	{
 		this.editMode = false;
+	}
+
+	onFocus(target: EventTarget = null)
+	{
+		var id = (target as HTMLInputElement).id;
+		this.focusedFieldId = id;
+		console.log("Focused field: " + id);
+	}
+
+	fillExtractedText(text: string)
+	{
+		console.log("Text extracted into " + this.focusedFieldId + ": " + text);
+		var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
+		input.value = text;
+		input.focus();
 	}
 }

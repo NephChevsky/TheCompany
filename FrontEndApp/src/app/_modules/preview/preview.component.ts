@@ -1,6 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime, throttleTime } from 'rxjs/operators';
+import { Component, ElementRef, HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ExtractBlock } from 'src/app/_models/extractBlock';
 import { Rectangle } from 'src/app/_models/rectangle';
 import { InvoiceService } from 'src/app/_services/invoice.service';
@@ -24,6 +22,8 @@ export class PreviewComponent implements OnInit
 	dragPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	canvasCtx: CanvasRenderingContext2D;
 	image: HTMLImageElement;
+
+	@Output() extractedTextEvent = new EventEmitter<string>();
 
 	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef)
 	{
@@ -116,7 +116,7 @@ export class PreviewComponent implements OnInit
 				result += this.extraction[i].Text;
 			}
 		}
-		console.log(result);
+		this.extractedTextEvent.emit(result);
 	}
 
 	translatePosition(position: Rectangle)

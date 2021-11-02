@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
@@ -23,6 +23,7 @@ export class ViewListComponent implements OnInit {
 	public editMode: boolean = false;
 	@Input()
 	public addedLines: FormGroup;
+	@Output() focusEvent = new EventEmitter<EventTarget>();
 
 	public linkable: boolean = false;
 	public fieldsName: string[] = [];
@@ -71,5 +72,10 @@ export class ViewListComponent implements OnInit {
 				"lines": new FormArray([])
 			});
 		return this.addedLines.controls["lines"] as FormArray;
+	}
+
+	onFocus(target: EventTarget)
+	{
+		this.focusEvent.emit(target);
 	}
 }
