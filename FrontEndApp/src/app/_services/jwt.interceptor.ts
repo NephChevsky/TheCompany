@@ -32,7 +32,7 @@ export class JwtInterceptor implements HttpInterceptor
 			}
 			else if (err.status === 0 && err.name === "HttpErrorResponse")
 			{
-				this.router.navigate(['/Error']);
+				this.router.navigate(['/Error']); // TODO: route doesn't exist
 			}
 			return throwError(err);
 		}))
