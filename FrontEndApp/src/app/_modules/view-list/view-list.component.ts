@@ -36,6 +36,11 @@ export class ViewListComponent implements OnInit {
 
 	ngOnInit(): void
 	{
+		if (!this.addedLines)
+			this.addedLines = this.formBuilder.group({
+				"lines": new FormArray([])
+			});
+		
 		if (this.linkField)
 		{
 			this.linkable = true;
@@ -56,26 +61,23 @@ export class ViewListComponent implements OnInit {
 	createNewLine()
 	{
 		const tmpForm = this.formBuilder.group({
-			reference: ['1', []],
-			description: ['2', []],
-			quantity: ['3', []],
-			unitaryprice: ['4', []],
-			price: ['5',[]]
+			reference: ['', []],
+			description: ['', []],
+			quantity: ['', []],
+			unitaryprice: ['', []],
+			price: ['',[]]
 		});
 		this.lines.push(tmpForm);
 	}
 
 	get lines()
 	{
-		if (!this.addedLines)
-			this.addedLines = this.formBuilder.group({
-				"lines": new FormArray([])
-			});
 		return this.addedLines.controls["lines"] as FormArray;
 	}
 
 	onFocus(target: EventTarget)
 	{
-		this.focusEvent.emit(target);
+		if (this.editMode)
+			this.focusEvent.emit(target);
 	}
 }

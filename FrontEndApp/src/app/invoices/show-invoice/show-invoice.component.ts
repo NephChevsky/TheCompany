@@ -72,16 +72,25 @@ export class ShowInvoiceComponent implements OnInit {
 
 	onFocus(target: EventTarget = null)
 	{
-		var id = (target as HTMLInputElement).id;
-		this.focusedFieldId = id;
-		console.log("Focused field: " + id);
+		if (this.editMode)
+		{
+			var id = (target as HTMLInputElement).id;
+			this.focusedFieldId = id;
+		}
 	}
 
 	fillExtractedText(text: string)
 	{
-		console.log("Text extracted into " + this.focusedFieldId + ": " + text);
-		var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
-		input.value = text;
-		input.focus();
+		if (this.editMode)
+		{
+			var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
+			var tmp = this.focusedFieldId.split(".");
+			if (tmp.length == 2)
+				this.lineItemsDataForm.controls["lines"].get([tmp[1]]).patchValue({[tmp[0]]:text});
+			else
+				this.dataForm.patchValue({[this.focusedFieldId]:text});
+			
+			input.focus();
+		}
 	}
 }

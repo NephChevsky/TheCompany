@@ -10,11 +10,11 @@
 		</tbody>
 		<tbody formArrayName="lines" *ngFor="let item of lines.controls; let i = index">
 			<tr [formGroupName]="i">
-				<td><input type="text" id="{{'reference'+i}}" size="10" formControlName="reference" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'description'+i}}" formControlName="description" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'quantity'+i}}" size="5" formControlName="quantity" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'unitaryprice'+i}}" size="5" formControlName="unitaryprice" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'price'+i}}" size="5" formControlName="price" (focus)="onFocus($event.target)"></td>
+				<td><input type="text" id="{{'reference.'+i}}" size="10" formControlName="reference" (focus)="onFocus($event.target)"></td>
+				<td><input type="text" id="{{'description.'+i}}" formControlName="description" (focus)="onFocus($event.target)"></td>
+				<td><input type="text" id="{{'quantity.'+i}}" size="5" formControlName="quantity" (focus)="onFocus($event.target)"></td>
+				<td><input type="text" id="{{'unitaryprice.'+i}}" size="5" formControlName="unitaryprice" (focus)="onFocus($event.target)"></td>
+				<td><input type="text" id="{{'price.'+i}}" size="5" formControlName="price" (focus)="onFocus($event.target)"></td>
 			</tr>
 		</tbody>
 		<tr *ngIf="editMode">

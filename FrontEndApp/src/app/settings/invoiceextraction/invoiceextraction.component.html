@@ -1,4 +1,5 @@
 <div class="content">
+	<h3>Invoice details</h3>
 	<form [formGroup]="invoiceSettingsForm" (ngSubmit)="onSubmit()">
 		<table class="main">
 			<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">
