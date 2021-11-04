@@ -315,7 +315,16 @@ namespace BackEndApp.Controllers
 					{
 						MemoryStream stream = new MemoryStream();
 						BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-						containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
+						try
+						{
+							containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
+						}
+						catch
+						{
+							_logger.LogInformation("End of Extraction method");
+							return NotFound();
+						}
+						
 						_logger.LogInformation("End of Extraction method");
 						return Ok(Convert.ToBase64String(stream.ToArray()));
 					}
