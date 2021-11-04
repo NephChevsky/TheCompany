@@ -182,8 +182,19 @@ namespace DbApp.Models
                 entity.Property(e => e.DataSource)
                     .IsRequired();
 
+                entity.Property(e => e.IsLineItem)
+                    .IsRequired();
+
                 entity.Property(e => e.Field)
                     .IsRequired();
+
+                entity.Property(e => e.X);
+
+                entity.Property(e => e.Y);
+
+                entity.Property(e => e.Height);
+
+                entity.Property(e => e.Width);
 
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
                     .IsRequired(); 

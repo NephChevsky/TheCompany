@@ -77,6 +77,9 @@ namespace DbApp.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsLineItem")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModificationDateTime")
                         .HasColumnType("datetime2");
 

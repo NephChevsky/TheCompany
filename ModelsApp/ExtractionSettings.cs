@@ -8,6 +8,7 @@ namespace ModelsApp
 	{
 		public Guid Id { get; set; }
 		public string DataSource { get; set; }
+		public bool IsLineItem { get; set; }
 		public string Field { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
@@ -24,9 +25,14 @@ namespace ModelsApp
 		public DateTime CreationDateTime { get; set; }
 		public DateTime LastModificationDateTime { get; set; }
 
-		public ExtractionSettings(string dataSource, string field, int x, int y, int width, int height, Guid owner)
+		public ExtractionSettings()
+		{
+		}
+		
+		public ExtractionSettings(string dataSource, bool isLineItem, string field, int x, int y, int width, int height, Guid owner)
 		{
 			DataSource = dataSource;
+			IsLineItem = isLineItem;
 			Field = field;
 			X = x;
 			Y = y;

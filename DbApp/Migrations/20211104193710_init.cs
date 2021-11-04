@@ -53,6 +53,7 @@ namespace DbApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     DataSource = table.Column<string>(nullable: false),
+                    IsLineItem = table.Column<bool>(nullable: false),
                     Field = table.Column<string>(nullable: false),
                     X = table.Column<int>(nullable: false),
                     Y = table.Column<int>(nullable: false),

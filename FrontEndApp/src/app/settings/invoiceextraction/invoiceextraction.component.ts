@@ -12,16 +12,34 @@ import { InvoiceService } from '../../_services/invoice.service';
 export class InvoiceExtractionComponent implements OnInit {
 
 	fieldsName: string[] = ["InvoiceNumber", "CustomerId", "LastName", "FirstName", "Address"];
+	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
+	lineItemSettingsForm: FormGroup = new FormGroup({});
 
 	constructor(private formBuilder: FormBuilder,
 				private router: Router,
 				private invoiceService: InvoiceService,
 				private additionalFieldService: AdditionalFieldService) { }
 
-	ngOnInit(): void {
+	ngOnInit(): void
+	{
 		this.invoiceSettingsForm = this.formBuilder.group({
 			"fields": new FormArray([])
+		});
+
+		this.lineItemSettingsForm = this.formBuilder.group({
+			boxymin: ['', []],
+			boxymax: ['', []],
+			referencexmin: ['', []],
+			referencexmax: ['', []],
+			descriptionxmin: ['', []],
+			descriptionxmax: ['', []],
+			quantityxmin: ['', []],
+			quantityxmax: ['', []],
+			unitarypricexmin: ['', []],
+			unitarypricexmax: ['', []],
+			pricexmin: ['', []],
+			pricexmax: ['', []]
 		});
 
 		for (let item of this.fieldsName)
@@ -34,6 +52,25 @@ export class InvoiceExtractionComponent implements OnInit {
 			for (var i = 0; i < data.length; i++)
 			{
 				this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
+			}
+		}, error => {
+			// TODO
+		});
+
+		this.invoiceService.getExtractionSettings(this.lineItemsName).subscribe((data: any[]) =>
+		{
+			for (var i = 0; i < data.length; i++)
+			{
+				if (data[i].field == "LineItem")
+				{
+					this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
+					this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
+				}
+				else
+				{
+					this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
+					this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
+				}
 			}
 		}, error => {
 			// TODO
@@ -93,11 +130,11 @@ export class InvoiceExtractionComponent implements OnInit {
 
 	onSubmit()
 	{
-		if (this.invoiceSettingsForm.invalid)
+		if (this.invoiceSettingsForm.invalid || this.lineItemSettingsForm.invalid)
 		{
 			return;
 		}
-		this.invoiceService.saveExtractionSettings(this.invoiceSettingsForm.value)
+		this.invoiceService.saveExtractionSettings(this.invoiceSettingsForm.value, this.lineItemSettingsForm.value)
 			.subscribe(
 				data =>
 				{

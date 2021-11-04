@@ -104,7 +104,9 @@ namespace BackEndApp.Controllers
 		public ActionResult SaveExtractionSettings([FromBody] dynamic json)
 		{
 			_logger.LogInformation("Start of SaveExtractionSettings method");
-			JsonElement fields = json.GetProperty("fields");
+			JsonElement invoiceSettings = json.GetProperty("invoiceSettings");
+			JsonElement lineItemSettings = json.GetProperty("lineItemSettings");
+			JsonElement fields = invoiceSettings.GetProperty("fields");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext())
 			{
@@ -121,25 +123,99 @@ namespace BackEndApp.Controllers
 						string name = field.GetProperty("id").GetString();
 						if (string.IsNullOrEmpty(name))
 							name = fieldName;
-						ExtractionSettings extSet = new ExtractionSettings("Invoice", name, x, y, width, height, owner);
-						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+						ExtractionSettings extSet = new ExtractionSettings("Invoice", false, name, x, y, width, height, owner);
+						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
 						if (dbExtSet != null)
 						{
 							dbExtSet.Deleted = true;
 						}
 						db.Add(extSet);
-						db.SaveChanges();
 					}
 					else if (x == -1 && y == -1 && width == -1 && height == -1)
 					{
-						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
+						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
 						if (dbExtSet != null)
 						{
 							dbExtSet.Deleted = true;
-							db.SaveChanges();
 						}
 					}
 				}
+
+				int boxYmin = ExtractPositon(lineItemSettings.GetProperty("boxymin"));
+				int boxYmax = ExtractPositon(lineItemSettings.GetProperty("boxymax"));
+				int referenceXmin = ExtractPositon(lineItemSettings.GetProperty("referencexmin"));
+				int referenceXmax = ExtractPositon(lineItemSettings.GetProperty("referencexmax"));
+				int descriptionXmin = ExtractPositon(lineItemSettings.GetProperty("descriptionxmin"));
+				int descriptionXmax = ExtractPositon(lineItemSettings.GetProperty("descriptionxmax"));
+				int quantityXmin = ExtractPositon(lineItemSettings.GetProperty("quantityxmin"));
+				int quantityXmax = ExtractPositon(lineItemSettings.GetProperty("quantityxmax"));
+				int unitarypriceXmin = ExtractPositon(lineItemSettings.GetProperty("unitarypricexmin"));
+				int unitarypriceXmax = ExtractPositon(lineItemSettings.GetProperty("unitarypricexmax"));
+				int priceXmin = ExtractPositon(lineItemSettings.GetProperty("pricexmin"));
+				int priceXmax = ExtractPositon(lineItemSettings.GetProperty("pricexmax"));
+
+				if (boxYmin !=-1 && boxYmax != -1)
+				{
+					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem" && x.Owner == owner).SingleOrDefault();
+					if (dbExtSet != null)
+					{
+						dbExtSet.Deleted = true;
+					}
+					ExtractionSettings extSet = new ExtractionSettings("Invoice", true, "LineItem", 0, boxYmin, 0, boxYmax-boxYmin, owner);
+					db.ExtractionSettings.Add(extSet);
+					if (referenceXmin != -1 && referenceXmax != -1)
+					{
+						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference" && x.Owner == owner).SingleOrDefault();
+						if (dbFieldExtSet != null)
+						{
+							dbFieldExtSet.Deleted = true;
+						}
+						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Reference", referenceXmin, 0, referenceXmax - referenceXmin, 0, owner);
+						db.ExtractionSettings.Add(fieldExtSet);
+					}
+					if (descriptionXmin != -1 && descriptionXmax != -1)
+					{
+						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Description" && x.Owner == owner).SingleOrDefault();
+						if (dbFieldExtSet != null)
+						{
+							dbFieldExtSet.Deleted = true;
+						}
+						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Description", descriptionXmin, 0, descriptionXmax - descriptionXmin, 0, owner);
+						db.ExtractionSettings.Add(fieldExtSet);
+					}
+					if (quantityXmin != -1 && quantityXmax != -1)
+					{
+						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Quantity" && x.Owner == owner).SingleOrDefault();
+						if (dbFieldExtSet != null)
+						{
+							dbFieldExtSet.Deleted = true;
+						}
+						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Quantity", quantityXmin, 0, quantityXmax - quantityXmin, 0, owner);
+						db.ExtractionSettings.Add(fieldExtSet);
+					}
+					if (unitarypriceXmin != -1 && unitarypriceXmax != -1)
+					{
+						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "UnitaryPrice" && x.Owner == owner).SingleOrDefault();
+						if (dbFieldExtSet != null)
+						{
+							dbFieldExtSet.Deleted = true;
+						}
+						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "UnitaryPrice", unitarypriceXmin, 0, unitarypriceXmax - unitarypriceXmin, 0, owner);
+						db.ExtractionSettings.Add(fieldExtSet);
+					}
+					if (priceXmin != -1 && priceXmax != -1)
+					{
+						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Price" && x.Owner == owner).SingleOrDefault();
+						if (dbFieldExtSet != null)
+						{
+							dbFieldExtSet.Deleted = true;
+						}
+						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Price", priceXmin, 0, priceXmax - priceXmin, 0, owner);
+						db.ExtractionSettings.Add(fieldExtSet);
+					}
+				}
+
+				db.SaveChanges();
 			}
 			_logger.LogInformation("End of SaveExtractionSettings method");
 			return Ok();

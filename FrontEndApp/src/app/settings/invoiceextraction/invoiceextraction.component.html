@@ -1,6 +1,7 @@
 <div class="content">
 	<h3>Invoice details</h3>
-	<form [formGroup]="invoiceSettingsForm" (ngSubmit)="onSubmit()">
+	<br />
+	<form [formGroup]="invoiceSettingsForm">
 		<table class="main">
 			<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">
 				<td>{{item.get("name")?.value}}</td>
@@ -25,14 +26,107 @@
 					</table>
 				</td>
 			</tr>
-			<tr class="buttons">
+		</table>
+	</form>
+	<form [formGroup]="lineItemSettingsForm">
+		<br /><br /><br />
+		<h3>Line items</h3>
+		<br />
+		<table class="main">
+			<tr>
+				<td>Full box size</td>
 				<td>
-					<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+					<table>
+						<tr>
+							<td>Y min:</td>
+							<td><input type="number" id="boxymin" formControlName="boxymin"></td>
+						</tr>
+						<tr>
+							<td>Y max:</td>
+							<td><input type="number" id="boxymax" formControlName="boxymax"></td>
+						</tr>
+					</table>
 				</td>
+			</tr>
+			<tr>
+				<td>Reference</td>
 				<td>
-					<button class="btn btn-primary">Save</button>
+					<table>
+						<tr>
+							<td>X min:</td>
+							<td><input type="number" id="referencexmin" formControlName="referencexmin"></td>
+						</tr>
+						<tr>
+							<td>X max:</td>
+							<td><input type="number" id="referencexmax" formControlName="referencexmax"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td>
+					<table>
+						<tr>
+							<td>X min:</td>
+							<td><input type="number" id="descriptionxmin" formControlName="descriptionxmin"></td>
+						</tr>
+						<tr>
+							<td>X max:</td>
+							<td><input type="number" id="descriptionxmax" formControlName="descriptionxmax"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Quantity</td>
+				<td>
+					<table>
+						<tr>
+							<td>X min:</td>
+							<td><input type="number" id="quantityxmin" formControlName="quantityxmin"></td>
+						</tr>
+						<tr>
+							<td>X max:</td>
+							<td><input type="number" id="quantityxmax" formControlName="quantityxmax"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Unitary price</td>
+				<td>
+					<table>
+						<tr>
+							<td>X min:</td>
+							<td><input type="number" id="unitarypricexmin" formControlName="unitarypricexmin"></td>
+						</tr>
+						<tr>
+							<td>X max:</td>
+							<td><input type="number" id="unitarypricexmax" formControlName="unitarypricexmax"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Price</td>
+				<td>
+					<table>
+						<tr>
+							<td>X min:</td>
+							<td><input type="number" id="pricexmin" formControlName="pricexmin"></td>
+						</tr>
+						<tr>
+							<td>X max:</td>
+							<td><input type="number" id="pricexmax" formControlName="pricexmax"></td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 		</table>
+		<br />
+		<br />
+		<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+		<button class="btn btn-primary" (click)="onSubmit()">Save</button>
 	</form>
 </div>

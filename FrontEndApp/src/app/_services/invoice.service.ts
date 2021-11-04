@@ -20,8 +20,12 @@ export class InvoiceService
 		})
 	}
 
-	saveExtractionSettings(data: any)
+	saveExtractionSettings(invoiceSettings: any, lineItemSettings: any)
 	{
+		var data = {
+			invoiceSettings: invoiceSettings,
+			lineItemSettings: lineItemSettings
+		}
 		return this.http.post(environment.baseUrl + `Invoice/SaveExtractionSettings`, data);
 	}
 
