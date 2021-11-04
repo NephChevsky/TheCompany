@@ -65,79 +65,91 @@ namespace AzureFunctionsApp
                             OcrResult Result = Ocr.Read(Input);
                             ExtractBlock size = new ExtractBlock(Result.Pages[0].ContentArea.X, Result.Pages[0].ContentArea.Y, Result.Pages[0].ContentArea.Height, Result.Pages[0].ContentArea.Width, "");
                             result.Add(size);
-                            Array.ForEach(Result.Words, delegate (OcrResult.Word word) {
+                            Array.ForEach(Result.Words, delegate (OcrResult.Word word)
+                            {
                                 ExtractBlock extractBlock = new ExtractBlock(word.X, word.Y, word.Height, word.Width, word.Text);
                                 result.Add(extractBlock);
                             });
                             byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
-                            
+
                             MemoryStream stream = new MemoryStream(byteArray);
                             if (invoice.ExtractId != Guid.Empty)
                                 containerClient.DeleteBlob(invoice.ExtractId.ToString());
                             containerClient.UploadBlob(id.ToString(), stream);
                             invoice.ExtractId = id;
-                        }
 
-                        string newCustomerNumber = "";
-                        string newCustomerLastName = "";
-                        string newCustomerFirstName = "";
-                        List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice").ToList();
-                        extractSettings.ForEach(item => {
-                            Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
-                            using (OcrInput Input = new OcrInput(rect, tempFileName))
+                            string newCustomerNumber = "";
+                            string newCustomerLastName = "";
+                            string newCustomerFirstName = "";
+                            List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == false).ToList();
+                            extractSettings.ForEach(item =>
                             {
-                                OcrResult tmp = Ocr.Read(Input);
+                                Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
+                                string txt = ExtractArea(Result, rect);
+
                                 if (item.Field == "InvoiceNumber") // TODO: reflection
                                 {
-                                    invoice.InvoiceNumber = tmp.Text;
+                                    invoice.InvoiceNumber = txt;
                                 }
                                 else if (item.Field == "CustomerId")
                                 {
-                                    invoice.CustomerNumber = tmp.Text;
-                                    Individual dbInvidual = db.Customers_Individual.Where(x => x.CustomerId == tmp.Text && x.Owner == invoice.Owner).SingleOrDefault();
+                                    invoice.CustomerNumber = txt;
+                                    Individual dbInvidual = db.Customers_Individual.Where(x => x.CustomerId == txt && x.Owner == invoice.Owner).SingleOrDefault();
                                     if (dbInvidual != null)
                                     {
-                                        
+
                                         invoice.CustomerId = dbInvidual.Id;
                                     }
                                     else
-                                        newCustomerNumber = tmp.Text;
+                                        newCustomerNumber = txt;
                                 }
                                 else if (item.Field == "Address")
                                 {
-                                    string address = String.Join(System.Environment.NewLine, tmp.Text.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                                    string address = String.Join(System.Environment.NewLine, txt.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
                                     address = String.Join(" ", address.Split(" ", StringSplitOptions.RemoveEmptyEntries));
                                     invoice.CustomerAddress = address;
                                 }
                                 else if (item.Field == "LastName")
-								{
-                                    newCustomerLastName = tmp.Text;
-								}
+                                {
+                                    newCustomerLastName = txt;
+                                }
                                 else if (item.Field == "FirstName")
                                 {
-                                    newCustomerFirstName = tmp.Text;
+                                    newCustomerFirstName = txt;
                                 }
+                            });
+
+                            /*ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
+                            if (dbBox != null)
+                            {
+                                int boxY = dbBox.Y;
+                                int boxHeight = dbBox.Height;
+                                ExtractionSettings reference = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
+                                if (reference != null)
+                                {
+
+                                }
+                            }*/
+
+                            if (!string.IsNullOrEmpty(newCustomerNumber))
+                            {
+                                Individual newCustomer = new Individual();
+                                newCustomer.CustomerId = newCustomerNumber;
+                                newCustomer.LastName = newCustomerLastName;
+                                newCustomer.FirstName = newCustomerFirstName;
+                                newCustomer.Owner = invoice.Owner;
+                                newCustomer.Address = invoice.CustomerAddress;
+                                newCustomer = db.Customers_Individual.Add(newCustomer).Entity;
+                                invoice.CustomerId = newCustomer.Id;
                             }
-                        });
 
-                        if (!string.IsNullOrEmpty(newCustomerNumber))
-						{
-                            Individual newCustomer = new Individual();
-                            newCustomer.CustomerId = newCustomerNumber;
-                            newCustomer.LastName = newCustomerLastName;
-                            newCustomer.FirstName = newCustomerFirstName;
-                            newCustomer.Owner = invoice.Owner;
-                            newCustomer.Address = invoice.CustomerAddress;
-                            newCustomer = db.Customers_Individual.Add(newCustomer).Entity;
-                            invoice.CustomerId = newCustomer.Id;
-						}
+                            File.Delete(tempFileName);
 
-                        File.Delete(tempFileName);
-
-                        invoice.ExtractDateTime = DateTime.Now;
-                        invoice.LockedBy = null;
-                        invoice.IsExtracted = true;
-                        db.SaveChanges();
+                            invoice.ExtractDateTime = DateTime.Now;
+                            invoice.LockedBy = null;
+                            invoice.IsExtracted = true;
+                            db.SaveChanges();
+                        }
                     }
                     else
                     {
@@ -147,5 +159,24 @@ namespace AzureFunctionsApp
             }
             _logger.LogInformation(string.Concat("Function \"ExtractDocument\" ended (Id: ", appId, ")"));
         }
+
+        private string ExtractArea(OcrResult input, Rectangle rect)
+		{
+            string text = null;
+            foreach (Word tmp in input.Words)
+			{
+                bool left = tmp.X + tmp.Width < rect.X;
+                bool right = tmp.X > rect.X + rect.Width;
+                bool above = tmp.Y > rect.Y + rect.Height;
+                bool below = tmp.Y + tmp.Height < rect.Y;
+                if (!(left || right || above || below))
+                {
+                    if (text != null)
+                        text += " ";
+                    text += tmp.Text;
+                }
+            }
+            return text;
+		}
     }
 }
