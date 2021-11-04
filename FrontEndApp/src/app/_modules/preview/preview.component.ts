@@ -102,7 +102,6 @@ export class PreviewComponent implements OnInit
 	extractText(position: Rectangle)
 	{
 		position = this.translatePosition(position);
-		console.log(position.X + " " + position.Y + " " + position.Width + " " + position.Height)
 		var result ="";
 		for (var i = 1; i < this.extraction.length; i++)
 		{
