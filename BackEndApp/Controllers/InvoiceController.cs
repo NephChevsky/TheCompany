@@ -128,7 +128,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
 						if (dbExtSet != null)
 						{
-							dbExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbExtSet);
 						}
 						db.Add(extSet);
 					}
@@ -137,7 +137,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == fieldName && x.Owner == owner).SingleOrDefault();
 						if (dbExtSet != null)
 						{
-							dbExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbExtSet);
 						}
 					}
 				}
@@ -160,7 +160,7 @@ namespace BackEndApp.Controllers
 					ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem" && x.Owner == owner).SingleOrDefault();
 					if (dbExtSet != null)
 					{
-						dbExtSet.Deleted = true;
+						db.ExtractionSettings.Remove(dbExtSet);
 					}
 					ExtractionSettings extSet = new ExtractionSettings("Invoice", true, "LineItem", 0, boxYmin, 0, boxYmax-boxYmin, owner);
 					db.ExtractionSettings.Add(extSet);
@@ -169,7 +169,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference" && x.Owner == owner).SingleOrDefault();
 						if (dbFieldExtSet != null)
 						{
-							dbFieldExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbFieldExtSet);
 						}
 						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Reference", referenceXmin, 0, referenceXmax - referenceXmin, 0, owner);
 						db.ExtractionSettings.Add(fieldExtSet);
@@ -179,7 +179,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Description" && x.Owner == owner).SingleOrDefault();
 						if (dbFieldExtSet != null)
 						{
-							dbFieldExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbFieldExtSet);
 						}
 						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Description", descriptionXmin, 0, descriptionXmax - descriptionXmin, 0, owner);
 						db.ExtractionSettings.Add(fieldExtSet);
@@ -189,7 +189,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Quantity" && x.Owner == owner).SingleOrDefault();
 						if (dbFieldExtSet != null)
 						{
-							dbFieldExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbFieldExtSet);
 						}
 						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Quantity", quantityXmin, 0, quantityXmax - quantityXmin, 0, owner);
 						db.ExtractionSettings.Add(fieldExtSet);
@@ -199,7 +199,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "UnitaryPrice" && x.Owner == owner).SingleOrDefault();
 						if (dbFieldExtSet != null)
 						{
-							dbFieldExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbFieldExtSet);
 						}
 						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "UnitaryPrice", unitarypriceXmin, 0, unitarypriceXmax - unitarypriceXmin, 0, owner);
 						db.ExtractionSettings.Add(fieldExtSet);
@@ -209,7 +209,7 @@ namespace BackEndApp.Controllers
 						ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Price" && x.Owner == owner).SingleOrDefault();
 						if (dbFieldExtSet != null)
 						{
-							dbFieldExtSet.Deleted = true;
+							db.ExtractionSettings.Remove(dbFieldExtSet);
 						}
 						ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Price", priceXmin, 0, priceXmax - priceXmin, 0, owner);
 						db.ExtractionSettings.Add(fieldExtSet);
