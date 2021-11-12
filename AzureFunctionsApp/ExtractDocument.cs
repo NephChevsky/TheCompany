@@ -11,6 +11,7 @@ using IronOcr;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
 using ModelsApp;
 using Newtonsoft.Json;
 using static IronOcr.OcrResult;
@@ -70,13 +71,6 @@ namespace AzureFunctionsApp
                                 ExtractBlock extractBlock = new ExtractBlock(word.X, word.Y, word.Height, word.Width, word.Text);
                                 result.Add(extractBlock);
                             });
-                            byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
-
-                            MemoryStream stream = new MemoryStream(byteArray);
-                            if (invoice.ExtractId != Guid.Empty)
-                                containerClient.DeleteBlob(invoice.ExtractId.ToString());
-                            containerClient.UploadBlob(id.ToString(), stream);
-                            invoice.ExtractId = id;
 
                             string newCustomerNumber = "";
                             string newCustomerLastName = "";
@@ -85,7 +79,7 @@ namespace AzureFunctionsApp
                             extractSettings.ForEach(item =>
                             {
                                 Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
-                                string txt = ExtractArea(Result, rect);
+                                string txt = ExtractTextInArea(Result, rect);
 
                                 if (item.Field == "InvoiceNumber") // TODO: reflection
                                 {
@@ -119,17 +113,63 @@ namespace AzureFunctionsApp
                                 }
                             });
 
-                            /*ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
+                            ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
                             if (dbBox != null)
                             {
-                                int boxY = dbBox.Y;
-                                int boxHeight = dbBox.Height;
                                 ExtractionSettings reference = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
                                 if (reference != null)
                                 {
+                                    Rectangle rect = new Rectangle(reference.X, dbBox.Y, reference.Width, dbBox.Height);
+                                    rect.X = reference.X;
+                                    rect.Width = reference.Width;
+                                    List<ExtractBlock> references = GetLinesInArea(Result, rect);
+                                    references.OrderBy(x => x.Y);
+                                    if (references != null)
+									{
+                                        List<ExtractionSettings> lineItemFields = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field != "LineItem" && x.Field != "Reference").ToList();
+                                        for (int i = 0; i < references.Count; i++)
+                                        {
+                                            ExtractBlock referenceLine = references.ElementAt(i);
+                                            InvoiceLineItem lineItem = new InvoiceLineItem(invoice.Id, invoice.Owner);
+                                            lineItem.Reference = referenceLine.Text;
+                                            if (lineItemFields.Count != 0)
+											{
+                                                ExtractBlock nextreference = null;
+                                                if (i != references.Count - 1)
+                                                    nextreference = references.ElementAt(i + 1);
 
+                                                lineItemFields.ForEach(field => {
+                                                    int endY = dbBox.Y + dbBox.Height;
+                                                    if (nextreference != null)
+                                                        endY = nextreference.Y - 1;
+                                                    Rectangle areaToExtract = new Rectangle(field.X, referenceLine.Y, field.Width, endY - referenceLine.Y);
+                                                    string txt = ExtractTextInArea(Result, areaToExtract);
+                                                    double tmp;
+                                                    switch (field.Field)
+                                                    {
+                                                        case "Description":
+                                                            lineItem.Description = txt;
+                                                            break;
+                                                        case "Quantity":
+                                                            if (Double.TryParse(txt, out tmp))
+                                                                lineItem.Quantity = tmp;
+                                                            break;
+                                                        case "UnitaryPrice":
+                                                            if (Double.TryParse(txt, out tmp))
+                                                                lineItem.UnitaryPrice = tmp;
+                                                            break;
+                                                        case "Price":
+                                                            if (Double.TryParse(txt, out tmp))
+                                                                lineItem.Price = tmp;
+                                                            break;
+                                                    }
+                                                });
+                                            }
+                                            db.InvoiceLineItems.Add(lineItem);
+                                        }
+                                    }
                                 }
-                            }*/
+                            }
 
                             if (!string.IsNullOrEmpty(newCustomerNumber))
                             {
@@ -145,6 +185,21 @@ namespace AzureFunctionsApp
 
                             File.Delete(tempFileName);
 
+                            byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
+                            MemoryStream stream = new MemoryStream(byteArray);
+                            if (invoice.ExtractId != Guid.Empty)
+                            {
+                                try
+								{
+                                    containerClient.DeleteBlob(invoice.ExtractId.ToString());
+                                }
+                                catch (StorageException e) when (e.RequestInformation.ErrorCode == "BlobNotFound")
+								{
+                                    _logger.LogInformation("Blob " + invoice.ExtractId.ToString() + " doesn't exist in storage");
+								}
+                            }
+                            containerClient.UploadBlob(id.ToString(), stream);
+                            invoice.ExtractId = id;
                             invoice.ExtractDateTime = DateTime.Now;
                             invoice.LockedBy = null;
                             invoice.IsExtracted = true;
@@ -160,7 +215,7 @@ namespace AzureFunctionsApp
             _logger.LogInformation(string.Concat("Function \"ExtractDocument\" ended (Id: ", appId, ")"));
         }
 
-        private string ExtractArea(OcrResult input, Rectangle rect)
+        private string ExtractTextInArea(OcrResult input, Rectangle rect)
 		{
             string text = null;
             foreach (Word tmp in input.Words)
@@ -178,5 +233,36 @@ namespace AzureFunctionsApp
             }
             return text;
 		}
+
+        private List<ExtractBlock> GetLinesInArea(OcrResult input, Rectangle rect)
+		{
+            List<ExtractBlock> result = new List<ExtractBlock>();
+            List<Word> list = new List<Word>();
+            foreach (Word tmp in input.Words)
+            {
+                bool left = tmp.X + tmp.Width < rect.X;
+                bool right = tmp.X > rect.X + rect.Width;
+                bool above = tmp.Y > rect.Y + rect.Height;
+                bool below = tmp.Y + tmp.Height < rect.Y;
+                if (!(left || right || above || below))
+                {
+                    list.Add(tmp);
+                }
+            }
+            list.ForEach(currentBlock => {
+                ExtractBlock existingBlock = result.Find(aBlock => currentBlock.Y == aBlock.Y);
+                if (existingBlock != null)
+				{
+                    existingBlock.Text += " " + currentBlock.Text;
+                    existingBlock.Width = currentBlock.X + currentBlock.Width - existingBlock.X;
+				}
+                else
+				{
+                    ExtractBlock newBlock = new ExtractBlock(currentBlock.X, currentBlock.Y, currentBlock.Height, currentBlock.Width, currentBlock.Text);
+                    result.Add(newBlock);
+				}
+            });
+            return result;
+        }
     }
 }

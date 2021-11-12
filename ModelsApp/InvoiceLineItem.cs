@@ -28,6 +28,12 @@ namespace ModelsApp
 		{
 		}
 
+		public InvoiceLineItem(Guid invoiceId, Guid owner)
+		{
+			InvoiceId = invoiceId;
+			Owner = owner;
+		}
+
 		public InvoiceLineItem(Guid invoiceId, Guid owner, string reference, string description, double quantity, double unitaryprice, double price)
 		{
 			InvoiceId = invoiceId;
