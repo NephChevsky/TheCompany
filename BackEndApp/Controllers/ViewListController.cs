@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using ModelsApp;
 using Microsoft.Extensions.Logging;
+using ModelsApp.DbModels;
 
 namespace BackEndApp.Controllers
 {
@@ -57,7 +58,7 @@ namespace BackEndApp.Controllers
 			using (var db = new TheCompanyDbContext())
 			{
 				Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-				List<Individual> individuals = db.Customers_Individual.Where(obj => obj.Owner == owner)
+				List<Individual> individuals = db.Individuals.Where(obj => obj.Owner == owner)
 																	.OrderBy(obj => obj.CustomerId)
 																	.ToList();
 				Dictionary<string, string> header = new Dictionary<string, string>();

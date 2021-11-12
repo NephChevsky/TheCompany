@@ -1,36 +1,40 @@
-﻿using DbApp.Models;
+﻿using BackEndApp.DTO;
+using DbApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ModelsApp;
+using ModelsApp.DbModels;
 using System;
 using System.Security.Claims;
 
 namespace BackEndApp.Controllers
 {
-	public class CustomerEntityController : Controller
+	[Route("[controller]")]
+	public class CustomerController : ControllerBase
 	{
-		private readonly ILogger<CustomerEntityController> _logger;
+		private readonly ILogger<CustomerController> _logger;
 
-		public CustomerEntityController(ILogger<CustomerEntityController> logger)
+		public CustomerController(ILogger<CustomerController> logger)
 		{
 			_logger = logger;
 		}
 
-		[HttpPost]
-		public ActionResult Create([FromBody] Individual entity)
+		[HttpPost("Create")]
+		public ActionResult Create([FromBody] CustomerCreateQuery customer)
 		{
 			_logger.LogInformation("Start of Create method");
-			if (entity == null)
+			if (string.IsNullOrEmpty(customer.CustomerId) || string.IsNullOrEmpty(customer.LastName))
 			{
 				return BadRequest();
 			}
 
 			using (var db = new TheCompanyDbContext())
 			{
-				entity.Owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-				db.Customers_Individual.Add(entity);
+				Individual newCustomer = (Individual) customer;
+				newCustomer.Owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+				db.Individuals.Add(newCustomer);
 				try
 				{
 					db.SaveChanges();

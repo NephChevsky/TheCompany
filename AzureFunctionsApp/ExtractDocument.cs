@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
-using ModelsApp;
+using ModelsApp.DbModels;
 using Newtonsoft.Json;
 using static IronOcr.OcrResult;
 
@@ -88,7 +88,7 @@ namespace AzureFunctionsApp
                                 else if (item.Field == "CustomerId")
                                 {
                                     invoice.CustomerNumber = txt;
-                                    Individual dbInvidual = db.Customers_Individual.Where(x => x.CustomerId == txt && x.Owner == invoice.Owner).SingleOrDefault();
+                                    Individual dbInvidual = db.Individuals.Where(x => x.CustomerId == txt && x.Owner == invoice.Owner).SingleOrDefault();
                                     if (dbInvidual != null)
                                     {
 
@@ -182,7 +182,7 @@ namespace AzureFunctionsApp
                                 newCustomer.FirstName = newCustomerFirstName;
                                 newCustomer.Owner = invoice.Owner;
                                 newCustomer.Address = invoice.CustomerAddress;
-                                newCustomer = db.Customers_Individual.Add(newCustomer).Entity;
+                                newCustomer = db.Individuals.Add(newCustomer).Entity;
                                 invoice.CustomerId = newCustomer.Id;
                             }
 

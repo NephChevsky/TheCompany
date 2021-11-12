@@ -27,10 +27,10 @@ export class SignUpComponent implements OnInit
 				Validators.required]],
 			password: ['', [
 				Validators.required,
-				Validators.minLength(8)]],
+				Validators.minLength(6)]],
 			confirmPassword: ['', [
 				Validators.required,
-				Validators.minLength(8)]]
+				Validators.minLength(6)]]
 		}, { validator: this.checkPasswords() });
 	}
 
@@ -63,7 +63,11 @@ export class SignUpComponent implements OnInit
 		}
 
 		this.loading = true;
-		this.userService.register(this.registerForm.value)
+		var user = {
+			login: this.registerForm.get("login").value,
+			password: this.registerForm.get("password").value
+		}
+		this.userService.register(user)
 			.subscribe(
 				data =>
 				{

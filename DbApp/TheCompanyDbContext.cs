@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsApp;
+using ModelsApp.DbInterfaces;
+using ModelsApp.DbModels;
+using ModelsApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +24,7 @@ namespace DbApp.Models
 		}
 
 		public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Individual> Customers_Individual { get; set; }
+        public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
 
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }

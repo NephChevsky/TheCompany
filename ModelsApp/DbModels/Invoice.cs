@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ModelsApp.DbInterfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ModelsApp
+namespace ModelsApp.DbModels
 {
 	public class Invoice : ILockable, IAttachment, IExtractable, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211104193710_init")]
+    [Migration("20211112134449_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace DbApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ModelsApp.AdditionalField", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.AdditionalField", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace DbApp.Migrations
                     b.ToTable("AdditionalFields");
                 });
 
-            modelBuilder.Entity("ModelsApp.ExtractionSettings", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.ExtractionSettings", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,7 +102,7 @@ namespace DbApp.Migrations
                     b.ToTable("ExtractionSettings");
                 });
 
-            modelBuilder.Entity("ModelsApp.Individual", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.Individual", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,10 +150,10 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers_Individual");
+                    b.ToTable("Individuals");
                 });
 
-            modelBuilder.Entity("ModelsApp.Invoice", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,7 +221,7 @@ namespace DbApp.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("ModelsApp.InvoiceLineItem", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.InvoiceLineItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -264,7 +264,7 @@ namespace DbApp.Migrations
                     b.ToTable("InvoiceLineItems");
                 });
 
-            modelBuilder.Entity("ModelsApp.User", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

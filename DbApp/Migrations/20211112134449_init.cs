@@ -25,29 +25,6 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers_Individual",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<string>(nullable: false),
-                    Owner = table.Column<Guid>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
-                    CreationDateTime = table.Column<DateTime>(nullable: false),
-                    LastModificationDateTime = table.Column<DateTime>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    MobilePhoneNumber = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers_Individual", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ExtractionSettings",
                 columns: table => new
                 {
@@ -67,6 +44,29 @@ namespace DbApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExtractionSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Individuals",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    CustomerId = table.Column<string>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    MobilePhoneNumber = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Individuals", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,10 +148,10 @@ namespace DbApp.Migrations
                 name: "AdditionalFields");
 
             migrationBuilder.DropTable(
-                name: "Customers_Individual");
+                name: "ExtractionSettings");
 
             migrationBuilder.DropTable(
-                name: "ExtractionSettings");
+                name: "Individuals");
 
             migrationBuilder.DropTable(
                 name: "InvoiceLineItems");

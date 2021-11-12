@@ -23,16 +23,16 @@ export class UserService
 		return this.currentUserSubject.value;
 	}
 
-	storeUser(user: User)
+	storeUser(user: any)
 	{
 		localStorage.setItem('currentUser', JSON.stringify(user));
 		this.currentUserSubject.next(user);
 		return user;
 	}
 
-	register(user: User)
+	register(user: any)
 	{
-		return this.http.post<User>(environment.baseUrl + `User/Register`, user)
+		return this.http.post(environment.baseUrl + `User/Register`, user)
 			.pipe(map(user =>
 			{
 				return this.storeUser(user);

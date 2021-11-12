@@ -13,6 +13,6 @@ export class CustomerEntityService
 
 	createCustomer(customer: CustomerEntity)
 	{
-		return this.http.post<CustomerEntity>(environment.baseUrl + `CustomerEntity/Create`, customer);
+		return this.http.post<CustomerEntity>(environment.baseUrl + `Customer/Create`, customer);
 	}
 }

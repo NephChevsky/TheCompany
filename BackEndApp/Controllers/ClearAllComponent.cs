@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ModelsApp;
+using ModelsApp.DbModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace BackEndApp.Controllers
 			{
 				using (var db = new TheCompanyDbContext())
 				{
-					List<Individual> dbIndividuals = db.Customers_Individual.Where(x => x.Owner == owner).ToList();
+					List<Individual> dbIndividuals = db.Individuals.Where(x => x.Owner == owner).ToList();
 					dbIndividuals.ForEach(individual =>
 					{
 						db.Remove(individual);

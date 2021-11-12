@@ -1,4 +1,5 @@
-﻿using DbApp.Models;
+﻿using BackEndApp.DTO;
+using DbApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ModelsApp;
+using ModelsApp.DbModels;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -15,7 +17,8 @@ using System.Text;
 
 namespace BackEndApp.Controllers
 {
-	public class UserController : Controller
+	[Route("[controller]")]
+	public class UserController : ControllerBase
 	{
 		private readonly ILogger<UserController> _logger;
 		private IConfiguration Configuration { get; }
@@ -27,13 +30,14 @@ namespace BackEndApp.Controllers
 			_logger = logger;
 		}
 
-		[HttpPost]
+		[HttpPost("Login")]
 		[AllowAnonymous]
-		public ActionResult Login([FromBody] User user)
+		public ActionResult Login([FromBody] UserLoginQuery user)
 		{
 			_logger.LogInformation("Start of Login method");
-			if (user == null || user.Login == null || user.Password == null)
+			if (string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password))
 			{
+				_logger.LogInformation("End of Login method");
 				return BadRequest();
 			}
 			using (var db = new TheCompanyDbContext())
@@ -55,11 +59,11 @@ namespace BackEndApp.Controllers
 							SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 						};
 						var token = tokenHandler.CreateToken(tokenDescriptor);
-						dbUser.Token = tokenHandler.WriteToken(token);
+						string strToken = tokenHandler.WriteToken(token);
 						dbUser.LastLoginDateTime = DateTime.Now;
 						db.SaveChanges();
 						_logger.LogInformation("End of Login method");
-						return Ok(dbUser);
+						return Ok(new UserLoginResponse(dbUser, strToken));
 					}
 					else
 					{
@@ -73,22 +77,21 @@ namespace BackEndApp.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpPost("Register")]
 		[AllowAnonymous]
-		public ActionResult Register([FromBody] User user)
+		public ActionResult Register([FromBody] UserRegisterQuery user)
 		{
 			_logger.LogInformation("Start of Register method");
-			if (user == null || user.Login == null || user.Password == null)
+			if (string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password))
 			{
 				return BadRequest();
 			}
 			string salt = BCrypt.Net.BCrypt.GenerateSalt(10);
 			string password = user.Password;
 			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
-			user.Email = user.Login;
 			using (var db = new TheCompanyDbContext())
 			{
-				db.Users.Add(user);
+				db.Users.Add((User) user);
 				try
 				{
 					db.SaveChanges();
@@ -106,7 +109,7 @@ namespace BackEndApp.Controllers
 			}
 			user.Password = password;
 			_logger.LogInformation("End of Register method");
-			return Login(user);
+			return Login((UserLoginQuery) user);
 		}
 	}
 }

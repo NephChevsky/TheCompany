@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ModelsApp.DbInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ModelsApp
+namespace ModelsApp.DbModels
 {
-	public partial class CustomerEntity : IOwnable, ISoftDeleteable, IDateTimeTrackable
+	public class Customer : IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		public Guid Id { get; set; }
 

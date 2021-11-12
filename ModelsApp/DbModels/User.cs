@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ModelsApp.DbInterfaces;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsApp
+namespace ModelsApp.DbModels
 {
-	public partial class User : ISoftDeleteable, IDateTimeTrackable
+	public class User : ISoftDeleteable, IDateTimeTrackable
 	{
 		public Guid Id { get; set; }
 
@@ -12,9 +13,6 @@ namespace ModelsApp
 		public string Email { get; set; }
 
 		public string Password { get; set; } // TODO: hide password in http request
-
-		[NotMapped]
-		public string Token { get; set; }
 
 		public DateTime LastLoginDateTime { get; set; }
 
@@ -25,5 +23,10 @@ namespace ModelsApp
 		public DateTime CreationDateTime { get; set; }
 
 		public DateTime LastModificationDateTime { get; set; }
+
+		public User()
+		{
+
+		}
 	}
 }

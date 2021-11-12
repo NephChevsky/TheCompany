@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ModelsApp.DbInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ModelsApp
+namespace ModelsApp.DbModels
 {
 	public class ExtractionSettings : IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{

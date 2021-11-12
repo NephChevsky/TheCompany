@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ModelsApp
+namespace ModelsApp.DbInterfaces
 {
-	public interface IOwnable
+	public interface ISoftDeleteable
 	{
-		public Guid Owner { get; set; }
+		public bool Deleted { get; set; }
 	}
 }

@@ -25,7 +25,7 @@ export class JwtInterceptor implements HttpInterceptor
 
 		return next.handle(request).pipe(catchError(err =>
 		{
-			if (err.status === 401)
+			if (err.status === 401 || err.status === 0)
 			{
 				this.userService.logout();
 				this.router.navigate(['/Login']);

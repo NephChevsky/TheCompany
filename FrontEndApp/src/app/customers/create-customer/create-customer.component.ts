@@ -22,7 +22,6 @@ export class CreateCustomerComponent implements OnInit {
 	ngOnInit(): void
 	{
 		this.customerForm = this.formBuilder.group({
-			type: ['individual', [Validators.required]],
 			customerId: ['', [Validators.required]],
 			lastName: ['', [Validators.required]],
 			firstName: ['', []],
@@ -39,8 +38,6 @@ export class CreateCustomerComponent implements OnInit {
 		{
 			return;
 		}
-		if (this.customerForm.value.type == "individual")
-			this.customerForm.value.type = 1;
 		this.customerEntityService.createCustomer(this.customerForm.value)
 			.subscribe(
 				data =>
