@@ -42,7 +42,7 @@ export class PreviewComponent implements OnInit
 					var bytes = new Uint8Array( data );
 					var len = bytes.byteLength;
 					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode( bytes[ i ] );
+						binary += String.fromCharCode(bytes[i]);
 					}
 					this.preview = "data:image/png;base64," + binary;
 					let that = this;
@@ -60,9 +60,11 @@ export class PreviewComponent implements OnInit
 					var bytes = new Uint8Array( data );
 					var len = bytes.byteLength;
 					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode( bytes[ i ] );
+						binary += String.fromCharCode(bytes[i]);
 					}
-					this.extraction = JSON.parse(atob(binary));
+					this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function(c) {
+						return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+					}).join('')));
 				}, error =>
 				{
 					// TODO: handle errors
@@ -86,7 +88,7 @@ export class PreviewComponent implements OnInit
 
 	startDrawing(event: PointerEvent)
 	{
-		if (this.extraction)
+		if (this.extraction && this.extraction.length != 0)
 		{
 			this.selectedPosition = new Rectangle(-1,-1,-1,-1);
 			this.selectedText = "";
@@ -111,7 +113,7 @@ export class PreviewComponent implements OnInit
 
 	stopDrawing(event: PointerEvent)
 	{
-		if (this.extraction)
+		if (this.extraction && this.extraction.length != 0)
 		{
 			var result = this.extractText(this.dragPosition);
 			this.dragPosition = new Rectangle(-1, -1, -1, -1);
