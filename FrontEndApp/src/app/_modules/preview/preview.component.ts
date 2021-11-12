@@ -70,9 +70,12 @@ export class PreviewComponent implements OnInit
 
 	startDrawing(event: PointerEvent)
 	{
-		this.dragPosition = new Rectangle(event.offsetX,  event.offsetY, 0, 0);
-		let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
-		this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
+		if (this.extraction)
+		{
+			this.dragPosition = new Rectangle(event.offsetX,  event.offsetY, 0, 0);
+			let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
+			this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
+		}
 	}
 
 	draw(event: PointerEvent)
@@ -90,8 +93,11 @@ export class PreviewComponent implements OnInit
 
 	stopDrawing(event: PointerEvent)
 	{
-		this.extractText(this.dragPosition);
-		this.dragPosition = new Rectangle(-1, -1, -1, -1);
+		if (this.extraction)
+		{
+			this.extractText(this.dragPosition);
+			this.dragPosition = new Rectangle(-1, -1, -1, -1);
+		}
 	}
 
 	@HostListener('window:resize', ['$event'])
