@@ -1,5 +1,4 @@
 ﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using BackEndApp.DTO;
 using DbApp.Models;
 using MagickApp;
@@ -10,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
-using ModelsApp;
 using ModelsApp.DbModels;
 using System;
 using System.Collections.Generic;
