@@ -1,4 +1,4 @@
 <div class="previewContainer">
 	<img id="imgPreview" class="imgPreview" [src]="preview" />
-	<canvas id="canvasPreview" class="canvasPreview" (pointerdown)="startDrawing($event)" (pointerup)="stopDrawing($event)" (pointermove)="draw($event)" [width]="imgPosition.width" [height]="imgPosition.height"></canvas>
+	<canvas id="canvasPreview" class="canvasPreview" (pointerdown)="handleClick($event)" (pointerup)="stopDrawing($event)" (pointermove)="draw($event)" [width]="imgPosition.width" [height]="imgPosition.height"></canvas>
 </div>

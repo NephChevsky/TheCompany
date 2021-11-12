@@ -22,6 +22,8 @@ export class PreviewComponent implements OnInit
 	dragPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	canvasCtx: CanvasRenderingContext2D;
 	image: HTMLImageElement;
+	selectedPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
+	selectedText: string = "";
 
 	@Output() extractedTextEvent = new EventEmitter<string>();
 
@@ -68,10 +70,26 @@ export class PreviewComponent implements OnInit
 		}
 	}
 
+	handleClick(event: PointerEvent)
+	{
+		if (event.offsetX >= this.selectedPosition.X && event.offsetX <= this.selectedPosition.X + this.selectedPosition.Width && event.offsetY >= this.selectedPosition.Y && event.offsetY <= this.selectedPosition.Y + this.selectedPosition.Height)
+		{
+			this.extractedTextEvent.emit(this.selectedText);
+			this.selectedPosition = new Rectangle(-1,-1,-1,-1);
+			this.selectedText = "";
+		}
+		else
+		{
+			this.startDrawing(event);
+		}
+	}
+
 	startDrawing(event: PointerEvent)
 	{
 		if (this.extraction)
 		{
+			this.selectedPosition = new Rectangle(-1,-1,-1,-1);
+			this.selectedText = "";
 			this.dragPosition = new Rectangle(event.offsetX,  event.offsetY, 0, 0);
 			let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
 			this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
@@ -95,8 +113,30 @@ export class PreviewComponent implements OnInit
 	{
 		if (this.extraction)
 		{
-			this.extractText(this.dragPosition);
+			var result = this.extractText(this.dragPosition);
 			this.dragPosition = new Rectangle(-1, -1, -1, -1);
+			result.position = this.reversePosition(result.position);
+			result.position.X = result.position.X - 3;
+			result.position.Y = result.position.Y - 3;
+			result.position.Width = result.position.Width + 6;
+			result.position.Height = result.position.Height + 6;
+			let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
+			this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
+			this.canvasCtx.fillStyle = '#f9ff87';
+			this.canvasCtx.fillRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
+			this.canvasCtx.strokeStyle = 'red';
+			this.canvasCtx.lineWidth = 1;
+			this.canvasCtx.strokeRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
+			
+			for (var i = 0; i < result.words.length; i++)
+			{
+				var wordPosition = this.reversePosition(result.words[i]);
+				this.canvasCtx.fillStyle = 'black';
+				this.canvasCtx.fillText(result.words[i].Text, wordPosition.X, wordPosition.Y + wordPosition.Height);
+			}
+
+			this.selectedPosition = result.position;
+			this.selectedText = result.text;
 		}
 	}
 
@@ -107,8 +147,11 @@ export class PreviewComponent implements OnInit
 
 	extractText(position: Rectangle)
 	{
-		position = this.translatePosition(position);
-		var result ="";
+		position = this.convertPosition(position);
+		var resultTxt = "";
+		var resultPosition = new Rectangle(-1,-1,-1,-1);
+		var currentLine = -1;
+		var words = [];
 		for (var i = 1; i < this.extraction.length; i++)
 		{
 			var left = this.extraction[i].X + this.extraction[i].Width < position.X;
@@ -117,21 +160,52 @@ export class PreviewComponent implements OnInit
 			var below = this.extraction[i].Y + this.extraction[i].Height < position.Y;
 			if (!( left || right || above || below ))
 			{
-				if (result)
-					result += " ";
-				result += this.extraction[i].Text;
+				words.push(this.extraction[i]);
+				if (resultTxt)
+				{
+					if (this.extraction[i].Y > currentLine + 1)
+						resultTxt += "\r\n";
+					else
+						resultTxt += " ";
+				}
+				if (currentLine == -1 || this.extraction[i].Y != currentLine)
+					currentLine = this.extraction[i].Y;
+				resultTxt += this.extraction[i].Text;
+				if (resultPosition.X > this.extraction[i].X || resultPosition.X == -1)
+					resultPosition.X = this.extraction[i].X;
+				if (resultPosition.Y > this.extraction[i].Y || resultPosition.Y == -1)
+					resultPosition.Y = this.extraction[i].Y;
+				if (resultPosition.X + resultPosition.Width < this.extraction[i].X + this.extraction[i].Width || resultPosition.Width == -1)
+					resultPosition.Width = this.extraction[i].X + this.extraction[i].Width - resultPosition.X;
+				if (resultPosition.Y + resultPosition.Height < this.extraction[i].Y + this.extraction[i].Height || resultPosition.Height == -1)
+					resultPosition.Height = this.extraction[i].Y + this.extraction[i].Height - resultPosition.Y;
 			}
 		}
-		this.extractedTextEvent.emit(result);
+		var result = {
+			text: resultTxt,
+			position: resultPosition,
+			words: words
+		}
+		return result;
 	}
 
-	translatePosition(position: Rectangle)
+	convertPosition(position: Rectangle)
 	{
 		var extractionSize = this.extraction[0];
 		var pos = new Rectangle(position.X * extractionSize.Width / this.imgPosition.width,
 								position.Y * extractionSize.Height / this.imgPosition.height,
 								position.Width * extractionSize.Width / this.imgPosition.width,
 								position.Height * extractionSize.Height / this.imgPosition.height);
+		return pos;
+	}
+
+	reversePosition(position: Rectangle)
+	{
+		var extractionSize = this.extraction[0];
+		var pos = new Rectangle(position.X * this.imgPosition.width / extractionSize.Width,
+			position.Y * this.imgPosition.height / extractionSize.Height,
+			position.Width * this.imgPosition.width / extractionSize.Width,
+			position.Height * this.imgPosition.height / extractionSize.Height);
 		return pos;
 	}
 }
