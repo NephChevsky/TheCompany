@@ -292,7 +292,7 @@ namespace DbApp.Models
                 {
                     DateTime now = DateTime.Now;
                     entity.LastModificationDateTime = now;
-                    if (item.State == EntityState.Added)
+                    if (item.State == EntityState.Added && entity.CreationDateTime==null)
                     {
                         entity.CreationDateTime = now;
                     }

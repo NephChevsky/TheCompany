@@ -168,7 +168,10 @@ namespace AzureFunctionsApp
                                                 });
                                             }
                                             if (!(lineItem.Quantity == 0 && lineItem.UnitaryPrice == 0 && lineItem.Price ==0))
+											{
+                                                lineItem.CreationDateTime = DateTime.Now;
                                                 db.InvoiceLineItems.Add(lineItem);
+                                            }
                                         }
                                     }
                                 }
