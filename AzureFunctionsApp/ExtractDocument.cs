@@ -113,6 +113,8 @@ namespace AzureFunctionsApp
                                 }
                             });
 
+                            db.InvoiceLineItems.RemoveRange(db.InvoiceLineItems.Where(x => x.Owner == invoice.Owner && x.InvoiceId == invoice.Id));
+
                             ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
                             if (dbBox != null)
                             {
@@ -165,7 +167,8 @@ namespace AzureFunctionsApp
                                                     }
                                                 });
                                             }
-                                            db.InvoiceLineItems.Add(lineItem);
+                                            if (!(lineItem.Quantity == 0 && lineItem.UnitaryPrice == 0 && lineItem.Price ==0))
+                                                db.InvoiceLineItems.Add(lineItem);
                                         }
                                     }
                                 }
