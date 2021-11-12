@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
 using ModelsApp;
 using System;
 using System.Collections.Generic;
@@ -319,7 +320,7 @@ namespace BackEndApp.Controllers
 						{
 							containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
 						}
-						catch
+						catch (StorageException e) when (e.RequestInformation.ErrorCode == "BlobNotFound")
 						{
 							_logger.LogInformation("End of Extraction method");
 							return NotFound();
