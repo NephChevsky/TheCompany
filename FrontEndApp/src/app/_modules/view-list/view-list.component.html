@@ -1,20 +1,20 @@
-<form [formGroup]="addedLines">
+<form [formGroup]="linesForm">
 	<table>
 		<tr>
-			<th *ngFor="let item of fieldsName | keyvalue">{{item.value}}</th>
+			<th *ngFor="let field of fields">{{field}}</th>
 		</tr>
-		<tbody *ngFor="let entry of data">
-			<tr (click)="linkable && show(entry[0])" [ngClass]="{'linkable' : linkable}">
-				<td *ngFor="let item of entry | keyvalue">{{item.value}}</td>
+		<tbody *ngIf="!editMode">
+			<tr *ngFor="let line of data" (click)="linkable && show(line[linkField])" [ngClass]="{'linkable' : linkable}">
+				<td *ngFor="let field of fields">
+					{{line[field]}}
+				</td>
 			</tr>
 		</tbody>
-		<tbody formArrayName="lines" *ngFor="let item of lines.controls; let i = index">
-			<tr [formGroupName]="i">
-				<td><input type="text" id="{{'reference.'+i}}" size="10" formControlName="reference" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'description.'+i}}" formControlName="description" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'quantity.'+i}}" size="5" formControlName="quantity" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'unitaryprice.'+i}}" size="5" formControlName="unitaryprice" (focus)="onFocus($event.target)"></td>
-				<td><input type="text" id="{{'price.'+i}}" size="5" formControlName="price" (focus)="onFocus($event.target)"></td>
+		<tbody *ngIf="editMode" formArrayName="values">
+			<tr *ngFor="let item of values.controls; let i = index" [formGroupName]="i">
+				<td *ngFor="let field of fields">
+					<input type="text" id="{{i + '.' + field}}"  [formControlName]="field" size=15 (focus)="onFocus($event.target)">
+				</td>
 			</tr>
 		</tbody>
 		<tr *ngIf="editMode">

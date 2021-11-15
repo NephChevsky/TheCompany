@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -49,12 +50,8 @@ export class InvoiceService
 		return this.http.get(environment.baseUrl + `Invoice/Extraction/` + id, {responseType: 'arraybuffer'});
 	}
 
-	saveInvoice(data: any, addedLineItems: any)
+	saveInvoice(obj: any)
 	{
-		var obj = {
-			data: data,
-			addedLineItems: addedLineItems
-		}
 		return this.http.post<any>(environment.baseUrl + `Invoice/SaveInvoice`, obj);
 	}
 }

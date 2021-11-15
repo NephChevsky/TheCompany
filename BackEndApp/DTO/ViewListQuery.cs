@@ -11,5 +11,6 @@ namespace BackEndApp.Models
 	{
 		public string DataSource { get; set; }
 		public List<Filter> Filters { get; set; }
+		public List<string> Fields { get; set; }
 	}
 }

@@ -35,7 +35,7 @@ namespace ModelsApp.DbModels
 			Owner = owner;
 		}
 
-		public InvoiceLineItem(Guid invoiceId, Guid owner, string reference, string description, double quantity, double unitaryprice, double price)
+		public InvoiceLineItem(Guid invoiceId, Guid owner, string reference, string description, double quantity, double unitaryprice, double price, DateTime creationDateTime)
 		{
 			InvoiceId = invoiceId;
 			Owner = owner;
@@ -44,6 +44,7 @@ namespace ModelsApp.DbModels
 			Quantity = quantity;
 			UnitaryPrice = unitaryprice;
 			Price = price;
+			CreationDateTime = creationDateTime;
 		}
 	}
 }

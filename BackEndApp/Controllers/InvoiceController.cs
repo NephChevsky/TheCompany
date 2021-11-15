@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -312,29 +313,88 @@ namespace BackEndApp.Controllers
 		}
 
 		[HttpPost("SaveInvoice")]
-		public ActionResult SaveInvoice([FromBody] JsonElement json) // TODO: implement DTO
+		public ActionResult SaveInvoice([FromBody] InvoiceSaveQuery query)
 		{
 			_logger.LogInformation("Start of SaveInvoice method");
+			if (query == null || query.Id == null || query.Fields == null || query.LineItems == null)
+			{
+				return BadRequest();
+			}
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext())
 			{
-				JsonElement data = json.GetProperty("data");
-				Guid invoiceId = Guid.Parse(data.GetProperty("id").GetString());
+				Guid invoiceId = Guid.Parse(query.Id);
 				Invoice invoice = db.Invoices.Where(x => x.Owner == owner && x.Id == invoiceId).SingleOrDefault();
-				invoice.InvoiceNumber = data.GetProperty("invoiceNumber").GetString();
-				invoice.CustomerNumber = data.GetProperty("customerNumber").GetString();
-				invoice.CustomerAddress = data.GetProperty("customerAddress").GetString();
-				JsonElement addedLineItems = json.GetProperty("addedLineItems").GetProperty("lines");
-				foreach (JsonElement line in addedLineItems.EnumerateArray())
+				Type type = typeof(Invoice);
+				query.Fields.ForEach(x => {
+					PropertyInfo property = type.GetProperty(x.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+					if (property.PropertyType == typeof(DateTime))
+					{
+						property.SetValue(invoice, DateTime.Parse(x.Value));
+					}
+					else if (property.PropertyType == typeof(string))
+					{
+						property.SetValue(invoice, x.Value);
+					}
+					else if (property.PropertyType == typeof(double))
+					{
+						property.SetValue(invoice, Double.Parse(x.Value));
+					}
+					else if (property.PropertyType == typeof(Guid))
+					{
+						property.SetValue(invoice, Guid.Parse(x.Value));
+					}
+					else
+					{
+						throw new Exception("Unknow property type");
+					}
+				});
+				query.LineItems.ForEach(lineItem =>
 				{
-					string reference = line.GetProperty("reference").GetString();
-					string description = line.GetProperty("description").GetString();
-					double quantity = Convert.ToDouble(line.GetProperty("quantity").GetString());
-					double unitaryprice = Convert.ToDouble(line.GetProperty("unitaryprice").GetString());
-					double price = Convert.ToDouble(line.GetProperty("price").GetString());
-					InvoiceLineItem newItem = new InvoiceLineItem(invoice.Id, owner, reference, description, quantity, unitaryprice, price);
-					db.InvoiceLineItems.Add(newItem);
-				}
+					Guid lineItemId;
+					InvoiceLineItem currentItem;
+					if (Guid.TryParse(lineItem.Id, out lineItemId) && lineItemId != Guid.Empty)
+					{
+						currentItem = db.InvoiceLineItems.Where(x => x.Owner == owner && x.InvoiceId == invoiceId && x.Id == lineItemId).SingleOrDefault();
+					}
+					else
+					{
+						currentItem = new InvoiceLineItem();
+						currentItem.CreationDateTime = DateTime.Now;
+						currentItem.InvoiceId = invoice.Id;
+						currentItem.Owner = owner;
+					}
+					Type type = typeof(InvoiceLineItem);
+					lineItem.Fields.ForEach(field =>
+					{
+						PropertyInfo property = type.GetProperty(field.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+						if (property.PropertyType == typeof(DateTime))
+						{
+							property.SetValue(currentItem, DateTime.Parse(field.Value));
+						}
+						else if (property.PropertyType == typeof(string))
+						{
+							property.SetValue(currentItem, field.Value);
+						}
+						else if (property.PropertyType == typeof(double))
+						{
+							property.SetValue(currentItem, Double.Parse(field.Value));
+						}
+						else if (property.PropertyType == typeof(Guid))
+						{
+							property.SetValue(currentItem, Guid.Parse(field.Value));
+						}
+						else
+						{
+							throw new Exception("Unknow property type");
+						}
+					});
+
+					if (lineItemId == Guid.Empty)
+					{
+						db.InvoiceLineItems.Add(currentItem);
+					}
+				});
 				db.SaveChanges();
 			}
 			

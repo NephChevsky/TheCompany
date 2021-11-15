@@ -1,7 +1,7 @@
 <div class="content">
 	<div class="invoiceFields">
 		<h4>Invoice details</h4>
-		<form [formGroup]="dataForm">
+		<form [formGroup]="invoiceForm">
 			<table>
 				<tr *ngFor="let field of invoiceData | keyvalue">
 					<td>{{field.key}}</td>
@@ -11,8 +11,8 @@
 			<br /><br />
 			<h4>Line items</h4>
 		</form>
-		<form [formGroup]="lineItemsDataForm">
-			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [editMode]="editMode" [addedLines]="lineItemsDataForm" (focusEvent)="onFocus($event)"></app-view-list>
+		<form [formGroup]="lineItemsForm">
+			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [fields]="['Reference','Description','Quantity','UnitaryPrice','Price']" [editMode]="editMode" [linesForm]="lineItemsForm" (focusEvent)="onFocus($event)"></app-view-list>
 		</form>
 		<br /><br />
 		<div class="buttons">

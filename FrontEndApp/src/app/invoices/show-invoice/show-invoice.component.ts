@@ -16,8 +16,8 @@ export class ShowInvoiceComponent implements OnInit {
 	public page: number = 1;
 	public filters: Filter[] = [];
 	public editMode: boolean = false;
-	public dataForm: FormGroup = new FormGroup({});
-	public lineItemsDataForm: FormGroup;
+	public invoiceForm: FormGroup = new FormGroup({});
+	public lineItemsForm: FormGroup = new FormGroup({});
 	public focusedFieldId: string;
 
 	constructor(private invoiceService: InvoiceService,
@@ -28,9 +28,6 @@ export class ShowInvoiceComponent implements OnInit {
 
 	ngOnInit(): void
 	{
-		this.lineItemsDataForm = this.formBuilder.group({
-			"lines": new FormArray([])
-		});
 		this.id = this.route.snapshot.paramMap.get('id');
 		this.filters.push(new Filter("InvoiceId", "=", this.id));
 		if (this.id)
@@ -40,7 +37,7 @@ export class ShowInvoiceComponent implements OnInit {
 					this.invoiceData = data;
 					for (var field in this.invoiceData)
 					{
-						this.dataForm.addControl(field, new FormControl(this.invoiceData[field], Validators.required));
+						this.invoiceForm.addControl(field, new FormControl(this.invoiceData[field], Validators.required));
 					}
 				}, error =>
 				{
@@ -56,7 +53,45 @@ export class ShowInvoiceComponent implements OnInit {
 
 	save()
 	{
-		this.invoiceService.saveInvoice(this.dataForm.value, this.lineItemsDataForm.value)
+		var fields = [];
+		for (const [key, value] of Object.entries(this.invoiceForm.value))
+		{
+			fields.push({
+				name: key,
+				value: value
+			})
+		}
+		var lineItems = [];
+
+		var tmp = this.lineItemsForm.get("values") as FormArray;
+		for (var i = 0; i < tmp.value.length; i++)
+		{
+			var lineItemsFields = [];
+			var id;
+			for (const [key, value] of Object.entries(tmp.at(i).value))
+			{
+				if (key == "Id")
+					id = value as string;
+				else
+					lineItemsFields.push({
+						name: key,
+						value: value
+					});
+			}
+			var item = {
+				id: id,
+				fields: lineItemsFields
+			}
+			lineItems.push(item);
+		}
+
+		var obj = {
+			id: this.id,
+			fields: fields,
+			lineItems: lineItems
+		};
+
+		this.invoiceService.saveInvoice(obj)
 			.subscribe(data =>{
 				window.location.reload()
 			}, error =>
@@ -86,9 +121,9 @@ export class ShowInvoiceComponent implements OnInit {
 			var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
 			var tmp = this.focusedFieldId.split(".");
 			if (tmp.length == 2)
-				this.lineItemsDataForm.controls["lines"].get([tmp[1]]).patchValue({[tmp[0]]:text});
+				this.lineItemsForm.controls["values"].get([tmp[0]]).patchValue({[tmp[1]]:text});
 			else
-				this.dataForm.patchValue({[this.focusedFieldId]:text});
+				this.invoiceForm.patchValue({[this.focusedFieldId]:text});
 			
 			input.focus();
 		}
