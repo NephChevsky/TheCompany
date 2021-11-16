@@ -37,6 +37,11 @@ export class ViewListComponent implements OnInit {
 
 	ngOnInit(): void
 	{
+		if (this.linesForm == null)
+		{
+			this.linesForm = new FormGroup({});
+		}
+
 		if (this.linkField)
 		{
 			this.linkable = true;
