@@ -1,4 +1,5 @@
-﻿using DbApp.Models;
+﻿using BackEndApp.DTO;
+using DbApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -24,14 +25,15 @@ namespace BackEndApp.Controllers
 		}
 
 		[HttpPost("Add")]
-		public ActionResult Add([FromBody] JsonElement json)
+		public ActionResult Add([FromBody] AdditionalFieldAddQuery query)
 		{
 			_logger.LogInformation("Start of Add method");
 
-			string dataSource = json.GetProperty("dataSource").GetString();
-			string name = json.GetProperty("name").GetString();
+			if (query.DataSource == null && query.Name == null)
+				return BadRequest();
+
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			AdditionalField field = new AdditionalField(dataSource, name, owner);
+			AdditionalField field = new AdditionalField(query.DataSource, query.Name, owner);
 
 			using (var db = new TheCompanyDbContext())
 			{
@@ -60,12 +62,17 @@ namespace BackEndApp.Controllers
 		public ActionResult Get(string dataSource)
 		{
 			_logger.LogInformation("Start of Get method");
+			List<AdditionalFieldGetResponse> result = new List<AdditionalFieldGetResponse>();
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext())
 			{
 				List<AdditionalField> dbAdditionalFields = db.AdditionalFields.Where(x => x.Owner == owner && x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
+				dbAdditionalFields.ForEach(additionalField =>
+				{
+					result.Add((AdditionalFieldGetResponse)additionalField);
+				});
 				_logger.LogInformation("End of Get method");
-				return Ok(dbAdditionalFields);
+				return Ok(result);
 			}
 		}
 	}
