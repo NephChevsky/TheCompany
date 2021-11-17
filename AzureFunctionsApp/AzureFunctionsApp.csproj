@@ -20,6 +20,9 @@
     <Reference Include="ModelsApp">
       <HintPath>..\ModelsApp\bin\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
     </Reference>
+    <Reference Include="StorageApp">
+      <HintPath>..\StorageApp\bin\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -33,6 +36,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 	<None Update="web.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

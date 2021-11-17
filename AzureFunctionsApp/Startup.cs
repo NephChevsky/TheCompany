@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog.Web;
 using System.IO;
@@ -30,6 +31,15 @@ namespace AzureFunctionsApp
                 var nLogConfig = logFactory.Configuration;
                 loggingBuilder.AddNLog(nLogConfig, nLogOptions);
             });
+        }
+
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+        {
+            FunctionsHostBuilderContext context = builder.GetContext();
+
+            builder.ConfigurationBuilder
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, "appsettings.json"), optional: false, reloadOnChange: false)
+                .AddEnvironmentVariables();
         }
     }
 }

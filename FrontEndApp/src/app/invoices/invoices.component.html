@@ -1,4 +1,4 @@
 <div class="buttons">
 	<button class="btn btn-primary" (click)="importInvoice()">Import invoice</button>
 </div>
-<app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerAddress']" [linkField]="linkField" [linkRoute]="linkRoute"></app-view-list>
+<app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerAddress', 'FileName']" [linkField]="linkField" [linkRoute]="linkRoute"></app-view-list>

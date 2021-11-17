@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using BackEndApp.DTO;
+﻿using BackEndApp.DTO;
 using DbApp.Models;
 using MagickApp;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using ModelsApp.DbModels;
+using StorageApp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,8 +46,7 @@ namespace BackEndApp.Controllers
 			}
 
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-			containerClient.CreateIfNotExists(); // TODO implement as singleton
+			Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
 
 			using (var db = new TheCompanyDbContext())
 			{
@@ -59,47 +58,55 @@ namespace BackEndApp.Controllers
 						{
 							using (Stream stream = entry.Open())
 							{
-								UploadFile(db, containerClient, stream, owner, entry.Name, entry.Length);
+								if (!CreateInvoice(db, storage, stream, owner, entry.Name, entry.Length))
+								{
+									return UnprocessableEntity();
+								}
 							}
 						}
 					}
 				}
 				else
 				{
-					UploadFile(db, containerClient, File.OpenReadStream(), owner, File.FileName, File.Length);
+					if (!CreateInvoice(db, storage, File.OpenReadStream(), owner, File.FileName, File.Length))
+					{
+						return UnprocessableEntity();
+					}
 				}
-
-				
+				db.SaveChanges();
 			}
 			_logger.LogInformation("End of Import method");
 			return Ok();
 		}
 
-		private ActionResult UploadFile(TheCompanyDbContext db, BlobContainerClient containerClient, Stream stream, Guid owner, string fileName, long fileSize)
+		private bool CreateInvoice(TheCompanyDbContext db, Storage storage, Stream stream, Guid owner, string fileName, long fileSize)
 		{
+			MemoryStream tmp = new MemoryStream();
+			stream.CopyTo(tmp);
 			Guid id = Guid.NewGuid();
-			containerClient.UploadBlob(id.ToString(), stream);
-
-			Invoice newInvoice = new Invoice(owner, id, fileName, fileSize);
-			db.Invoices.Add(newInvoice);
-			try
+			if (UploadFile(storage, tmp, owner, id, fileName, fileSize))
 			{
-				db.SaveChanges();
+				Invoice newInvoice = new Invoice(owner, id, fileName, fileSize);
+				db.Invoices.Add(newInvoice);
 			}
-			catch (Exception e)
+			else
 			{
-				containerClient.DeleteBlob(id.ToString());
-				if (e.GetType().IsAssignableFrom(typeof(DbUpdateException)) && ((e.InnerException as SqlException)?.Number == 2601 || (e.InnerException as SqlException)?.Number == 2627))
-				{
-					return Conflict("AlreadyExists");
-				}
-				else
-				{
-					throw e;
-				}
+				return false;
 			}
+			return true;
+		}
 
-			return Ok();
+		private bool UploadFile(Storage storage, MemoryStream stream, Guid owner, Guid fileId, string fileName, long fileSize)
+		{
+			if (!storage.CreateFile(fileId.ToString(), stream))
+			{
+				if (!storage.DeleteFile(fileId.ToString()))
+				{
+					_logger.LogError("Couldn't delete file after upload error " + fileId.ToString());
+				}
+				return false;
+			}
+			return true;
 		}
 
 		[HttpPost("SaveExtractionSettings")]
@@ -260,9 +267,12 @@ namespace BackEndApp.Controllers
 				else
 				{
 					// TODO: store preview in Azure Storage for faster load the next time
-					MemoryStream stream = new MemoryStream();
-					BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-					containerClient.GetBlobClient(dbInvoice.FileId.ToString()).DownloadTo(stream);
+					MemoryStream stream;
+					Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
+					if (!storage.GetFile(dbInvoice.FileId.ToString(), out stream))
+					{
+						return UnprocessableEntity("NotFound");
+					}
 					MagickEngine magickEngine = new MagickEngine();
 					byte[] output = magickEngine.ConvertToPng(stream, page);
 					_logger.LogInformation("End of Preview method");
@@ -287,13 +297,9 @@ namespace BackEndApp.Controllers
 				{
 					if (dbInvoice.ExtractId != Guid.Empty)
 					{
-						MemoryStream stream = new MemoryStream();
-						BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-						try
-						{
-							containerClient.GetBlobClient(dbInvoice.ExtractId.ToString()).DownloadTo(stream);
-						}
-						catch (StorageException e) when (e.RequestInformation.ErrorCode == "BlobNotFound")
+						MemoryStream stream;
+						Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
+						if (!storage.GetFile(dbInvoice.ExtractId.ToString(), out stream))
 						{
 							_logger.LogInformation("End of Extraction method");
 							return NotFound();

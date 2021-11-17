@@ -10,10 +10,12 @@ using DbApp.Models;
 using IronOcr;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using ModelsApp.DbModels;
 using Newtonsoft.Json;
+using StorageApp;
 using static IronOcr.OcrResult;
 
 namespace AzureFunctionsApp
@@ -21,9 +23,11 @@ namespace AzureFunctionsApp
     public class ExtractDocument
     {
         private readonly ILogger<ExtractDocument> _logger;
-        public ExtractDocument(ILogger<ExtractDocument> logger)
+        private IConfiguration Configuration { get; }
+        public ExtractDocument(ILogger<ExtractDocument> logger, IConfiguration configuration)
         {
             _logger = logger;
+            Configuration = configuration;
         }
 
 
@@ -49,15 +53,24 @@ namespace AzureFunctionsApp
                         db.SaveChanges();
 
                         // TODO: run in a task (not sure if it's worth it in azure function since it will be parallelized by kubernets
-                        BlobContainerClient containerClient = new BlobContainerClient("UseDevelopmentStorage=true", invoice.Owner.ToString()); //TODO use Azure dll
+                        Storage storage = new Storage(Configuration.GetSection("Storage"), invoice.Owner);
+                        MemoryStream inputStream;
+                        if (!storage.GetFile(invoice.FileId.ToString(), out inputStream))
+						{
+                            throw new Exception("Couldn't retrieve file " + invoice.FileId.ToString());
+						}
                         string contentType;
                         new FileExtensionContentTypeProvider().TryGetContentType(invoice.FileName, out contentType);
                         string fileExtension = invoice.FileName.Split(".").Last();
                         string tempFileName = Path.GetTempFileName().Replace(".tmp", string.Concat(".", fileExtension));
-                        containerClient.GetBlobClient(invoice.FileId.ToString()).DownloadTo(tempFileName);
+                        using (var fs = new FileStream(tempFileName, FileMode.OpenOrCreate))
+                        {
+                            inputStream.Seek(0, SeekOrigin.Begin);
+                            inputStream.CopyTo(fs);
+                        }
+
                         List<ExtractBlock> result = new List<ExtractBlock>();
                         Guid id = Guid.NewGuid();
-
                         IronTesseract Ocr = new IronTesseract();
                         using (OcrInput Input = new OcrInput(tempFileName))
                         {
@@ -189,22 +202,26 @@ namespace AzureFunctionsApp
                                 invoice.CustomerId = newCustomer.Id;
                             }
 
-                            File.Delete(tempFileName);
-
                             byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
-                            MemoryStream stream = new MemoryStream(byteArray);
+                            MemoryStream outputStream = new MemoryStream(byteArray);
                             if (invoice.ExtractId != Guid.Empty)
                             {
                                 try
 								{
-                                    containerClient.DeleteBlob(invoice.ExtractId.ToString());
+                                    if(!storage.DeleteFile(invoice.ExtractId.ToString()))
+                                    {
+                                        throw new Exception("Couldn't delete previous extraction file");
+									}
                                 }
                                 catch (StorageException e) when (e.RequestInformation.ErrorCode == "BlobNotFound")
 								{
                                     _logger.LogInformation("Blob " + invoice.ExtractId.ToString() + " doesn't exist in storage");
 								}
                             }
-                            containerClient.UploadBlob(id.ToString(), stream);
+                            if (!storage.CreateFile(id.ToString(), outputStream))
+                            {
+                                throw new Exception("Couldn't create extraction file " + id.ToString());
+                            }
                             invoice.ExtractId = id;
                             invoice.ExtractDateTime = DateTime.Now;
                             invoice.LockedBy = null;

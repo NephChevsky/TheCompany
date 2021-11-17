@@ -21,7 +21,7 @@ namespace MagickApp
                 image.Read(file, settings);
                 MemoryStream stream = new MemoryStream();
                 image.Write(stream, MagickFormat.Png);
-                return stream.ToArray();
+                return stream.ToArray(); // TODO: should return a memory stream IMO
             }
         }
 	}

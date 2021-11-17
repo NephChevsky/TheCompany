@@ -1,10 +1,9 @@
-﻿using Azure.Storage.Blobs;
-using DbApp.Models;
+﻿using DbApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using ModelsApp;
 using ModelsApp.DbModels;
+using StorageApp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,10 +48,13 @@ namespace BackEndApp.Controllers
 					dbInvoices.ForEach(invoice =>
 					{
 						// Uncomment this code when true delete is impleted
-						/*BlobContainerClient containerClient = new BlobContainerClient(Configuration.GetConnectionString("AzureStorageAccount"), owner.ToString());
-						containerClient.DeleteBlob(invoice.FileId.ToString());
+						/*Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
+						if (!storage.DeleteFile(invoice.FileId.ToString()))
+						{
+							_logger.LogError("Couldn't delete file " + invoice.FileId.ToString() + " during clear all");
+						}
 						if (invoice.ExtractId != Guid.Empty)
-							containerClient.DeleteBlob(invoice.ExtractId.ToString());*/
+							storage.DeleteFile(invoice.ExtractId.ToString());*/
 						db.Remove(invoice);
 					});
 					db.SaveChanges();
