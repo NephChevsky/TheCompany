@@ -17,42 +17,17 @@ namespace StorageApp.Workers
 		
 		public bool CreateFile(string fileName, MemoryStream file)
 		{
-			try
-			{
-				
-			}
-			catch
-			{
-				return false;
-			}
-			return true;
+			throw new System.NotImplementedException();
 		}
 
 		public bool DeleteFile(string fileName)
 		{
-			try
-			{
-				
-			}
-			catch
-			{
-				return false;
-			}
-			return true;
+			throw new System.NotImplementedException();
 		}
 
 		public bool GetFile(string fileName, out MemoryStream file)
 		{
-			file = new MemoryStream();
-			try
-			{
-				
-			}
-			catch
-			{
-				return false;
-			}
-			return true;
+			throw new System.NotImplementedException();
 		}
 	}
 }
