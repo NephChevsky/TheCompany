@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace StorageApp
+namespace StorageApp.Interfaces
 {
 	public interface IStorage
 	{

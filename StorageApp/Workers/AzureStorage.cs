@@ -1,9 +1,9 @@
 ﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Configuration;
+using StorageApp.Interfaces;
 using System;
 using System.IO;
 
-namespace StorageApp
+namespace StorageApp.Workers
 {
 	public class AzureStorage : IStorage
 	{
