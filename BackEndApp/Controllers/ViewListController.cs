@@ -43,7 +43,7 @@ namespace BackEndApp.Controllers
 				{
 					case "Individual":
 						List<Individual> individuals = db.Individuals.Where(obj => obj.Owner == owner)
-																	.OrderBy(obj => obj.CustomerId)
+																	.OrderBy(obj => obj.CustomerNumber)
 																	.FilterDynamic(query.Filters)
 																	.ToList();
 						values = FormatResultValues(individuals, query.Fields);

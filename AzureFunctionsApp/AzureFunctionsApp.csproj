@@ -20,6 +20,9 @@
     <Reference Include="ModelsApp">
       <HintPath>..\ModelsApp\bin\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
     </Reference>
+    <Reference Include="OcrApp">
+      <HintPath>..\OcrApp\bin\Debug\netcoreapp3.1\OcrApp.dll</HintPath>
+    </Reference>
     <Reference Include="StorageApp">
       <HintPath>..\StorageApp\bin\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
     </Reference>
@@ -41,5 +44,8 @@
 	<None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

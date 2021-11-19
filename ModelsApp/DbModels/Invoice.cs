@@ -13,6 +13,8 @@ namespace ModelsApp.DbModels
 		public string InvoiceNumber { get; set; }
 		public string CustomerNumber { get; set; }
 		public Guid CustomerId { get; set; }
+		public string CustomerFirstName { get; set; }
+		public string CustomerLastName { get; set; }
 		public string CustomerAddress { get; set; }
 
 		// ILockable

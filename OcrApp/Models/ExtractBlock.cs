@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AzureFunctionsApp.Models
+namespace OcrApp.Models
 {
 	public class ExtractBlock
 	{

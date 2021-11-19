@@ -11,7 +11,7 @@ import { InvoiceService } from '../../_services/invoice.service';
 })
 export class InvoiceExtractionComponent implements OnInit {
 
-	fieldsName: string[] = ["InvoiceNumber", "CustomerId", "LastName", "FirstName", "Address"];
+	fieldsName: string[] = ["InvoiceNumber", "CustomerNumber", "CustomerLastName", "CustomerFirstName", "CustomerAddress"];
 	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 	lineItemSettingsForm: FormGroup = new FormGroup({});

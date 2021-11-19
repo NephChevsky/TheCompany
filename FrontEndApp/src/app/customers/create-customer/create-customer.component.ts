@@ -22,7 +22,7 @@ export class CreateCustomerComponent implements OnInit {
 	ngOnInit(): void
 	{
 		this.customerForm = this.formBuilder.group({
-			customerId: ['', [Validators.required]],
+			customerNumber: ['', [Validators.required]],
 			lastName: ['', [Validators.required]],
 			firstName: ['', []],
 			email: ['', [Validators.email]],

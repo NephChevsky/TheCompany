@@ -12,7 +12,7 @@ namespace ModelsApp.DbModels
 
 		public int Type { get; set; }
 
-		public string CustomerId { get; set; }
+		public string CustomerNumber { get; set; }
 
 		// IOwnable
 		public Guid Owner { get; set; }

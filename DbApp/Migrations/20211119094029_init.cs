@@ -52,7 +52,7 @@ namespace DbApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Type = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<string>(nullable: false),
+                    CustomerNumber = table.Column<string>(nullable: false),
                     Owner = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),

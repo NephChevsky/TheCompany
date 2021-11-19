@@ -25,7 +25,7 @@ namespace BackEndApp.Controllers
 		public ActionResult Create([FromBody] CustomerCreateQuery customer)
 		{
 			_logger.LogInformation("Start of Create method");
-			if (string.IsNullOrEmpty(customer.CustomerId) || string.IsNullOrEmpty(customer.LastName))
+			if (string.IsNullOrEmpty(customer.CustomerNumber) || string.IsNullOrEmpty(customer.LastName))
 			{
 				return BadRequest();
 			}

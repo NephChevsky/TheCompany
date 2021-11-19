@@ -75,7 +75,7 @@ namespace DbApp.Models
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CustomerId)
+                entity.Property(e => e.CustomerNumber)
                     .IsRequired();
 
                 entity.Property(e => e.LastName)
@@ -114,6 +114,10 @@ namespace DbApp.Models
                 entity.Property(e => e.CustomerNumber);
 
                 entity.Property(e => e.CustomerId);
+
+                entity.Property(e => e.CustomerFirstName);
+
+                entity.Property(e => e.CustomerLastName);
 
                 entity.Property(e => e.CustomerAddress);
 

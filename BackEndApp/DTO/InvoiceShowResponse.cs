@@ -10,6 +10,8 @@ namespace BackEndApp.DTO
 	{
 		public string InvoiceNumber { get; set; }
 		public string CustomerNumber { get; set; }
+		public string CustomerFirstName { get; set; }
+		public string CustomerLastName { get; set; }
 		public string CustomerAddress { get; set; }
 		public DateTime CreationDateTime { get; set; }
 
@@ -18,6 +20,8 @@ namespace BackEndApp.DTO
 			InvoiceShowResponse result = new InvoiceShowResponse();
 			result.InvoiceNumber = invoice.InvoiceNumber;
 			result.CustomerNumber = invoice.CustomerNumber;
+			result.CustomerFirstName = invoice.CustomerFirstName;
+			result.CustomerLastName = invoice.CustomerLastName;
 			result.CustomerAddress = invoice.CustomerAddress;
 			result.CreationDateTime = invoice.CreationDateTime;
 			return result;

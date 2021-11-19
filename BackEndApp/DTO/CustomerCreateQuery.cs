@@ -8,7 +8,7 @@ namespace BackEndApp.DTO
 {
 	public class CustomerCreateQuery
 	{
-		public string CustomerId { get; set; }
+		public string CustomerNumber { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string Email { get; set; }
@@ -19,7 +19,7 @@ namespace BackEndApp.DTO
 		public static explicit operator Individual(CustomerCreateQuery customer)
 		{
 			Individual newCustomer = new Individual();
-			newCustomer.CustomerId = customer.CustomerId;
+			newCustomer.CustomerNumber = customer.CustomerNumber;
 			newCustomer.FirstName = customer.FirstName;
 			newCustomer.LastName = customer.LastName;
 			newCustomer.Email = customer.Email;
