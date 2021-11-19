@@ -18,25 +18,27 @@ namespace StorageApp.Workers
 			Container = new BlobContainerClient(ConnectionString, Owner.ToString());
 			Container.CreateIfNotExists();
 		}
-		public bool CreateFile(string fileName, MemoryStream file)
+		public bool CreateFile(MemoryStream file, out Guid Id)
 		{
 			try
 			{
 				file.Position = 0;
-				Container.UploadBlob(fileName, file);
+				Id = Guid.NewGuid();
+				Container.UploadBlob(Id.ToString(), file);
 			}
 			catch
 			{
+				Id = Guid.Empty;
 				return false;
 			}
 			return true;
 		}
 
-		public bool DeleteFile(string fileName)
+		public bool DeleteFile(Guid id)
 		{
 			try
 			{
-				Container.DeleteBlob(fileName);
+				Container.DeleteBlob(id.ToString());
 			}
 			catch
 			{
@@ -45,12 +47,12 @@ namespace StorageApp.Workers
 			return true;
 		}
 
-		public bool GetFile(string fileName, out MemoryStream file)
+		public bool GetFile(Guid id, out MemoryStream file)
 		{
 			file = new MemoryStream();
 			try
 			{
-				Container.GetBlobClient(fileName).DownloadTo(file);
+				Container.GetBlobClient(id.ToString()).DownloadTo(file);
 			}
 			catch
 			{

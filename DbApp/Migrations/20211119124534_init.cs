@@ -47,6 +47,22 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    FilePath = table.Column<string>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Individuals",
                 columns: table => new
                 {
@@ -98,6 +114,8 @@ namespace DbApp.Migrations
                     InvoiceNumber = table.Column<string>(nullable: true),
                     CustomerNumber = table.Column<string>(nullable: true),
                     CustomerId = table.Column<Guid>(nullable: false),
+                    CustomerFirstName = table.Column<string>(nullable: true),
+                    CustomerLastName = table.Column<string>(nullable: true),
                     CustomerAddress = table.Column<string>(nullable: true),
                     LockedBy = table.Column<string>(nullable: true),
                     FileId = table.Column<Guid>(nullable: false),
@@ -149,6 +167,9 @@ namespace DbApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExtractionSettings");
+
+            migrationBuilder.DropTable(
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Individuals");

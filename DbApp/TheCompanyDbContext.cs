@@ -26,10 +26,10 @@ namespace DbApp.Models
 		public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
-
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
         public virtual DbSet<InvoiceLineItem> InvoiceLineItems { get; set; }
+        public virtual DbSet<File> Files { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -247,6 +247,30 @@ namespace DbApp.Models
                 entity.Property(e => e.LastModificationDateTime);
             });
 
+            modelBuilder.Entity<File>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.FilePath)
+                    .IsRequired();
+
+                entity.Property(e => e.Owner)
+                    .IsRequired();
+
+                entity.Property(e => e.Owner)
+                    .IsRequired();
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
             foreach (var type in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDeleteable).IsAssignableFrom(type.ClrType))
@@ -296,7 +320,7 @@ namespace DbApp.Models
                 {
                     DateTime now = DateTime.Now;
                     entity.LastModificationDateTime = now;
-                    if (item.State == EntityState.Added && entity.CreationDateTime==null)
+                    if (item.State == EntityState.Added && (entity.CreationDateTime==null || entity.CreationDateTime==DateTime.MinValue))
                     {
                         entity.CreationDateTime = now;
                     }

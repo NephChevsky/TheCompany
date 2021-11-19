@@ -30,19 +30,19 @@ namespace StorageApp
 			}
 		}
 
-		public bool CreateFile(string fileName, MemoryStream file)
+		public bool CreateFile(MemoryStream file, out Guid Id)
 		{
-			return Instance.CreateFile(fileName, file);
+			return Instance.CreateFile(file, out Id);
 		}
 
-		public bool DeleteFile( string fileName)
+		public bool DeleteFile(Guid id)
 		{
-			return Instance.DeleteFile(fileName);
+			return Instance.DeleteFile(id);
 		}
 
-		public bool GetFile(string fileName, out MemoryStream file)
+		public bool GetFile(Guid id, out MemoryStream file)
 		{
-			return Instance.GetFile(fileName, out file);
+			return Instance.GetFile(id, out file);
 		}
 	}
 }

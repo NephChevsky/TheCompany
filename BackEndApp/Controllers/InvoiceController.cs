@@ -83,8 +83,8 @@ namespace BackEndApp.Controllers
 		{
 			MemoryStream tmp = new MemoryStream();
 			stream.CopyTo(tmp);
-			Guid id = Guid.NewGuid();
-			if (UploadFile(storage, tmp, owner, id, fileName, fileSize))
+			Guid id;
+			if (UploadFile(storage, tmp, owner, out id))
 			{
 				Invoice newInvoice = new Invoice(owner, id, fileName, fileSize);
 				db.Invoices.Add(newInvoice);
@@ -96,14 +96,11 @@ namespace BackEndApp.Controllers
 			return true;
 		}
 
-		private bool UploadFile(Storage storage, MemoryStream stream, Guid owner, Guid fileId, string fileName, long fileSize)
+		private bool UploadFile(Storage storage, MemoryStream stream, Guid owner, out Guid fileId)
 		{
-			if (!storage.CreateFile(fileId.ToString(), stream))
+			fileId = Guid.Empty;
+			if (!storage.CreateFile(stream, out fileId))
 			{
-				if (!storage.DeleteFile(fileId.ToString()))
-				{
-					_logger.LogError("Couldn't delete file after upload error " + fileId.ToString());
-				}
 				return false;
 			}
 			return true;
@@ -269,7 +266,7 @@ namespace BackEndApp.Controllers
 					// TODO: store preview in Azure Storage for faster load the next time
 					MemoryStream stream;
 					Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
-					if (!storage.GetFile(dbInvoice.FileId.ToString(), out stream))
+					if (!storage.GetFile(dbInvoice.FileId, out stream))
 					{
 						return UnprocessableEntity("NotFound");
 					}
@@ -299,7 +296,7 @@ namespace BackEndApp.Controllers
 					{
 						MemoryStream stream;
 						Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
-						if (!storage.GetFile(dbInvoice.ExtractId.ToString(), out stream))
+						if (!storage.GetFile(dbInvoice.ExtractId, out stream))
 						{
 							_logger.LogInformation("End of Extraction method");
 							return NotFound();

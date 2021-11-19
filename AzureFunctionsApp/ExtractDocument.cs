@@ -53,7 +53,7 @@ namespace AzureFunctionsApp
                         // TODO: run in a task (not sure if it's worth it in azure function since it will be parallelized by kubernets
                         Storage storage = new Storage(Configuration.GetSection("Storage"), invoice.Owner);
                         MemoryStream inputStream;
-                        if (!storage.GetFile(invoice.FileId.ToString(), out inputStream))
+                        if (!storage.GetFile(invoice.FileId, out inputStream))
 						{
                             throw new Exception("Couldn't retrieve file " + invoice.FileId.ToString());
 						}
@@ -208,20 +208,13 @@ namespace AzureFunctionsApp
                         MemoryStream outputStream = new MemoryStream(byteArray);
                         if (invoice.ExtractId != Guid.Empty)
                         {
-                            try
-							{
-                                if(!storage.DeleteFile(invoice.ExtractId.ToString()))
-                                {
-                                    throw new Exception("Couldn't delete previous extraction file");
-								}
-                            }
-                            catch (StorageException e) when (e.RequestInformation.ErrorCode == "BlobNotFound")
-							{
-                                _logger.LogInformation("Blob " + invoice.ExtractId.ToString() + " doesn't exist in storage");
+                            if(!storage.DeleteFile(invoice.ExtractId))
+                            {
+                                throw new Exception("Couldn't delete previous extraction file");
 							}
                         }
-                        Guid id = Guid.NewGuid();
-                        if (!storage.CreateFile(id.ToString(), outputStream))
+                        Guid id;
+                        if (!storage.CreateFile(outputStream, out id))
                         {
                             throw new Exception("Couldn't create extraction file " + id.ToString());
                         }
