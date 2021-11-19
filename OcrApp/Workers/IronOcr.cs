@@ -12,13 +12,15 @@ namespace OcrApp.Workers
 {
 	public class IronOcrWrapper : IOcr
 	{
-		private IConfiguration Configuration { get; }
+		private bool Deskew { get; set; }
+		private bool Denoise { get; set; }
 		public List<ExtractBlock> ExtractedBlocks { get; set; }
 		private OcrResult OcrResult { get; set; }
 		
-		public IronOcrWrapper(IConfiguration configuration)
+		public IronOcrWrapper(bool deskew, bool denoise)
 		{
-			Configuration = configuration;
+			Deskew = deskew;
+			Denoise = denoise;
 		}
 
 		public bool ExtractPDF(string filePath)
@@ -27,8 +29,10 @@ namespace OcrApp.Workers
 			IronTesseract Ocr = new IronTesseract();
 			using (OcrInput Input = new OcrInput(filePath))
 			{
-				//Input.Deskew();
-				//Input.DeNoise();
+				if (Deskew)
+					Input.Deskew();
+				if (Denoise)
+					Input.DeNoise();
 				OcrResult = Ocr.Read(Input);
 				ExtractBlock size = new ExtractBlock(OcrResult.Pages[0].ContentArea.X, OcrResult.Pages[0].ContentArea.Y, OcrResult.Pages[0].ContentArea.Height, OcrResult.Pages[0].ContentArea.Width, "");
 				ExtractedBlocks.Add(size);

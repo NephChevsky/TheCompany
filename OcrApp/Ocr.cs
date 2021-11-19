@@ -17,7 +17,7 @@ namespace OcrApp
 			Configuration = configuration;
 			if (Configuration["OcrType"] == "Iron")
 			{
-				Instance = new IronOcrWrapper(Configuration);
+				Instance = new IronOcrWrapper(Configuration["Deskew"] == "true", Configuration["Denoise"] == "true");
 			}
 			else if (Configuration["StorageType"] == "CharlesW")
 			{
