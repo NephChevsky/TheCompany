@@ -271,9 +271,9 @@ namespace BackEndApp.Controllers
 						return UnprocessableEntity("NotFound");
 					}
 					MagickEngine magickEngine = new MagickEngine();
-					byte[] output = magickEngine.ConvertToPng(stream, page);
+					MemoryStream output = magickEngine.ConvertToPng(stream, page);
 					_logger.LogInformation("End of Preview method");
-					return Ok(Convert.ToBase64String(output));
+					return Ok(Convert.ToBase64String(output.ToArray()));
 				}
 			}
 		}
