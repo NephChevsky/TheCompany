@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage;
 using ModelsApp.DbModels;
 using Newtonsoft.Json;
 using StorageApp;
@@ -116,14 +115,17 @@ namespace AzureFunctionsApp
 							{
                                 dbIndividual = new Individual();
                                 Guid customerId = Guid.NewGuid();
-                                string address = String.Join(System.Environment.NewLine, invoice.CustomerAddress.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                                address = String.Join(" ", address.Split(" ", StringSplitOptions.RemoveEmptyEntries));
                                 dbIndividual.Id = customerId;
                                 dbIndividual.CustomerNumber = invoice.CustomerNumber;
                                 dbIndividual.Owner = invoice.Owner;
-                                dbIndividual.Address = address;
                                 dbIndividual.FirstName = invoice.CustomerFirstName;
                                 dbIndividual.LastName = invoice.CustomerLastName;
+                                if (!string.IsNullOrEmpty(invoice.CustomerAddress))
+								{
+                                    string address = String.Join(System.Environment.NewLine, invoice.CustomerAddress.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                                    address = String.Join(" ", address.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+                                    dbIndividual.Address = address;
+                                }
                                 invoice.CustomerId = customerId;
                                 db.Individuals.Add(dbIndividual);
                             }
@@ -199,11 +201,7 @@ namespace AzureFunctionsApp
                             }
                         }
 
-                        List<ExtractBlock> result;
-                        if (!ocr.GetExtractedBlocks(out result))
-						{
-                            throw new Exception("Couldn't get list of extracted blocks");
-						}
+                        List<ExtractBlock> result = ocr.GetExtractedBlocks(true);
                         byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result));
                         MemoryStream outputStream = new MemoryStream(byteArray);
                         if (invoice.ExtractId != Guid.Empty)

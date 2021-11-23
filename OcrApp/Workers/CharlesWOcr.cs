@@ -1,35 +1,74 @@
-﻿using OcrApp.Interfaces;
+﻿using MagickApp;
+using OcrApp.Interfaces;
 using OcrApp.Models;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
+using System.Linq;
+using Tesseract;
 
 namespace OcrApp.Workers
 {
 	public class CharlesWWrapper : IOcr
 	{
-		public CharlesWWrapper()
-		{
+        private string ModelsPath;
+        private ExtractBlock PageSize { get; set; }
+        public List<ExtractBlock> ExtractedBlocks { get; set; }
 
-		}
+        public CharlesWWrapper(string modelsPath)
+		{
+            ModelsPath = modelsPath;
+
+        }
 
 		public bool ExtractPDF(string fileName)
 		{
-			throw new System.NotImplementedException();
-		}
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            MemoryStream ms = new MemoryStream();
+            fs.CopyTo(ms);
+            MagickEngine magickEngine = new MagickEngine();
+            MemoryStream output = magickEngine.ConvertToPng(ms, 1);
+            using (var engine = new TesseractEngine(ModelsPath, "fra", EngineMode.Default))
+            {
+                using (Pix img = Pix.LoadFromMemory(output.ToArray()))
+                {
+                    using (Page page = engine.Process(img))
+                    {
+                        ExtractedBlocks = new List<ExtractBlock>();
+                        PageSize = new ExtractBlock(page.RegionOfInterest.X1, page.RegionOfInterest.Y1, page.RegionOfInterest.Height, page.RegionOfInterest.Width, null);
+                        using (var iter = page.GetIterator())
+                        {
+                            iter.Begin();
+                            do
+                            {
+                                do
+                                {
+                                    do
+                                    {
+                                        do
+                                        {
+                                            Rect boundingBox;
+                                            iter.TryGetBoundingBox(PageIteratorLevel.Word, out boundingBox);
+                                            ExtractBlock extractBlock = new ExtractBlock(boundingBox.X1, boundingBox.Y1, boundingBox.Height, boundingBox.Width, iter.GetText(PageIteratorLevel.Word));
+                                            ExtractedBlocks.Add(extractBlock);
+                                        } while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
+                                    } while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+                                } while (iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+                            } while (iter.Next(PageIteratorLevel.Block));
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
-		public bool ExtractTextInArea(Rectangle rectangle, out string text)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public bool ExtractLinesInArea(Rectangle rectangle, out List<ExtractBlock> result)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public bool GetExtractedBlocks(out List<ExtractBlock> result)
-		{
-			throw new System.NotImplementedException();
-		}
-	}
+        public List<ExtractBlock> GetExtractedBlocks(bool addPageSize)
+        {
+            List<ExtractBlock> result = ExtractedBlocks.ToList();
+            if (addPageSize)
+            {
+                result.Insert(0, PageSize);
+            }
+            return ExtractedBlocks;
+        }
+    }
 }

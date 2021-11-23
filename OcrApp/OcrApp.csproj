@@ -7,6 +7,13 @@
   <ItemGroup>
     <PackageReference Include="IronOcr" Version="2021.11.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.21" />
+    <PackageReference Include="Tesseract" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MagickApp">
+      <HintPath>..\MagickApp\bin\Debug\netcoreapp3.1\MagickApp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

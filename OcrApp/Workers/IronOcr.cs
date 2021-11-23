@@ -1,12 +1,9 @@
 ﻿using IronOcr;
-using Microsoft.Extensions.Configuration;
 using OcrApp.Interfaces;
 using OcrApp.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using static IronOcr.OcrResult;
 
 namespace OcrApp.Workers
 {
@@ -14,9 +11,9 @@ namespace OcrApp.Workers
 	{
 		private bool Deskew { get; set; }
 		private bool Denoise { get; set; }
-		public List<ExtractBlock> ExtractedBlocks { get; set; }
-		private OcrResult OcrResult { get; set; }
-		
+		private ExtractBlock PageSize { get; set; }
+		private List<ExtractBlock> ExtractedBlocks { get; set; }
+
 		public IronOcrWrapper(bool deskew, bool denoise)
 		{
 			Deskew = deskew;
@@ -33,10 +30,9 @@ namespace OcrApp.Workers
 					Input.Deskew();
 				if (Denoise)
 					Input.DeNoise();
-				OcrResult = Ocr.Read(Input);
-				ExtractBlock size = new ExtractBlock(OcrResult.Pages[0].ContentArea.X, OcrResult.Pages[0].ContentArea.Y, OcrResult.Pages[0].ContentArea.Height, OcrResult.Pages[0].ContentArea.Width, "");
-				ExtractedBlocks.Add(size);
-				Array.ForEach(OcrResult.Words, delegate (OcrResult.Word word)
+				OcrResult result = Ocr.Read(Input);
+				PageSize = new ExtractBlock(result.Pages[0].ContentArea.X, result.Pages[0].ContentArea.Y, result.Pages[0].ContentArea.Height, result.Pages[0].ContentArea.Width, null);
+				Array.ForEach(result.Words, delegate (OcrResult.Word word)
 				{
 					ExtractBlock extractBlock = new ExtractBlock(word.X, word.Y, word.Height, word.Width, word.Text);
 					ExtractedBlocks.Add(extractBlock);
@@ -45,62 +41,14 @@ namespace OcrApp.Workers
 			return true;
 		}
 
-		public bool ExtractTextInArea(Rectangle rectangle, out string text)
+		public List<ExtractBlock> GetExtractedBlocks(bool addPageSize)
 		{
-			text = null;
-			foreach (Word tmp in OcrResult.Words)
+			List<ExtractBlock> result = ExtractedBlocks.ToList();
+			if (addPageSize)
 			{
-				bool left = tmp.X + tmp.Width < rectangle.X;
-				bool right = tmp.X > rectangle.X + rectangle.Width;
-				bool above = tmp.Y > rectangle.Y + rectangle.Height;
-				bool below = tmp.Y + tmp.Height < rectangle.Y;
-				if (!(left || right || above || below))
-				{
-					if (text != null)
-						text += " ";
-					text += tmp.Text;
-				}
+				result.Insert(0, PageSize);
 			}
-			return true;
-		}
-
-		public bool ExtractLinesInArea(Rectangle rectangle, out List<ExtractBlock> result)
-		{
-			List<ExtractBlock> currentResult = new List<ExtractBlock>();
-			List<Word> list = new List<Word>();
-			foreach (Word tmp in OcrResult.Words)
-			{
-				bool left = tmp.X + tmp.Width < rectangle.X;
-				bool right = tmp.X > rectangle.X + rectangle.Width;
-				bool above = tmp.Y > rectangle.Y + rectangle.Height;
-				bool below = tmp.Y + tmp.Height < rectangle.Y;
-				if (!(left || right || above || below))
-				{
-					list.Add(tmp);
-				}
-			}
-			list.ForEach(currentBlock => {
-				ExtractBlock existingBlock = currentResult.Find(aBlock => currentBlock.Y == aBlock.Y);
-				if (existingBlock != null)
-				{
-					existingBlock.Text += " " + currentBlock.Text;
-					existingBlock.Width = currentBlock.X + currentBlock.Width - existingBlock.X;
-				}
-				else
-				{
-					ExtractBlock newBlock = new ExtractBlock(currentBlock.X, currentBlock.Y, currentBlock.Height, currentBlock.Width, currentBlock.Text);
-					currentResult.Add(newBlock);
-				}
-			});
-			currentResult.OrderBy(x => x.Y);
-			result = currentResult;
-			return true;
-		}
-
-		public bool GetExtractedBlocks(out List<ExtractBlock> result)
-		{
-			result = ExtractedBlocks;
-			return true;
+			return result;
 		}
 	}
 }
