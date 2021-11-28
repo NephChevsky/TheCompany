@@ -366,6 +366,8 @@ namespace DbApp.Models
                             Expression right;
                             if (prop.Type == typeof(Guid))
 							{
+                                if (x.FieldValue == null)
+                                    throw new Exception(x.FieldName + " property value cannot be null in query filters");
                                 right = Expression.Constant(Guid.Parse(x.FieldValue));
                             }
                             else
