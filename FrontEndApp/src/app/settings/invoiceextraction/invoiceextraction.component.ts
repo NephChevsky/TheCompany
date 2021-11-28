@@ -46,27 +46,25 @@ export class InvoiceExtractionComponent implements OnInit {
 		{
 			for (var i = 0; i < data.length; i++)
 			{
-				this.addField(data[i].field);
-				this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
-			}
-		}, error => {
-			// TODO
-		});
-
-		this.invoiceService.getExtractionSettings(this.lineItemsName).subscribe((data: any[]) =>
-		{
-			for (var i = 0; i < data.length; i++)
-			{
-				if (data[i].field == "LineItem")
+				if (data[i].isLineItem)
 				{
-					this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
-					this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
+					if (data[i].field == "LineItem")
+					{
+						this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
+						this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
+					}
+					else
+					{
+						this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
+						this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
+					}
 				}
 				else
 				{
-					this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
-					this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
+					this.addField(data[i].field);
+					this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
 				}
+				
 			}
 		}, error => {
 			// TODO

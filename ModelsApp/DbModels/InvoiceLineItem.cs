@@ -15,18 +15,23 @@ namespace ModelsApp.DbModels
 		public Guid InvoiceId { get; set; }
 
 		[TextField]
+		[Extractable]
 		public string Reference { get; set; }
 
 		[TextField]
+		[Extractable]
 		public string Description { get; set; }
 
 		[NumberField]
+		[Extractable]
 		public double Quantity { get; set; }
 
 		[NumberField]
+		[Extractable]
 		public double UnitaryPrice { get; set; }
 
 		[NumberField]
+		[Extractable]
 		public double Price { get; set; }
 
 		// IOwnable

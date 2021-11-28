@@ -228,6 +228,21 @@ namespace BackEndApp.Controllers
 						}
 					}
 				}
+
+				query.Add("LineItem");
+
+				properties = typeof(InvoiceLineItem).GetProperties();
+				foreach (PropertyInfo property in properties)
+				{
+					System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);  // Reflection.  
+					foreach (System.Attribute attr in attrs)
+					{
+						if (attr is Extractable)
+						{
+							query.Add(property.Name);
+						}
+					}
+				}
 			}
 
 			List<ExtractionSettings> results = new List<ExtractionSettings>();
