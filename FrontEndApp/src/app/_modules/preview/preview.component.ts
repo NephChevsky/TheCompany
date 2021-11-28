@@ -118,7 +118,6 @@ export class PreviewComponent implements OnInit
 	{
 		if (this.extraction && this.extraction.length != 0)
 		{
-			debugger;
 			var result = this.extractText(this.dragPosition);
 			this.dragPosition = new Rectangle(-1, -1, -1, -1);
 			result.position = this.reversePosition(result.position);
