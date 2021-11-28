@@ -25,7 +25,7 @@ import { InvoiceComponent } from './settings/invoice/invoice.component';
 import { AddComponent } from './settings/additional-fields/add/add.component';
 import { CustomerComponent } from './settings/customer/customer.component';
 import { PreviewComponent } from './_modules/preview/preview.component';
-import { TextFieldComponent } from './_modules/fields/text-field/text-field.component';
+import { FieldComponent } from './_modules/field/field.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import { TextFieldComponent } from './_modules/fields/text-field/text-field.comp
     AddComponent,
     CustomerComponent,
     PreviewComponent,
-    TextFieldComponent
+    FieldComponent
   ],
   imports: [
     BrowserModule,

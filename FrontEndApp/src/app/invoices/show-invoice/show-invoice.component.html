@@ -5,7 +5,7 @@
 			<table>
 				<tr *ngFor="let field of invoiceData | keyvalue">
 					<td>{{field.key}}</td>
-					<td><app-text-field [form]="invoiceForm" key="{{field.key}}" size="50" [readonlyValue]="!editMode" (focusEvent)="onFocus($event)"></app-text-field></td>
+					<td><app-field type="text" [form]="invoiceForm" key="{{field.key}}" size="50" [readonlyValue]="!editMode" (focusEvent)="onFocus($event)"></app-field></td>
 				</tr>
 			</table>
 			<br /><br />
