@@ -3,7 +3,6 @@ using DbApp.Models;
 using MagickApp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ModelsApp.DbModels;
@@ -17,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using ModelsApp.Helpers;
 
 namespace BackEndApp.Controllers
 {
@@ -216,33 +216,9 @@ namespace BackEndApp.Controllers
 
 			if (query.Count == 0)
 			{
-				PropertyInfo[] properties = typeof(Invoice).GetProperties();
-				foreach (PropertyInfo property in properties)
-				{
-					System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);  // Reflection.  
-					foreach (System.Attribute attr in attrs)
-					{
-						if (attr is Extractable)
-						{
-							query.Add(property.Name);
-						}
-					}
-				}
-
+				query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(Invoice)));
 				query.Add("LineItem");
-
-				properties = typeof(InvoiceLineItem).GetProperties();
-				foreach (PropertyInfo property in properties)
-				{
-					System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);  // Reflection.  
-					foreach (System.Attribute attr in attrs)
-					{
-						if (attr is Extractable)
-						{
-							query.Add(property.Name);
-						}
-					}
-				}
+				query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(InvoiceLineItem)));
 			}
 
 			List<ExtractionSettings> results = new List<ExtractionSettings>();
