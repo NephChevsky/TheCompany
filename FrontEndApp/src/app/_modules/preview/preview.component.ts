@@ -18,6 +18,7 @@ export class PreviewComponent implements OnInit
 	page: number = 1;
 	preview: string;
 	extraction : ExtractBlock[];
+	extractionSize : ExtractBlock;
 	imgPosition: DOMRect = new DOMRect();
 	dragPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	canvasCtx: CanvasRenderingContext2D;
@@ -65,6 +66,8 @@ export class PreviewComponent implements OnInit
 					this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function(c) {
 						return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 					}).join('')));
+					this.extractionSize = this.extraction[0];
+					this.extraction.shift();
 				}, error =>
 				{
 					// TODO: handle errors
@@ -115,6 +118,7 @@ export class PreviewComponent implements OnInit
 	{
 		if (this.extraction && this.extraction.length != 0)
 		{
+			debugger;
 			var result = this.extractText(this.dragPosition);
 			this.dragPosition = new Rectangle(-1, -1, -1, -1);
 			result.position = this.reversePosition(result.position);
@@ -183,6 +187,12 @@ export class PreviewComponent implements OnInit
 					resultPosition.Height = this.extraction[i].Y + this.extraction[i].Height - resultPosition.Y;
 			}
 		}
+
+		if (resultPosition.X == -1)
+		{
+			resultPosition = position;
+		}
+
 		var result = {
 			text: resultTxt,
 			position: resultPosition,
@@ -193,21 +203,19 @@ export class PreviewComponent implements OnInit
 
 	convertPosition(position: Rectangle)
 	{
-		var extractionSize = this.extraction[0];
-		var pos = new Rectangle(position.X * extractionSize.Width / this.imgPosition.width,
-								position.Y * extractionSize.Height / this.imgPosition.height,
-								position.Width * extractionSize.Width / this.imgPosition.width,
-								position.Height * extractionSize.Height / this.imgPosition.height);
+		var pos = new Rectangle(position.X * this.extractionSize.Width / this.imgPosition.width,
+								position.Y * this.extractionSize.Height / this.imgPosition.height,
+								position.Width * this.extractionSize.Width / this.imgPosition.width,
+								position.Height * this.extractionSize.Height / this.imgPosition.height);
 		return pos;
 	}
 
 	reversePosition(position: Rectangle)
 	{
-		var extractionSize = this.extraction[0];
-		var pos = new Rectangle(position.X * this.imgPosition.width / extractionSize.Width,
-			position.Y * this.imgPosition.height / extractionSize.Height,
-			position.Width * this.imgPosition.width / extractionSize.Width,
-			position.Height * this.imgPosition.height / extractionSize.Height);
+		var pos = new Rectangle(position.X * this.imgPosition.width / this.extractionSize.Width,
+			position.Y * this.imgPosition.height / this.extractionSize.Height,
+			position.Width * this.imgPosition.width / this.extractionSize.Width,
+			position.Height * this.imgPosition.height / this.extractionSize.Height);
 		return pos;
 	}
 }
