@@ -13,9 +13,4 @@ export class CustomersComponent implements OnInit
 
 	ngOnInit(): void {
 	}
-
-	createCustomer() {
-		this.router.navigate(['Customers/Create']);
-	}
-
 }
