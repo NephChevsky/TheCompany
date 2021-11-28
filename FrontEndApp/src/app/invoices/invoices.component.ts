@@ -15,8 +15,4 @@ export class InvoicesComponent implements OnInit {
 
 	ngOnInit(): void {
 	}
-
-	importInvoice() {
-		this.router.navigate(['Invoices/Import']);
-	}
 }
