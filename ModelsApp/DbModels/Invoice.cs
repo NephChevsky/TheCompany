@@ -16,11 +16,13 @@ namespace ModelsApp.DbModels
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		[Extractable]
 		public string InvoiceNumber { get; set; }
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		[Extractable]
 		public string CustomerNumber { get; set; }
 
@@ -29,16 +31,19 @@ namespace ModelsApp.DbModels
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		[Extractable]
 		public string CustomerFirstName { get; set; }
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		[Extractable]
 		public string CustomerLastName { get; set; }
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		[Extractable]
 		public string CustomerAddress { get; set; }
 

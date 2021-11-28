@@ -335,29 +335,40 @@ namespace BackEndApp.Controllers
 				Guid invoiceId = Guid.Parse(query.Id);
 				Invoice invoice = db.Invoices.Where(x => x.Owner == owner && x.Id == invoiceId).SingleOrDefault();
 				Type type = typeof(Invoice);
+				bool notEditableField = false;
 				query.Fields.ForEach(x => {
 					PropertyInfo property = type.GetProperty(x.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-					if (property.PropertyType == typeof(DateTime))
+					if (AttributeHelper.CheckAttribute<Editable>(type, property))
 					{
-						property.SetValue(invoice, DateTime.Parse(x.Value));
-					}
-					else if (property.PropertyType == typeof(string))
-					{
-						property.SetValue(invoice, x.Value);
-					}
-					else if (property.PropertyType == typeof(double))
-					{
-						property.SetValue(invoice, Double.Parse(x.Value));
-					}
-					else if (property.PropertyType == typeof(Guid))
-					{
-						property.SetValue(invoice, Guid.Parse(x.Value));
+						if (property.PropertyType == typeof(DateTime))
+						{
+							property.SetValue(invoice, DateTime.Parse(x.Value));
+						}
+						else if (property.PropertyType == typeof(string))
+						{
+							property.SetValue(invoice, x.Value);
+						}
+						else if (property.PropertyType == typeof(double))
+						{
+							property.SetValue(invoice, Double.Parse(x.Value));
+						}
+						else if (property.PropertyType == typeof(Guid))
+						{
+							property.SetValue(invoice, Guid.Parse(x.Value));
+						}
+						else
+						{
+							throw new Exception("Unknow property type");
+						}
 					}
 					else
 					{
-						throw new Exception("Unknow property type");
+						notEditableField = true;
 					}
 				});
+				if (notEditableField)
+					return BadRequest();
+
 				query.LineItems.ForEach(lineItem =>
 				{
 					Guid lineItemId;
@@ -377,25 +388,32 @@ namespace BackEndApp.Controllers
 					lineItem.Fields.ForEach(field =>
 					{
 						PropertyInfo property = type.GetProperty(field.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-						if (property.PropertyType == typeof(DateTime))
+						if (AttributeHelper.CheckAttribute<Editable>(type, property))
 						{
-							property.SetValue(currentItem, DateTime.Parse(field.Value));
-						}
-						else if (property.PropertyType == typeof(string))
-						{
-							property.SetValue(currentItem, field.Value);
-						}
-						else if (property.PropertyType == typeof(double))
-						{
-							property.SetValue(currentItem, Double.Parse(field.Value));
-						}
-						else if (property.PropertyType == typeof(Guid))
-						{
-							property.SetValue(currentItem, Guid.Parse(field.Value));
+							if (property.PropertyType == typeof(DateTime))
+							{
+								property.SetValue(currentItem, DateTime.Parse(field.Value));
+							}
+							else if (property.PropertyType == typeof(string))
+							{
+								property.SetValue(currentItem, field.Value);
+							}
+							else if (property.PropertyType == typeof(double))
+							{
+								property.SetValue(currentItem, Double.Parse(field.Value));
+							}
+							else if (property.PropertyType == typeof(Guid))
+							{
+								property.SetValue(currentItem, Guid.Parse(field.Value));
+							}
+							else
+							{
+								throw new Exception("Unknow property type");
+							}
 						}
 						else
 						{
-							throw new Exception("Unknow property type");
+							notEditableField = true;
 						}
 					});
 
@@ -404,6 +422,9 @@ namespace BackEndApp.Controllers
 						db.InvoiceLineItems.Add(currentItem);
 					}
 				});
+				if (notEditableField)
+					return BadRequest();
+
 				db.SaveChanges();
 			}
 			
