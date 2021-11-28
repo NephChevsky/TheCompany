@@ -11,7 +11,7 @@ import { InvoiceService } from '../../_services/invoice.service';
 })
 export class InvoiceExtractionComponent implements OnInit {
 
-	fieldsName: string[] = ["InvoiceNumber", "CustomerNumber", "CustomerLastName", "CustomerFirstName", "CustomerAddress"];
+	fieldsName: string[] = [];
 	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 	lineItemSettingsForm: FormGroup = new FormGroup({});
@@ -42,15 +42,11 @@ export class InvoiceExtractionComponent implements OnInit {
 			pricexmax: ['', []]
 		});
 
-		for (let item of this.fieldsName)
-		{
-			this.addField(item);
-		}
-
-		this.invoiceService.getExtractionSettings(this.fieldsName).subscribe((data: any[]) =>
+		this.invoiceService.getExtractionSettings().subscribe((data: any[]) =>
 		{
 			for (var i = 0; i < data.length; i++)
 			{
+				this.addField(data[i].field);
 				this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
 			}
 		}, error => {

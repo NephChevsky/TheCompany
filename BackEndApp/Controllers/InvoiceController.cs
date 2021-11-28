@@ -3,12 +3,11 @@ using DbApp.Models;
 using MagickApp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage;
 using ModelsApp.DbModels;
+using ModelsApp.Attributes;
 using StorageApp;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace BackEndApp.Controllers
 {
@@ -215,6 +213,23 @@ namespace BackEndApp.Controllers
 		{
 			_logger.LogInformation("Start of GetExtractionSettings method");
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+
+			if (query.Count == 0)
+			{
+				PropertyInfo[] properties = typeof(Invoice).GetProperties();
+				foreach (PropertyInfo property in properties)
+				{
+					System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);  // Reflection.  
+					foreach (System.Attribute attr in attrs)
+					{
+						if (attr is Extractable)
+						{
+							query.Add(property.Name);
+						}
+					}
+				}
+			}
+
 			List<ExtractionSettings> results = new List<ExtractionSettings>();
 			using (var db = new TheCompanyDbContext())
 			{
