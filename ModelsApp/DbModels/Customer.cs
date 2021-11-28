@@ -16,6 +16,7 @@ namespace ModelsApp.DbModels
 		public int Type { get; set; }
 
 		[TextField]
+		[Viewable]
 		public string CustomerNumber { get; set; }
 
 		// IOwnable
@@ -28,9 +29,11 @@ namespace ModelsApp.DbModels
 
 		// IDateTimeTrackable
 		[DateTimeField]
+		[Viewable]
 		public DateTime CreationDateTime { get; set; }
 
 		[DateTimeField]
+		[Viewable]
 		public DateTime LastModificationDateTime { get; set; }
 	}
 }

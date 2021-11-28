@@ -6,6 +6,7 @@ using System.Text;
 
 namespace ModelsApp.DbModels
 {
+	[Viewable]
 	public class InvoiceLineItem : IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		[IdentifierField]
@@ -15,22 +16,27 @@ namespace ModelsApp.DbModels
 		public Guid InvoiceId { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string Reference { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string Description { get; set; }
 
 		[NumberField]
+		[Viewable]
 		[Extractable]
 		public double Quantity { get; set; }
 
 		[NumberField]
+		[Viewable]
 		[Extractable]
 		public double UnitaryPrice { get; set; }
 
 		[NumberField]
+		[Viewable]
 		[Extractable]
 		public double Price { get; set; }
 

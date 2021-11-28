@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using ModelsApp;
 using Microsoft.Extensions.Logging;
 using ModelsApp.DbModels;
-using BackEndApp.DTO;
 using System.Reflection;
+using ModelsApp.Attributes;
+using ModelsApp.Helpers;
 
 namespace BackEndApp.Controllers
 {
@@ -31,6 +31,19 @@ namespace BackEndApp.Controllers
 			{
 				_logger.LogInformation("End of Get method");
 				return BadRequest();
+			}
+
+			Type type = Type.GetType("ModelsApp.DbModels." + query.DataSource + ",ModelsApp");
+			if (type == null)
+				return BadRequest();
+
+			if (!AttributeHelper.CheckAttribute<Viewable>(type))
+				return BadRequest();
+
+			foreach (string fieldName in query.Fields)
+			{
+				if (!AttributeHelper.CheckAttribute<Viewable>(type, fieldName))
+					return BadRequest();
 			}
 
 			query.Fields.Insert(0, "Id");
@@ -97,6 +110,10 @@ namespace BackEndApp.Controllers
 						value = property.GetValue(item).ToString();
 					}
 					else if (property.PropertyType == typeof(double))
+					{
+						value = property.GetValue(item).ToString();
+					}
+					else if (property.PropertyType == typeof(DateTime))
 					{
 						value = property.GetValue(item).ToString();
 					}

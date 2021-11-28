@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 
 namespace ModelsApp.DbModels
 {
+	[Viewable]
 	public class Invoice : ILockable, IAttachment, IExtractable, IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		[IdentifierField]
 		public Guid Id { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string InvoiceNumber { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string CustomerNumber { get; set; }
 
@@ -25,14 +28,17 @@ namespace ModelsApp.DbModels
 		public Guid CustomerId { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string CustomerFirstName { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string CustomerLastName { get; set; }
 
 		[TextField]
+		[Viewable]
 		[Extractable]
 		public string CustomerAddress { get; set; }
 
@@ -45,6 +51,7 @@ namespace ModelsApp.DbModels
 		public Guid FileId { get; set; }
 
 		[TextField]
+		[Viewable]
 		public string FileName { get; set; }
 
 		[NumberField]
