@@ -12,7 +12,7 @@ import { InvoiceService } from 'src/app/_services/invoice.service';
 export class ShowInvoiceComponent implements OnInit {
 
 	public id: string = "";
-	public invoiceData: any;
+	public invoiceData: any[];
 	public page: number = 1;
 	public filters: Filter[] = [];
 	public editMode: boolean = false;
@@ -33,11 +33,11 @@ export class ShowInvoiceComponent implements OnInit {
 		if (this.id)
 		{
 			this.invoiceService.getInvoice(this.id)
-				.subscribe(data =>{
-					this.invoiceData = data;
-					for (var field in this.invoiceData)
+				.subscribe((data: any) =>{
+					this.invoiceData = data.fields;
+					for (var i = 0; i < this.invoiceData.length; i++)
 					{
-						this.invoiceForm.addControl(field, new FormControl(this.invoiceData[field], Validators.required));
+						this.invoiceForm.addControl(this.invoiceData[i].name, new FormControl(this.invoiceData[i].value));
 					}
 				}, error =>
 				{

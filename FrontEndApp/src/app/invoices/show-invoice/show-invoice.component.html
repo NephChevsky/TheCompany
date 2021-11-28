@@ -3,9 +3,9 @@
 		<h4>Invoice details</h4>
 		<form [formGroup]="invoiceForm">
 			<table>
-				<tr *ngFor="let field of invoiceData | keyvalue">
-					<td>{{field.key}}</td>
-					<td><app-field type="text" [form]="invoiceForm" key="{{field.key}}" size="50" [readonlyValue]="!editMode" (focusEvent)="onFocus($event)"></app-field></td>
+				<tr *ngFor="let field of invoiceData">
+					<td>{{field.name}}</td>
+					<td><app-field type="{{field.type}}" [form]="invoiceForm" key="{{field.name}}" [readonlyValue]="!editMode" (focusEvent)="onFocus($event)"></app-field></td>
 				</tr>
 			</table>
 			<br /><br />

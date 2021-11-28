@@ -62,5 +62,71 @@ namespace ModelsApp.Helpers
 			}
 			return result;
 		}
+
+		public static string GetFieldType(PropertyInfo property)
+		{
+			System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);
+			foreach (System.Attribute attr in attrs)
+			{
+				if (attr is TextField)
+				{
+					return "TextField";
+				}
+				else if (attr is MultilineTextField)
+				{
+					return "MultilineTextField";
+				}
+				else if (attr is BooleanField)
+				{
+					return "BooleanField";
+				}
+				else if (attr is DateTimeField)
+				{
+					return "DateTimeField";
+				}
+				else if (attr is IdentifierField)
+				{
+					return "IdentifierField";
+				}
+				else if (attr is NumberField)
+				{
+					return "NumberField";
+				}
+			}
+			throw new Exception("Unknown field type for property " + property.Name);
+		}
+
+		public static string GetFieldValue(object element, PropertyInfo property)
+		{
+			System.Attribute[] attrs = System.Attribute.GetCustomAttributes(property);
+			foreach (System.Attribute attr in attrs)
+			{
+				if (attr is TextField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is MultilineTextField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is BooleanField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is DateTimeField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is IdentifierField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is NumberField)
+				{
+					return property.GetValue(element).ToString();
+				}
+			}
+			throw new Exception("Unknown field type for property " + property.Name);
+		}
 	}
 }

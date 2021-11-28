@@ -37,7 +37,7 @@ export class InvoiceService
 
 	getInvoice(id: string)
 	{
-		return this.http.get<any>(environment.baseUrl + `Invoice/Show/` + id);
+		return this.http.get(environment.baseUrl + `Invoice/Show/` + id);
 	}
 
 	getPreview(id: string, page: number)

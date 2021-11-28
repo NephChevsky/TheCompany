@@ -19,6 +19,10 @@ export class FieldComponent implements OnInit {
 	@Input()
 	public size: string = "50";
 	@Input()
+	public rows: string = "3";
+	@Input()
+	public cols: string = "51";
+	@Input()
 	public readonlyValue: boolean;
 	@Output() focusEvent = new EventEmitter<EventTarget>();
 

@@ -41,7 +41,7 @@ namespace ModelsApp.DbModels
 		[Extractable]
 		public string CustomerLastName { get; set; }
 
-		[TextField]
+		[MultilineTextField]
 		[Viewable]
 		[Editable]
 		[Extractable]

@@ -250,7 +250,7 @@ namespace BackEndApp.Controllers
 				else
 				{
 					_logger.LogInformation("End of Show method");
-					return Ok((InvoiceShowResponse) dbInvoice);
+					return Ok((InvoiceShowResponse)dbInvoice);
 				}
 			}
 		}
