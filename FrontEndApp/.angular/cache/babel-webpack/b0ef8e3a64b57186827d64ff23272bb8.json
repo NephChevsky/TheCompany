@@ -1,1 +1,0 @@
-{"ast":null,"code":"export class User {\n  constructor() {\n    this.id = \"\";\n    this.login = \"\";\n    this.email = \"\";\n    this.password = \"\";\n    this.token = \"\";\n    this.LastLoginDateTime = new Date();\n    this.CreationDateTime = new Date();\n    this.LastModificationDateTime = new Date();\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

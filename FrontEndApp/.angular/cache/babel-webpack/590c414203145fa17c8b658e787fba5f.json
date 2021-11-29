@@ -1,1 +1,0 @@
-{"ast":null,"code":"export class Rectangle {\n  constructor(a, b, c, d) {\n    this.X = -1;\n    this.Y = -1;\n    this.Width = -1;\n    this.Height = -1;\n    this.X = a;\n    this.Y = b;\n    this.Width = c;\n    this.Height = d;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}
