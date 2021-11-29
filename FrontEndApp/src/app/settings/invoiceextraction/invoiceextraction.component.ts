@@ -128,6 +128,18 @@ export class InvoiceExtractionComponent implements OnInit {
 		{
 			return;
 		}
+
+		for (let control of (this.invoiceSettingsForm.get("fields") as FormArray).controls)
+		{
+			if (control.get("x").value  == "" && control.get("y").value  == "" && control.get("width").value  == "" && control.get("height").value  == "")
+			{
+				control.get("x").setValue(-1);
+				control.get("y").setValue(-1);
+				control.get("width").setValue(-1);
+				control.get("height").setValue(-1);
+			}
+		}
+
 		this.invoiceService.saveExtractionSettings(this.invoiceSettingsForm.value, this.lineItemSettingsForm.value)
 			.subscribe(
 				data =>
