@@ -103,11 +103,19 @@ namespace ModelsApp.Helpers
 			{
 				if (attr is TextField)
 				{
-					return property.GetValue(element).ToString();
+					object value = property.GetValue(element);
+					if (value != null)
+						return value.ToString();
+					else
+						return "";
 				}
 				else if (attr is MultilineTextField)
 				{
-					return property.GetValue(element).ToString();
+					object value = property.GetValue(element);
+					if (value != null)
+						return value.ToString();
+					else
+						return "";
 				}
 				else if (attr is BooleanField)
 				{
