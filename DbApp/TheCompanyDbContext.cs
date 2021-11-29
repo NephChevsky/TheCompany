@@ -30,6 +30,7 @@ namespace DbApp.Models
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
         public virtual DbSet<InvoiceLineItem> InvoiceLineItems { get; set; }
         public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<FilePreview> FilePreviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -256,6 +257,27 @@ namespace DbApp.Models
                     .IsRequired();
 
                 entity.Property(e => e.Owner)
+                    .IsRequired();
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<FilePreview>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.FileId)
+                    .IsRequired();
+
+                entity.Property(e => e.Page)
                     .IsRequired();
 
                 entity.Property(e => e.Owner)

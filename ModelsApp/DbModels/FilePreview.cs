@@ -1,16 +1,20 @@
 ﻿using ModelsApp.Attributes;
-using ModelsApp.DbInterfaces;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ModelsApp.DbModels
 {
-	public class File : IOwnable, ISoftDeleteable, IDateTimeTrackable
+	public class FilePreview
 	{
 		[IdentifierField]
 		public Guid Id { get; set; }
 
-		[TextField]
-		public string FilePath { get; set; }
+		[IdentifierField]
+		public Guid FileId { get; set; }
+
+		[NumberField]
+		public int Page { get; set; }
 
 		// IOwnable
 		[IdentifierField]
@@ -26,17 +30,5 @@ namespace ModelsApp.DbModels
 
 		[DateTimeField]
 		public DateTime LastModificationDateTime { get; set; }
-
-		public File()
-		{
-
-		}
-
-		public File(Guid id, string filePath, Guid owner)
-		{
-			Id = id;
-			FilePath = filePath;
-			Owner = owner;
-		}
 	}
 }

@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211129213405_file-preview")]
+    partial class filepreview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,7 +128,7 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.ToTable("File");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.FilePreview", b =>
@@ -157,7 +159,7 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FilePreviews");
+                    b.ToTable("FilePreview");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.Individual", b =>

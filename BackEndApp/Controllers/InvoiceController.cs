@@ -269,15 +269,43 @@ namespace BackEndApp.Controllers
 				}
 				else
 				{
-					// TODO: store preview in Azure Storage for faster load the next time
-					MemoryStream stream;
 					Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
-					if (!storage.GetFile(dbInvoice.FileId, out stream))
+					MemoryStream output;
+
+					FilePreview filePreview = db.FilePreviews.Where(x => x.Owner == owner && x.FileId == dbInvoice.FileId && x.Page == page).SingleOrDefault();
+					if (filePreview == null)
 					{
-						return UnprocessableEntity("NotFound");
+						MemoryStream stream;
+						if (!storage.GetFile(dbInvoice.FileId, out stream))
+						{
+							return UnprocessableEntity("NotFound");
+						}
+						MagickEngine magickEngine = new MagickEngine();
+						output = magickEngine.ConvertToPng(stream, page);
+						Guid previewId;
+						if (storage.CreateFile(output, out previewId))
+						{
+							filePreview = new FilePreview();
+							filePreview.Id = previewId;
+							filePreview.FileId = dbInvoice.FileId;
+							filePreview.Owner = dbInvoice.Owner;
+							filePreview.Page = page;
+							db.FilePreviews.Add(filePreview);
+							db.SaveChanges();
+						}
+						else
+						{
+							throw new Exception("Couldn't create preview");
+						}
 					}
-					MagickEngine magickEngine = new MagickEngine();
-					MemoryStream output = magickEngine.ConvertToPng(stream, page);
+					else
+					{
+						if (!storage.GetFile(filePreview.Id, out output))
+						{
+							return NotFound();
+						}
+					}
+					
 					_logger.LogInformation("End of Preview method");
 					return Ok(Convert.ToBase64String(output.ToArray()));
 				}
