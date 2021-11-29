@@ -12,12 +12,13 @@ export class ViewListService
 		
 	}
 
-	getResults(dataSource: string, filters: Filter[], fields: string[])
+	getResults(dataSource: string, filters: Filter[], fields: string[], linkField: string)
 	{
 		var obj = {
 			dataSource: dataSource,
 			filters: filters,
-			fields: fields
+			fields: fields,
+			linkField: linkField
 		}
 		return this.http.post<any>(environment.baseUrl + `ViewList/Get`, obj);
 	}

@@ -13,6 +13,8 @@ export class FieldComponent implements OnInit {
 	@Input()
 	public form: FormGroup;
 	@Input()
+	public index: number = null;
+	@Input()
 	public key: string = "";
 	@Input()
 	public value: string = "";

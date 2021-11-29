@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace BackEndApp.Models
 {
-	public class ViewListQuery
+	public class ViewListGetQuery
 	{
 		public string DataSource { get; set; }
 		public List<Filter> Filters { get; set; }
 		public List<string> Fields { get; set; }
+		public string LinkField { get; set; }
 	}
 }

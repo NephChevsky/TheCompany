@@ -29,6 +29,7 @@ export class ViewListComponent implements OnInit {
 
 	public linkable: boolean = false;
 	public data: any[] = [];
+	public fieldsData: any[] = [];
 
 	constructor(private viewListService: ViewListService,
 				private router: Router,
@@ -41,28 +42,29 @@ export class ViewListComponent implements OnInit {
 		{
 			this.linesForm = new FormGroup({});
 		}
+		
+		if (this.linesForm.get("values") == null)
+		{
+			this.linesForm.addControl("values", this.formBuilder.array([]));
+		}
 
 		if (this.linkField)
 		{
 			this.linkable = true;
 		}
 
-		this.viewListService.getResults(this.dataSource, this.filters, this.fields).subscribe(x => {
-			this.data = x;
-
-			if (this.linesForm)
+		this.viewListService.getResults(this.dataSource, this.filters, this.fields, this.linkField).subscribe(x => {
+			this.data = x.items;
+			this.fieldsData = x.fieldsData;
+			var items = this.linesForm.get("values") as FormArray;
+			for (var i = 0; i < this.data.length; i++)
 			{
-				this.linesForm.addControl("values", this.formBuilder.array([]));
-				var items = this.linesForm.get("values") as FormArray;
-				for (var i = 0; i < x.length; i++)
+				var controls = this.formBuilder.group({});
+				for (var j = 0; j < this.data[i].fields.length; j++)
 				{
-					var controls = this.formBuilder.group({});
-					for (const [key, value] of Object.entries(x[i]))
-					{
-						controls.addControl(key, new FormControl(value));
-					}
-					items.push(controls);
+					controls.addControl(this.data[i].fields[j].name, new FormControl(this.data[i].fields[j].value));
 				}
+				items.push(controls);
 			}
 		});
 	}
@@ -86,6 +88,17 @@ export class ViewListComponent implements OnInit {
 	get values()
 	{
 		return this.linesForm.controls["values"] as FormArray;
+	}
+
+	getItem(index: number)
+	{
+		var test = (this.linesForm.controls["values"] as FormArray).at(index) as FormGroup;
+		return test;
+	}
+
+	getFieldType(name: string)
+	{
+		return this.fieldsData.find(x => x.name == name).type;
 	}
 
 	onFocus(target: EventTarget)

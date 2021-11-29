@@ -3,7 +3,7 @@
 		<tr>
 			<th *ngFor="let field of fields">{{field}}</th>
 		</tr>
-		<tbody *ngIf="!editMode">
+		<!--<tbody *ngIf="!editMode">
 			<tr *ngFor="let line of data" (click)="linkable && show(line[linkField])" [ngClass]="{'linkable' : linkable}">
 				<td *ngFor="let field of fields">
 					{{line[field]}}
@@ -17,8 +17,24 @@
 				</td>
 			</tr>
 		</tbody>
+		[form]="values.at(index).controls"
+		-->
+		<tbody *ngIf="!editMode" formArrayName="values">
+			<tr *ngFor="let line of data; let index = index" (click)="linkable && !editMode && show(line.linkValue)" [ngClass]="{'linkable' : linkable && !editMode}">
+				<td *ngFor="let field of line.fields">
+					<app-field type="{{field.type}}" [form]="getItem(index)" [index]="index" key="{{field.name}}" size="15" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
+				</td>
+			</tr>
+		</tbody>
+		<tbody *ngIf="editMode" formArrayName="values">
+			<tr *ngFor="let line of values.controls; let index = index" [formGroupName]="index">
+				<td *ngFor="let field of fields; let id = index">
+					<app-field type="{{getFieldType(field)}}" [form]="getItem(index)" [index]="index" key="{{field}}" size="15" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
+				</td>
+			</tr>
+		</tbody>
 		<tr *ngIf="editMode">
-			<td colspan="100%"><button (click)="createNewLine()">Add line</button></td>
+			<td colspan="100%"><button class="btn btn-primary" (click)="createNewLine()">Add line</button></td>
 		</tr>
 	</table>
 </form>

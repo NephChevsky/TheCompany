@@ -10,6 +10,8 @@ using ModelsApp.DbModels;
 using System.Reflection;
 using ModelsApp.Attributes;
 using ModelsApp.Helpers;
+using BackEndApp.DTO;
+using ModelsApp.Models;
 
 namespace BackEndApp.Controllers
 {
@@ -24,7 +26,7 @@ namespace BackEndApp.Controllers
 		}
 
 		[HttpPost("Get")]
-		public ActionResult Get([FromBody] ViewListQuery query)
+		public ActionResult Get([FromBody] ViewListGetQuery query)
 		{
 			_logger.LogInformation("Start of Get method");
 			if (query == null)
@@ -46,10 +48,11 @@ namespace BackEndApp.Controllers
 					return BadRequest();
 			}
 
-			query.Fields.Insert(0, "Id");
+			if (!string.IsNullOrEmpty(query.LinkField) && !AttributeHelper.CheckAttribute<IdentifierField>(type, query.LinkField))
+				return BadRequest();
 
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			List<Dictionary<string, string>> values;
+			ViewListGetResponse values;
 			using (var db = new TheCompanyDbContext())
 			{
 				switch (query.DataSource)
@@ -59,28 +62,28 @@ namespace BackEndApp.Controllers
 																	.OrderBy(obj => obj.CustomerNumber)
 																	.FilterDynamic(query.Filters)
 																	.ToList();
-						values = FormatResultValues(individuals, query.Fields);
+						values = FormatResultValues(individuals, query.Fields, query.LinkField);
 						break;
 					case "Invoice":
 						List<Invoice> invoices = db.Invoices.Where(obj => obj.Owner == owner)
 															.OrderBy(obj => obj.InvoiceNumber)
 															.FilterDynamic(query.Filters)
 															.ToList();
-						values = FormatResultValues(invoices, query.Fields);
+						values = FormatResultValues(invoices, query.Fields, query.LinkField);
 						break;
 					case "AdditionalField":
 						List<AdditionalField> additionalFields = db.AdditionalFields.Where(obj => obj.Owner == owner)
 																					.OrderBy(obj => obj.Name)
 																					.FilterDynamic(query.Filters)
 																					.ToList();
-						values = FormatResultValues(additionalFields, query.Fields);
+						values = FormatResultValues(additionalFields, query.Fields, query.LinkField);
 						break;
 					case "InvoiceLineItem":
 						List<InvoiceLineItem> lineItems = db.InvoiceLineItems.Where(obj => obj.Owner == owner)
 																			.OrderBy(obj => obj.CreationDateTime)
 																			.FilterDynamic(query.Filters)
 																			.ToList();
-						values = FormatResultValues(lineItems, query.Fields);
+						values = FormatResultValues(lineItems, query.Fields, query.LinkField);
 						break;
 					default:
 						return BadRequest();
@@ -90,40 +93,40 @@ namespace BackEndApp.Controllers
 			return Ok(values);
 		}
 
-		private List<Dictionary<string, string>> FormatResultValues<T>(List<T> values, List<string> fields)
+		private ViewListGetResponse FormatResultValues<T>(List<T> values, List<string> fields, string linkField)
 		{
-			List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+			ViewListGetResponse result = new ViewListGetResponse();
+			result.Items = new List<ViewListGetResponse.Item>();
 			Type type = typeof(T);
-			values.ForEach(item =>
+			result.FieldsData = new List<Field>();
+			fields.ForEach(field =>
 			{
-				Dictionary<string, string> line = new Dictionary<string, string>();
+				PropertyInfo property = type.GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+				Field newField = new Field();
+				newField.Name = field;
+				newField.Type = AttributeHelper.GetFieldType(property);
+				result.FieldsData.Add(newField);
+			});
+
+			values.ForEach(value =>
+			{
+				ViewListGetResponse.Item item = new ViewListGetResponse.Item();
+				item.Fields = new List<Field>();
+				if (!string.IsNullOrEmpty(linkField))
+				{
+					PropertyInfo property = type.GetProperty(linkField, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+					item.LinkValue = property.GetValue(value).ToString();
+				}
 				fields.ForEach(field =>
 				{
-					PropertyInfo property = type.GetProperty(field);
-					string value;
-					if (property.PropertyType == typeof(string))
-					{
-						value = property.GetValue(item) as string;
-					}
-					else if (property.PropertyType == typeof(Guid))
-					{
-						value = property.GetValue(item).ToString();
-					}
-					else if (property.PropertyType == typeof(double))
-					{
-						value = property.GetValue(item).ToString();
-					}
-					else if (property.PropertyType == typeof(DateTime))
-					{
-						value = property.GetValue(item).ToString();
-					}
-					else
-					{
-						throw new Exception("Unknown property type");
-					}
-					line.Add(field, value);
+					PropertyInfo property = type.GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+					Field newField = new Field();
+					newField.Name = property.Name;
+					newField.Type = AttributeHelper.GetFieldType(property);
+					newField.Value = AttributeHelper.GetFieldValue(value, property);
+					item.Fields.Add(newField);
 				});
-				result.Add(line);
+				result.Items.Add(item);
 			});
 			return result;
 		}
