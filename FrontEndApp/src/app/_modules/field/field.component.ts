@@ -23,7 +23,7 @@ export class FieldComponent implements OnInit {
 	@Input()
 	public cols: string = "51";
 	@Input()
-	public readonlyValue: boolean;
+	public editMode: boolean;
 	@Output() focusEvent = new EventEmitter<EventTarget>();
 
 	constructor() { }

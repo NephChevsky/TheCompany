@@ -1,4 +1,5 @@
 <div [formGroup]="form">
-	<input *ngIf="type=='TextField'" type="text" [id]="key" [formControlName]="key" [size]="size" [readonly]="readonlyValue" (focus)="onFocus($event.target)" />
-	<textarea *ngIf="type=='MultilineTextField'" [id]="key" [formControlName]="key" [rows]="rows" [cols]="cols" [readonly]="readonlyValue" (focus)="onFocus($event.target)"></textarea>
+	<input *ngIf="editMode && type=='TextField'" type="text" [id]="key" [formControlName]="key" [size]="size" [readonly]="!editMode" (focus)="onFocus($event.target)" />
+	<textarea *ngIf="editMode && type=='MultilineTextField'" [id]="key" [formControlName]="key" [rows]="rows" [cols]="cols" [readonly]="!editMode" (focus)="onFocus($event.target)"></textarea>
+	<div *ngIf="!editMode">{{form.get(key).value}}</div>
 </div>
