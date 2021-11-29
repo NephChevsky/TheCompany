@@ -6,6 +6,7 @@ using System.Text;
 
 namespace ModelsApp.DbModels
 {
+	[Viewable]
 	public class AdditionalField : IOwnable, ISoftDeleteable, IDateTimeTrackable
 	{
 		[IdentifierField]
@@ -15,6 +16,7 @@ namespace ModelsApp.DbModels
 		public string DataSource { get; set; }
 
 		[TextField]
+		[Viewable]
 		public string Name { get; set; }
 
 		// IOwnable
