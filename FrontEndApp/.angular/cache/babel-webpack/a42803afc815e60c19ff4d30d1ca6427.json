@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class Filter {\n  constructor(fieldName, operator, fieldValue) {\n    this.FieldName = \"\";\n    this.Operator = \"\";\n    this.FieldValue = \"\";\n    this.FieldName = fieldName;\n    this.Operator = operator;\n    this.FieldValue = fieldValue;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

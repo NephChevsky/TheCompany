@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const environment = {\n  production: true,\n  baseUrl: \"https://\" + window.location.hostname + \":8443/\"\n};","map":null,"metadata":{},"sourceType":"module"}
