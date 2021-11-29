@@ -53,7 +53,8 @@ export class ShowInvoiceComponent implements OnInit {
 
 	save()
 	{
-		var fields = [];
+		
+		var fields: any[] = [];
 		for (const [key, value] of Object.entries(this.invoiceForm.value))
 		{
 			fields.push({
@@ -61,8 +62,8 @@ export class ShowInvoiceComponent implements OnInit {
 				value: value
 			})
 		}
-		var lineItems = [];
 
+		var lineItems: any[] = [];
 		var tmp = this.lineItemsForm.get("values") as FormArray;
 		for (var i = 0; i < tmp.value.length; i++)
 		{
@@ -75,7 +76,7 @@ export class ShowInvoiceComponent implements OnInit {
 				else
 					lineItemsFields.push({
 						name: key,
-						value: value
+						value: value.toString()
 					});
 			}
 			var item = {

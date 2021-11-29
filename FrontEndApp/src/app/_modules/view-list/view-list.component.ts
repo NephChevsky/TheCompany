@@ -14,7 +14,7 @@ export class ViewListComponent implements OnInit {
 	@Input()
     public dataSource: string = "";
 	@Input()
-	public linkField: string = "";
+	public linkable: boolean = false;
 	@Input()
 	public linkRoute: string = "";
 	@Input()
@@ -27,7 +27,6 @@ export class ViewListComponent implements OnInit {
 	public linesForm: FormGroup;
 	@Output() focusEvent = new EventEmitter<EventTarget>();
 
-	public linkable: boolean = false;
 	public data: any[] = [];
 	public fieldsData: any[] = [];
 
@@ -48,18 +47,14 @@ export class ViewListComponent implements OnInit {
 			this.linesForm.addControl("values", this.formBuilder.array([]));
 		}
 
-		if (this.linkField)
-		{
-			this.linkable = true;
-		}
-
-		this.viewListService.getResults(this.dataSource, this.filters, this.fields, this.linkField).subscribe(x => {
+		this.viewListService.getResults(this.dataSource, this.filters, this.fields).subscribe(x => {
 			this.data = x.items;
 			this.fieldsData = x.fieldsData;
 			var items = this.linesForm.get("values") as FormArray;
 			for (var i = 0; i < this.data.length; i++)
 			{
 				var controls = this.formBuilder.group({});
+				controls.addControl("Id", new FormControl(this.data[i].linkValue));
 				for (var j = 0; j < this.data[i].fields.length; j++)
 				{
 					controls.addControl(this.data[i].fields[j].name, new FormControl(this.data[i].fields[j].value));

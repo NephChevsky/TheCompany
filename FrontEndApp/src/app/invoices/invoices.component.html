@@ -2,4 +2,4 @@
 	<button class="btn btn-primary" [routerLink]="['Create']">Create invoice</button>
 	<button class="btn btn-primary" [routerLink]="['Import']">Import invoice</button>
 </div>
-<app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerFirstName','CustomerLastName','CustomerAddress', 'FileName']" [linkField]="linkField" [linkRoute]="linkRoute"></app-view-list>
+<app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerFirstName','CustomerLastName','CustomerAddress', 'FileName']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>

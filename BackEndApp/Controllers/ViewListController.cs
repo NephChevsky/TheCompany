@@ -48,9 +48,6 @@ namespace BackEndApp.Controllers
 					return BadRequest();
 			}
 
-			if (!string.IsNullOrEmpty(query.LinkField) && !AttributeHelper.CheckAttribute<IdentifierField>(type, query.LinkField))
-				return BadRequest();
-
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			ViewListGetResponse values;
 			using (var db = new TheCompanyDbContext())
@@ -62,28 +59,28 @@ namespace BackEndApp.Controllers
 																	.OrderBy(obj => obj.CustomerNumber)
 																	.FilterDynamic(query.Filters)
 																	.ToList();
-						values = FormatResultValues(individuals, query.Fields, query.LinkField);
+						values = FormatResultValues(individuals, query.Fields);
 						break;
 					case "Invoice":
 						List<Invoice> invoices = db.Invoices.Where(obj => obj.Owner == owner)
 															.OrderBy(obj => obj.InvoiceNumber)
 															.FilterDynamic(query.Filters)
 															.ToList();
-						values = FormatResultValues(invoices, query.Fields, query.LinkField);
+						values = FormatResultValues(invoices, query.Fields);
 						break;
 					case "AdditionalField":
 						List<AdditionalField> additionalFields = db.AdditionalFields.Where(obj => obj.Owner == owner)
 																					.OrderBy(obj => obj.Name)
 																					.FilterDynamic(query.Filters)
 																					.ToList();
-						values = FormatResultValues(additionalFields, query.Fields, query.LinkField);
+						values = FormatResultValues(additionalFields, query.Fields);
 						break;
 					case "InvoiceLineItem":
 						List<InvoiceLineItem> lineItems = db.InvoiceLineItems.Where(obj => obj.Owner == owner)
 																			.OrderBy(obj => obj.CreationDateTime)
 																			.FilterDynamic(query.Filters)
 																			.ToList();
-						values = FormatResultValues(lineItems, query.Fields, query.LinkField);
+						values = FormatResultValues(lineItems, query.Fields);
 						break;
 					default:
 						return BadRequest();
@@ -93,7 +90,7 @@ namespace BackEndApp.Controllers
 			return Ok(values);
 		}
 
-		private ViewListGetResponse FormatResultValues<T>(List<T> values, List<string> fields, string linkField)
+		private ViewListGetResponse FormatResultValues<T>(List<T> values, List<string> fields)
 		{
 			ViewListGetResponse result = new ViewListGetResponse();
 			result.Items = new List<ViewListGetResponse.Item>();
@@ -112,11 +109,8 @@ namespace BackEndApp.Controllers
 			{
 				ViewListGetResponse.Item item = new ViewListGetResponse.Item();
 				item.Fields = new List<Field>();
-				if (!string.IsNullOrEmpty(linkField))
-				{
-					PropertyInfo property = type.GetProperty(linkField, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-					item.LinkValue = property.GetValue(value).ToString();
-				}
+				PropertyInfo property = type.GetProperty("Id", BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+				item.LinkValue = property.GetValue(value).ToString();
 				fields.ForEach(field =>
 				{
 					PropertyInfo property = type.GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
