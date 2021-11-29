@@ -5,11 +5,12 @@ import { Observable, throwError } from 'rxjs';
 import { UserService } from './user.service';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor
 {
-	constructor(private userService: UserService, private router: Router) { }
+	constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
   {
@@ -25,14 +26,15 @@ export class JwtInterceptor implements HttpInterceptor
 
 		return next.handle(request).pipe(catchError(err =>
 		{
-			if (err.status === 401 || err.status === 0)
+			debugger;
+			if (err.status === 401)
 			{
 				this.userService.logout();
 				this.router.navigate(['/Login']);
 			}
 			else if (err.status === 0 && err.name === "HttpErrorResponse")
 			{
-				this.router.navigate(['/Error']); // TODO: route doesn't exist
+				this.toastr.error("Couldn't reach server");
 			}
 			return throwError(err);
 		}))

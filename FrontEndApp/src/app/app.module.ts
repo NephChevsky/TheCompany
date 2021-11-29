@@ -26,6 +26,7 @@ import { AddComponent } from './settings/additional-fields/add/add.component';
 import { CustomerComponent } from './settings/customer/customer.component';
 import { PreviewComponent } from './_modules/preview/preview.component';
 import { FieldComponent } from './_modules/field/field.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,11 @@ import { FieldComponent } from './_modules/field/field.component';
     ReactiveFormsModule,
     AngularMaterialModule,
     FormsModule,
-    CdkTreeModule
+    CdkTreeModule,
+	ToastrModule.forRoot({
+		positionClass: 'toast-bottom-right',
+		preventDuplicates: true,
+	  })
   ],
   providers: [[{
     provide: HTTP_INTERCEPTORS,
