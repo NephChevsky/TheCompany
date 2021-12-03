@@ -25,9 +25,9 @@ export class ImportInvoiceComponent implements OnInit {
 
 	ngOnInit()
 	{
-	this.form = this.formBuilder.group({
-		file: [null]
-	});
+		this.form = this.formBuilder.group({
+			file: [null]
+		});
 	}
 
 	onFileChange(event: any)
@@ -38,6 +38,12 @@ export class ImportInvoiceComponent implements OnInit {
 			var fileObj = this.form.get('file');
 			if (fileObj)
 				fileObj.setValue(file);
+		}
+		else
+		{
+			var fileObj = this.form.get('file');
+			if (fileObj)
+				fileObj.setValue(null);
 		}
 	}
 

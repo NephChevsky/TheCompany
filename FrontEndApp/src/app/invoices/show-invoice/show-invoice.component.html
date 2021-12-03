@@ -21,7 +21,7 @@
 			<button class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
 		</div>
 	</div>
-	<div class="invoicePreview" (focus)="onFocus($event.target)">
+	<div class="invoicePreview">
 		<app-preview dataSource="Invoice" [id]="id" [page]="page" (extractedTextEvent)="fillExtractedText($event)"></app-preview>
 	</div>
 </div>

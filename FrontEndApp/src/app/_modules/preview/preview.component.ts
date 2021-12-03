@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ExtractBlock } from 'src/app/_models/extractBlock';
 import { Rectangle } from 'src/app/_models/rectangle';
 import { InvoiceService } from 'src/app/_services/invoice.service';
@@ -16,7 +17,9 @@ export class PreviewComponent implements OnInit
 	id: string = "";
 	@Input()
 	page: number = 1;
-	preview: string;
+	@Input()
+	file: any;
+	preview: SafeResourceUrl;
 	extraction : ExtractBlock[];
 	extractionSize : ExtractBlock;
 	imgPosition: DOMRect = new DOMRect();
@@ -28,7 +31,7 @@ export class PreviewComponent implements OnInit
 
 	@Output() extractedTextEvent = new EventEmitter<string>();
 
-	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef)
+	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef, private sanitizer:DomSanitizer)
 	{
 	}
 
@@ -37,42 +40,77 @@ export class PreviewComponent implements OnInit
 		this.canvasCtx = (<HTMLCanvasElement> document.getElementById('canvasPreview')).getContext('2d');
 		if (this.dataSource == "Invoice")
 		{
-			this.invoiceService.getPreview(this.id, this.page)
+			if (this.file != null)
+			{
+				this.invoiceService.getPreviewOnTheFly(this.file)
 				.subscribe((data: any) =>{
-					var binary = '';
-					var bytes = new Uint8Array( data );
-					var len = bytes.byteLength;
-					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode(bytes[i]);
-					}
-					this.preview = "data:image/png;base64," + binary;
-					let that = this;
-					document.getElementById("imgPreview").addEventListener('load', function () {
-						that.imgPosition = document.getElementById("imgPreview").getBoundingClientRect();
-					});
 					
+					this.handlePreview(this.stringToArrayBuffer(data.preview));
+					this.handleExtraction(this.stringToArrayBuffer(data.extraction));
 				}, error =>
 				{
 					// TODO: handle errors
 				});
-			this.invoiceService.getExtraction(this.id)
+			}
+			else if (this.id != null)
+			{
+				this.invoiceService.getPreview(this.id, this.page)
 				.subscribe((data: any) =>{
-					var binary = '';
-					var bytes = new Uint8Array( data );
-					var len = bytes.byteLength;
-					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode(bytes[i]);
-					}
-					this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function(c) {
-						return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-					}).join('')));
-					this.extractionSize = this.extraction[0];
-					this.extraction.shift();
+					this.handlePreview(data);
 				}, error =>
 				{
 					// TODO: handle errors
 				});
+
+				this.invoiceService.getExtraction(this.id)
+				.subscribe((data: any) =>{
+					this.handleExtraction(data);
+				}, error =>
+				{
+					// TODO: handle errors
+				});
+			}
 		}
+	}
+
+	stringToArrayBuffer(str: string)
+	{
+		var buf = new ArrayBuffer(str.length); // 2 bytes for each char
+		var bufView = new Uint8Array(buf);
+		for (var i=0, strLen=str.length; i < strLen; i++) {
+			bufView[i] = str.charCodeAt(i);
+		}
+		return buf;
+	}
+
+	handlePreview(data: any)
+	{
+		var binary = '';
+		var bytes = new Uint8Array( data );
+		var len = bytes.byteLength;
+		for (var i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		this.preview = this.sanitizer.bypassSecurityTrustResourceUrl("data:image/png;base64," + binary);
+		let that = this;
+		document.getElementById("imgPreview").addEventListener('load', function () {
+			that.imgPosition = document.getElementById("imgPreview").getBoundingClientRect();
+		});
+	}
+
+	handleExtraction(data: any)
+	{
+		var binary = '';
+		var bytes = new Uint8Array( data );
+		var len = bytes.byteLength;
+		for (var i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join('')));
+		this.extractionSize = this.extraction[0];
+		this.extraction.shift();
 	}
 
 	handleClick(event: PointerEvent)

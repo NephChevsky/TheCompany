@@ -1,3 +1,4 @@
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +15,10 @@ export class InvoiceExtractionComponent implements OnInit
 	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 	lineItemSettingsForm: FormGroup = new FormGroup({});
+	error: string = "";
+	progress: number = 0;
+	inProgress: boolean = false;
+	sampleFile: FormData = null;
 
 	constructor(private formBuilder: FormBuilder,
 				private router: Router,
@@ -168,5 +173,44 @@ export class InvoiceExtractionComponent implements OnInit
 	onCancel()
 	{
 		this.router.navigate(['Home']);
+	}
+
+	onFileChange(event: any)
+	{
+		if (event.target.files.length > 0)
+		{
+			this.sampleFile = new FormData();
+			this.sampleFile.append("file", event.target.files[0]);
+		}
+		else
+		{
+			this.sampleFile = null;
+		}
+	}
+
+	get errorMessage(): string
+	{
+		let message = "";
+		if (this.error === "Required")
+		{
+			message = "You have to select a file\r\n";
+		}
+		else if (this.error === "AlreadyExists")
+		{
+			message = "The file name already exists\r\n";
+		}
+		else if (this.error === "InvalidCharacters")
+		{
+			message = "Some characters are not allowed\r\n";
+		}
+		else if (this.error === "UnknownError")
+		{
+			message = "Unknown error\r\n";
+		}
+		else if (this.error === 'UnknownParentFolder')
+		{
+			message = "The parent folder doesn't exists\r\n";
+		}
+		return message;
 	}
 }

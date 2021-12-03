@@ -17,6 +17,9 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using ModelsApp.Helpers;
+using OcrApp;
+using OcrApp.Models;
+using System.Text.Json;
 
 namespace BackEndApp.Controllers
 {
@@ -269,8 +272,8 @@ namespace BackEndApp.Controllers
 			}
 		}
 
-		[HttpGet("Preview/{id}/{page}")]
-		public ActionResult Preview(string id, int page)
+		[HttpGet("GetPreview/{id}/{page}")]
+		public ActionResult GetPreview(string id, int page)
 		{
 			_logger.LogInformation("Start of Preview method");
 			using (var db = new TheCompanyDbContext())
@@ -324,6 +327,46 @@ namespace BackEndApp.Controllers
 					return Ok(Convert.ToBase64String(output.ToArray()));
 				}
 			}
+		}
+
+		[HttpPost("GetPreviewOnTheFly")]
+		public ActionResult GetPreviewOnTheFly([FromForm] IFormFile File)
+		{
+			_logger.LogInformation("Start of GetPreviewOnTheFly method");
+
+			if (File == null)
+			{
+				return BadRequest();
+			}
+
+			InvoiceGetSampleExtractionResponse result = new InvoiceGetSampleExtractionResponse();
+
+			MemoryStream stream = new MemoryStream();
+			File.OpenReadStream().CopyTo(stream);
+
+			MagickEngine magickEngine = new MagickEngine();
+			MemoryStream preview = magickEngine.ConvertToPng(stream, 1);
+
+			result.Preview = Convert.ToBase64String(preview.ToArray());
+
+			string fileExtension = File.FileName.Split(".").Last();
+			string tempFileName = Path.GetTempFileName().Replace(".tmp", string.Concat(".", fileExtension));
+			using (var fs = new FileStream(tempFileName, FileMode.OpenOrCreate))
+			{
+				stream.Seek(0, SeekOrigin.Begin);
+				stream.CopyTo(fs);
+			}
+			Ocr ocr = new Ocr(Configuration.GetSection("Ocr"));
+			if (!ocr.ExtractPDF(tempFileName))
+			{
+				throw new Exception("Couldn't extract PDF file");
+			}
+			;
+
+			result.Extraction = Convert.ToBase64String(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ocr.GetExtractedBlocks(true))));
+
+			_logger.LogInformation("End of GetPreviewOnTheFly method");
+			return Ok(result);
 		}
 
 		[HttpGet("Extraction/{id}")]

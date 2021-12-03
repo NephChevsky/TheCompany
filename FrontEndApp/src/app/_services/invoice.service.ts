@@ -42,7 +42,12 @@ export class InvoiceService
 
 	getPreview(id: string, page: number)
 	{
-		return this.http.get(environment.baseUrl + `Invoice/Preview/` + id + "/" + page, {responseType: 'arraybuffer'});
+		return this.http.get(environment.baseUrl + `Invoice/GetPreview/` + id + "/" + page, {responseType: 'arraybuffer'});
+	}
+
+	getPreviewOnTheFly(data: any)
+	{
+		return this.http.post(environment.baseUrl + `Invoice/GetPreviewOnTheFly`, data);
 	}
 
 	getExtraction(id: string)
