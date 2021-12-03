@@ -22,13 +22,26 @@ namespace OcrApp.Workers
 
 		public bool ExtractPDF(string fileName)
 		{
+            bool debugMode = false;
+#if DEBUG
+            debugMode = true;
+#endif
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             MemoryStream ms = new MemoryStream();
             fs.CopyTo(ms);
             MagickEngine magickEngine = new MagickEngine();
+            magickEngine.GrayScale = true;
+            magickEngine.Erode = true;
+            magickEngine.Dilate = true;
+            magickEngine.GaussianBlur = true;
             MemoryStream output = magickEngine.ConvertToPng(ms, 1);
-            using (var engine = new TesseractEngine(ModelsPath, "fra", EngineMode.Default))
+            using (TesseractEngine engine = new TesseractEngine(ModelsPath, "fra", EngineMode.Default))
             {
+                engine.SetVariable("image_default_resolution", 300);
+                if (debugMode)
+				{
+                    engine.SetVariable("tessedit_write_images", true);
+                }
                 using (Pix img = Pix.LoadFromMemory(output.ToArray()))
                 {
                     using (Page page = engine.Process(img))
@@ -68,7 +81,7 @@ namespace OcrApp.Workers
             {
                 result.Insert(0, PageSize);
             }
-            return ExtractedBlocks;
+            return result;
         }
     }
 }

@@ -48,6 +48,7 @@ namespace WorkerServiceApp
                         Invoice invoice = db.Invoices.Where(x => x.ShouldBeExtracted == true && x.IsExtracted == false && string.IsNullOrEmpty(x.LockedBy)).FirstOrDefault();
                         if (invoice != null)
                         {
+                            _logger.LogInformation(string.Concat("Start processing invoice " + invoice.Id.ToString()));
                             invoice.LockedBy = string.Concat("ExtractDocument-", AppId);
                             db.SaveChanges();
 
@@ -222,6 +223,7 @@ namespace WorkerServiceApp
                             invoice.LockedBy = null;
                             invoice.IsExtracted = true;
                             db.SaveChanges();
+                            _logger.LogInformation(string.Concat("Invoice " + invoice.Id.ToString() + " has been processed"));
                         }
                         else
                         {
