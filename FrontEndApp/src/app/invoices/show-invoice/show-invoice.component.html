@@ -4,7 +4,7 @@
 		<form [formGroup]="invoiceForm">
 			<table>
 				<tr *ngFor="let field of invoiceData">
-					<td>{{field.name}}</td>
+					<td class="fieldName">{{field.name}}</td>
 					<td><app-field type="{{field.type}}" [form]="invoiceForm" key="{{field.name}}" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field></td>
 				</tr>
 			</table>
