@@ -1,11 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NLog.Web;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace WorkerServiceApp
 {
@@ -18,6 +14,7 @@ namespace WorkerServiceApp
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
+				.UseWindowsService()
 				.ConfigureServices((hostContext, services) =>
 				{
 					services.AddLogging(loggingBuilder =>
