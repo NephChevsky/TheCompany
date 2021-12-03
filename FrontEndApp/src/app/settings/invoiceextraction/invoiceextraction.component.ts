@@ -1,7 +1,9 @@
 import { HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Rectangle } from 'src/app/_models/rectangle';
+import { PreviewComponent } from 'src/app/_modules/preview/preview.component';
 import { AdditionalFieldService } from 'src/app/_services/additionalField.service';
 import { InvoiceService } from '../../_services/invoice.service';
 
@@ -19,6 +21,8 @@ export class InvoiceExtractionComponent implements OnInit
 	progress: number = 0;
 	inProgress: boolean = false;
 	sampleFile: FormData = null;
+	@ViewChild('appPreview', { static: false }) appPreview: PreviewComponent;
+
 
 	constructor(private formBuilder: FormBuilder,
 				private router: Router,
@@ -188,29 +192,40 @@ export class InvoiceExtractionComponent implements OnInit
 		}
 	}
 
-	get errorMessage(): string
+	showBoundingBox(index: any)
 	{
-		let message = "";
-		if (this.error === "Required")
+		debugger;
+		if (this.sampleFile)
 		{
-			message = "You have to select a file\r\n";
+			var rect;
+			if (typeof(index) == "string")
+			{
+				if (index == "LineItemBox")
+				{
+					var x = 0;
+					var y = parseInt((document.getElementById("boxymin") as HTMLInputElement).value);
+					var width = 5000;
+					var height = parseInt((document.getElementById("boxymax") as HTMLInputElement).value) - parseInt((document.getElementById("boxymin") as HTMLInputElement).value);
+					rect = new Rectangle(x, y, width, height);
+				}
+				else
+				{
+					var x = parseInt((document.getElementById(index + 'xmin') as HTMLInputElement).value);
+					var y = parseInt((document.getElementById("boxymin") as HTMLInputElement).value);
+					var width = parseInt((document.getElementById(index + 'xmax') as HTMLInputElement).value) - parseInt((document.getElementById(index + 'xmin') as HTMLInputElement).value);
+					var height = parseInt((document.getElementById("boxymax") as HTMLInputElement).value) - parseInt((document.getElementById("boxymin") as HTMLInputElement).value);
+					rect = new Rectangle(x, y, width, height);
+				}
+			}
+			else
+			{
+				var x = parseInt((document.getElementById('x' + index) as HTMLInputElement).value);
+				var y = parseInt((document.getElementById('y' + index) as HTMLInputElement).value);
+				var width = parseInt((document.getElementById('width' + index) as HTMLInputElement).value);
+				var height = parseInt((document.getElementById('height' + index) as HTMLInputElement).value);
+				rect = new Rectangle(x, y, width, height);
+			}
+			this.appPreview.drawBox(this.appPreview.reversePosition(rect));
 		}
-		else if (this.error === "AlreadyExists")
-		{
-			message = "The file name already exists\r\n";
-		}
-		else if (this.error === "InvalidCharacters")
-		{
-			message = "Some characters are not allowed\r\n";
-		}
-		else if (this.error === "UnknownError")
-		{
-			message = "Unknown error\r\n";
-		}
-		else if (this.error === 'UnknownParentFolder')
-		{
-			message = "The parent folder doesn't exists\r\n";
-		}
-		return message;
 	}
 }

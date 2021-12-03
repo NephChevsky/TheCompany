@@ -7,7 +7,7 @@
 				<tr formArrayName="fields" *ngFor="let item of fields.controls; let i = index">
 					<td>{{item.get("name")?.value}}</td>
 					<td>
-						<table [formGroupName]="i">
+						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
 								<td>X:</td>
 								<td><input id="{{'x'+i}}" type="number" formControlName="x"></td>
@@ -37,7 +37,7 @@
 				<tr>
 					<td>Full box size</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('LineItemBox')">
 							<tr>
 								<td>Y min:</td>
 								<td><input type="number" id="boxymin" formControlName="boxymin"></td>
@@ -52,7 +52,7 @@
 				<tr>
 					<td>Reference</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('reference')">
 							<tr>
 								<td>X min:</td>
 								<td><input type="number" id="referencexmin" formControlName="referencexmin"></td>
@@ -67,7 +67,7 @@
 				<tr>
 					<td>Description</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('description')">
 							<tr>
 								<td>X min:</td>
 								<td><input type="number" id="descriptionxmin" formControlName="descriptionxmin"></td>
@@ -82,7 +82,7 @@
 				<tr>
 					<td>Quantity</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('quantity')">
 							<tr>
 								<td>X min:</td>
 								<td><input type="number" id="quantityxmin" formControlName="quantityxmin"></td>
@@ -97,7 +97,7 @@
 				<tr>
 					<td>Unitary price</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('unitaryprice')">
 							<tr>
 								<td>X min:</td>
 								<td><input type="number" id="unitarypricexmin" formControlName="unitarypricexmin"></td>
@@ -112,7 +112,7 @@
 				<tr>
 					<td>Price</td>
 					<td>
-						<table>
+						<table (click)="showBoundingBox('price')">
 							<tr>
 								<td>X min:</td>
 								<td><input type="number" id="pricexmin" formControlName="pricexmin"></td>
@@ -137,6 +137,6 @@
 					<input type="file" name="file" (change)="onFileChange($event)" />
 				</div>
 			</div>
-		<app-preview *ngIf="sampleFile" dataSource="Invoice" [file]="sampleFile"></app-preview>
+		<app-preview #appPreview *ngIf="sampleFile" dataSource="Invoice" [file]="sampleFile"></app-preview>
 	</div>
 </div>

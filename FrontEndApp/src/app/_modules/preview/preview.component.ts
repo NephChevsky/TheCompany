@@ -28,6 +28,7 @@ export class PreviewComponent implements OnInit
 	image: HTMLImageElement;
 	selectedPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	selectedText: string = "";
+	loading: boolean = true;
 
 	@Output() extractedTextEvent = new EventEmitter<string>();
 
@@ -47,6 +48,7 @@ export class PreviewComponent implements OnInit
 					
 					this.handlePreview(this.stringToArrayBuffer(data.preview));
 					this.handleExtraction(this.stringToArrayBuffer(data.extraction));
+					this.loading = false;
 				}, error =>
 				{
 					// TODO: handle errors
@@ -57,6 +59,7 @@ export class PreviewComponent implements OnInit
 				this.invoiceService.getPreview(this.id, this.page)
 				.subscribe((data: any) =>{
 					this.handlePreview(data);
+					this.loading = this.extraction == null || this.preview == null;
 				}, error =>
 				{
 					// TODO: handle errors
@@ -65,6 +68,7 @@ export class PreviewComponent implements OnInit
 				this.invoiceService.getExtraction(this.id)
 				.subscribe((data: any) =>{
 					this.handleExtraction(data);
+					this.loading = this.extraction == null || this.preview == null;
 				}, error =>
 				{
 					// TODO: handle errors
@@ -156,31 +160,38 @@ export class PreviewComponent implements OnInit
 	{
 		if (this.extraction && this.extraction.length != 0)
 		{
-			var result = this.extractText(this.dragPosition);
+			var result = this.drawBox(this.dragPosition);
 			this.dragPosition = new Rectangle(-1, -1, -1, -1);
-			result.position = this.reversePosition(result.position);
-			result.position.X = result.position.X - 3;
-			result.position.Y = result.position.Y - 3;
-			result.position.Width = result.position.Width + 6;
-			result.position.Height = result.position.Height + 6;
-			let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
-			this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
-			this.canvasCtx.fillStyle = '#f9ff87';
-			this.canvasCtx.fillRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
-			this.canvasCtx.strokeStyle = 'red';
-			this.canvasCtx.lineWidth = 1;
-			this.canvasCtx.strokeRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
-			
-			for (var i = 0; i < result.words.length; i++)
-			{
-				var wordPosition = this.reversePosition(result.words[i]);
-				this.canvasCtx.fillStyle = 'black';
-				this.canvasCtx.fillText(result.words[i].Text, wordPosition.X, wordPosition.Y + wordPosition.Height);
-			}
 
 			this.selectedPosition = result.position;
 			this.selectedText = result.text;
 		}
+	}
+
+	drawBox(rect: Rectangle)
+	{
+		debugger;
+		var result = this.extractText(rect);
+		result.position = this.reversePosition(result.position);
+		result.position.X = result.position.X - 3;
+		result.position.Y = result.position.Y - 3;
+		result.position.Width = result.position.Width + 6;
+		result.position.Height = result.position.Height + 6;
+		let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
+		this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
+		this.canvasCtx.fillStyle = '#f9ff87';
+		this.canvasCtx.fillRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
+		this.canvasCtx.strokeStyle = 'red';
+		this.canvasCtx.lineWidth = 1;
+		this.canvasCtx.strokeRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
+		
+		for (var i = 0; i < result.words.length; i++)
+		{
+			var wordPosition = this.reversePosition(result.words[i]);
+			this.canvasCtx.fillStyle = 'black';
+			this.canvasCtx.fillText(result.words[i].Text, wordPosition.X, wordPosition.Y + wordPosition.Height);
+		}
+		return result;
 	}
 
 	@HostListener('window:resize', ['$event'])
