@@ -10,10 +10,10 @@ namespace BackEndApp.DTO
 	{
 		public string Field { get; set; }
 		public bool IsLineItem { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int Width { get; set; }
-		public int Height { get; set; }
+		public int? X { get; set; }
+		public int? Y { get; set; }
+		public int? Width { get; set; }
+		public int? Height { get; set; }
 
 		public static implicit operator InvoiceGetExtractionSettingsResponse(ExtractionSettings settings)
 		{
@@ -26,14 +26,5 @@ namespace BackEndApp.DTO
 			result.Height = settings.Height;
 			return result;
 		}
-
-		/*public InvoiceGetExtractionSettingsResponse(ExtractionSettings settings)
-		{
-			Field = settings.Field;
-			X = settings.X;
-			Y = settings.Y;
-			Width = settings.Width;
-			Height = settings.Height;
-		}*/
 	}
 }

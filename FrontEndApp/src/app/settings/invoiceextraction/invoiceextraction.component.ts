@@ -9,9 +9,8 @@ import { InvoiceService } from '../../_services/invoice.service';
 	templateUrl: './invoiceextraction.component.html',
 	styleUrls: ['./invoiceextraction.component.scss']
 })
-export class InvoiceExtractionComponent implements OnInit {
-
-	fieldsName: string[] = [];
+export class InvoiceExtractionComponent implements OnInit
+{
 	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 	lineItemSettingsForm: FormGroup = new FormGroup({});
@@ -50,13 +49,26 @@ export class InvoiceExtractionComponent implements OnInit {
 				{
 					if (data[i].field == "LineItem")
 					{
-						this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
-						this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
+						if (data[i].y != null)
+						{
+							this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
+							if (data[i].height != null)
+							{
+								this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
+							}
+						}
+						
 					}
 					else
 					{
-						this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
-						this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
+						if (data[i].x != null)
+						{
+							this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
+							if (data[i].width != null)
+							{
+								this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
+							}
+						}
 					}
 				}
 				else

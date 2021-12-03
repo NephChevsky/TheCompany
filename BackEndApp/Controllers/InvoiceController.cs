@@ -227,9 +227,23 @@ namespace BackEndApp.Controllers
 				results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Owner == owner && query.Contains(x.Field)).ToList();
 			}
 			List<InvoiceGetExtractionSettingsResponse> returnValues = new List<InvoiceGetExtractionSettingsResponse>();
-			results.ForEach(x =>
+			bool lineItem = false;
+			query.ForEach(x =>
 			{
-				returnValues.Add((InvoiceGetExtractionSettingsResponse) x);
+				if (x == "LineItem")
+					lineItem = true;
+				ExtractionSettings dbField = results.Find(y => y.Field == x);
+				if (dbField != null)
+				{
+					returnValues.Add((InvoiceGetExtractionSettingsResponse)dbField);
+				}
+				else
+				{
+					InvoiceGetExtractionSettingsResponse item = new InvoiceGetExtractionSettingsResponse();
+					item.Field = x;
+					item.IsLineItem = lineItem;
+					returnValues.Add(item);
+				}
 			});
 			_logger.LogInformation("End of GetExtractionSettings method");
 			return Ok(returnValues);
