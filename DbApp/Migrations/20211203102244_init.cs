@@ -47,6 +47,23 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FilePreviews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    FileId = table.Column<Guid>(nullable: false),
+                    Page = table.Column<int>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilePreviews", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Files",
                 columns: table => new
                 {
@@ -167,6 +184,9 @@ namespace DbApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExtractionSettings");
+
+            migrationBuilder.DropTable(
+                name: "FilePreviews");
 
             migrationBuilder.DropTable(
                 name: "Files");

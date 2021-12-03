@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211119124534_init")]
+    [Migration("20211203102244_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,37 @@ namespace DbApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("ModelsApp.DbModels.FilePreview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModificationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Owner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Page")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FilePreviews");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.Individual", b =>
