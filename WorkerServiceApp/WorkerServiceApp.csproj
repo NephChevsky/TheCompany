@@ -1,35 +1,51 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>dotnet-WorkerServiceApp-08C8CDAB-C622-46FA-AC35-EFD104F28912</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<UserSecretsId>dotnet-WorkerServiceApp-08C8CDAB-C622-46FA-AC35-EFD104F28912</UserSecretsId>
+		<BaseOutputPath>..\</BaseOutputPath>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
-    <PackageReference Include="IronOcr" Version="2021.11.0" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.4.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.21" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.21" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.21" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
-    <PackageReference Include="Tesseract" Version="4.1.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
+		<PackageReference Include="IronOcr" Version="2021.11.0" />
+		<PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.4.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.21" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.21" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.21" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
+		<PackageReference Include="Tesseract" Version="4.1.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="DbApp">
-      <HintPath>..\DbApp\bin\Debug\netcoreapp3.1\DbApp.dll</HintPath>
-    </Reference>
-    <Reference Include="ModelsApp">
-      <HintPath>..\ModelsApp\bin\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
-    </Reference>
-    <Reference Include="OcrApp">
-      <HintPath>..\OcrApp\bin\Debug\netcoreapp3.1\OcrApp.dll</HintPath>
-    </Reference>
-    <Reference Include="StorageApp">
-      <HintPath>..\StorageApp\bin\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+		<Reference Include="DbApp">
+			<HintPath>..\Release\netcoreapp3.1\DbApp.dll</HintPath>
+		</Reference>
+		<Reference Include="ModelsApp">
+			<HintPath>..\Release\netcoreapp3.1\ModelsApp.dll</HintPath>
+		</Reference>
+		<Reference Include="OcrApp">
+			<HintPath>..\Release\netcoreapp3.1\OcrApp.dll</HintPath>
+		</Reference>
+		<Reference Include="StorageApp">
+			<HintPath>..\Release\netcoreapp3.1\StorageApp.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<Reference Include="DbApp">
+			<HintPath>..\Debug\netcoreapp3.1\DbApp.dll</HintPath>
+		</Reference>
+		<Reference Include="ModelsApp">
+			<HintPath>..\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
+		</Reference>
+		<Reference Include="OcrApp">
+			<HintPath>..\Debug\netcoreapp3.1\OcrApp.dll</HintPath>
+		</Reference>
+		<Reference Include="StorageApp">
+			<HintPath>..\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>
