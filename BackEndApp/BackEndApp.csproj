@@ -6,6 +6,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Include="..\appsettings.Development.json" Link="appsettings.Development.json" />
+	  <Content Include="..\appsettings.json" Link="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
 		<PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
 		<PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.4.0" />
@@ -54,10 +59,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="nlog.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<None Include="..\appsettings.json" Link="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Condition=" '$(Configuration)' == 'Debug' " Include="..\appsettings.Development.json" Link="appsettings.Development.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\nlog.config" Link="nlog.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-
 
 </Project>

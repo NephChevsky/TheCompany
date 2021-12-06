@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using System.IO;
+using System.Reflection;
 
 namespace BackEndApp
 {
@@ -10,6 +13,7 @@ namespace BackEndApp
 	{
 		public static void Main(string[] args)
 		{
+			Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 			CreateHostBuilder(args).Build().Run();
 		}
 
@@ -20,6 +24,7 @@ namespace BackEndApp
 					webBuilder.UseStartup<Startup>();
 				}).ConfigureLogging(logging =>
 				{
+					GlobalDiagnosticsContext.Set("AppName", "BackEndApp");
 					logging.ClearProviders();
 					logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 				})

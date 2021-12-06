@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<UserSecretsId>dotnet-WorkerServiceApp-08C8CDAB-C622-46FA-AC35-EFD104F28912</UserSecretsId>
 		<BaseOutputPath>..\</BaseOutputPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="..\appsettings.Development.json" Link="appsettings.Development.json" />
+	  <Content Include="..\appsettings.json" Link="appsettings.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
@@ -47,5 +52,17 @@
 		<Reference Include="StorageApp">
 			<HintPath>..\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Condition=" '$(Configuration)' == 'Debug' " Include="..\appsettings.Development.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\nlog.config" Link="nlog.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>
