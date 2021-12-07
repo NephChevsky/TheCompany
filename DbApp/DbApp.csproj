@@ -19,16 +19,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<Reference Include="ModelsApp">
-			<HintPath>..\Release\netcoreapp3.1\ModelsApp.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<Reference Include="ModelsApp">
-			<HintPath>..\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
-		</Reference>
+	<ItemGroup>
+	  <ProjectReference Include="..\ModelsApp\ModelsApp.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -24,34 +24,11 @@
 		<PackageReference Include="Tesseract" Version="4.1.1" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<Reference Include="DbApp">
-			<HintPath>..\Release\netcoreapp3.1\DbApp.dll</HintPath>
-		</Reference>
-		<Reference Include="ModelsApp">
-			<HintPath>..\Release\netcoreapp3.1\ModelsApp.dll</HintPath>
-		</Reference>
-		<Reference Include="OcrApp">
-			<HintPath>..\Release\netcoreapp3.1\OcrApp.dll</HintPath>
-		</Reference>
-		<Reference Include="StorageApp">
-			<HintPath>..\Release\netcoreapp3.1\StorageApp.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<Reference Include="DbApp">
-			<HintPath>..\Debug\netcoreapp3.1\DbApp.dll</HintPath>
-		</Reference>
-		<Reference Include="ModelsApp">
-			<HintPath>..\Debug\netcoreapp3.1\ModelsApp.dll</HintPath>
-		</Reference>
-		<Reference Include="OcrApp">
-			<HintPath>..\Debug\netcoreapp3.1\OcrApp.dll</HintPath>
-		</Reference>
-		<Reference Include="StorageApp">
-			<HintPath>..\Debug\netcoreapp3.1\StorageApp.dll</HintPath>
-		</Reference>
+	<ItemGroup>
+		<ProjectReference Include="..\DbApp\DbApp.csproj" />
+		<ProjectReference Include="..\ModelsApp\ModelsApp.csproj" />
+		<ProjectReference Include="..\OcrApp\OcrApp.csproj" />
+		<ProjectReference Include="..\StorageApp\StorageApp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

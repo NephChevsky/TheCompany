@@ -11,16 +11,8 @@
 		<PackageReference Include="Tesseract" Version="4.1.1" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<Reference Include="MagickApp">
-			<HintPath>..\Release\netcoreapp3.1\MagickApp.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<Reference Include="MagickApp">
-			<HintPath>..\Debug\netcoreapp3.1\MagickApp.dll</HintPath>
-		</Reference>
+	<ItemGroup>
+		<ProjectReference Include="..\MagickApp\MagickApp.csproj" />
 	</ItemGroup>
 
 </Project>
