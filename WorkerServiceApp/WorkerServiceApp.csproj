@@ -4,7 +4,6 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<UserSecretsId>dotnet-WorkerServiceApp-08C8CDAB-C622-46FA-AC35-EFD104F28912</UserSecretsId>
 		<BaseOutputPath>..\</BaseOutputPath>
-		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 	</PropertyGroup>
 
 	<ItemGroup>
