@@ -42,7 +42,7 @@ namespace MagickApp
                 }
                 MemoryStream stream = new MemoryStream();
                 image.Write(stream, MagickFormat.Png);
-                return stream; // TODO: should return a memory stream IMO
+                return stream;
             }
         }
 	}
