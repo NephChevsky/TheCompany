@@ -25,9 +25,9 @@ export class InvoiceExtractionComponent implements OnInit
 
 
 	constructor(private formBuilder: FormBuilder,
-				private router: Router,
-				private invoiceService: InvoiceService,
-				private additionalFieldService: AdditionalFieldService) { }
+		private router: Router,
+		private invoiceService: InvoiceService,
+		private additionalFieldService: AdditionalFieldService) { }
 
 	ngOnInit(): void
 	{
@@ -66,7 +66,7 @@ export class InvoiceExtractionComponent implements OnInit
 								this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
 							}
 						}
-						
+
 					}
 					else
 					{
@@ -85,9 +85,10 @@ export class InvoiceExtractionComponent implements OnInit
 					this.addField(data[i].field);
 					this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
 				}
-				
+
 			}
-		}, error => {
+		}, error =>
+		{
 			// TODO
 		});
 
@@ -99,13 +100,15 @@ export class InvoiceExtractionComponent implements OnInit
 				ids.push(item.id);
 				this.addField(item.name, item.id);
 			}
-			this.invoiceService.getExtractionSettings(ids).subscribe((data: any) =>{
+			this.invoiceService.getExtractionSettings(ids).subscribe((data: any) =>
+			{
 				for (var i = 0; i < data.length; i++)
 				{
 					this.updateField(data[i].field, data[i].id, data[i].x, data[i].y, data[i].height, data[i].width);
 				}
 			});
-		}, error => {
+		}, error =>
+		{
 			// TODO
 		});
 	}
@@ -117,8 +120,8 @@ export class InvoiceExtractionComponent implements OnInit
 			id: [id, []],
 			x: ['', []],
 			y: ['', []],
-			height: ['',[]],
-			width: ['',[]]
+			height: ['', []],
+			width: ['', []]
 		});
 		this.fields.push(tmpForm);
 	}
@@ -152,7 +155,7 @@ export class InvoiceExtractionComponent implements OnInit
 
 		for (let control of (this.invoiceSettingsForm.get("fields") as FormArray).controls)
 		{
-			if (control.get("x").value  == "" && control.get("y").value  == "" && control.get("width").value  == "" && control.get("height").value  == "")
+			if (control.get("x").value == "" && control.get("y").value == "" && control.get("width").value == "" && control.get("height").value == "")
 			{
 				control.get("x").setValue(-1);
 				control.get("y").setValue(-1);
@@ -194,11 +197,10 @@ export class InvoiceExtractionComponent implements OnInit
 
 	showBoundingBox(index: any)
 	{
-		debugger;
 		if (this.sampleFile)
 		{
 			var rect;
-			if (typeof(index) == "string")
+			if (typeof (index) == "string")
 			{
 				if (index == "LineItemBox")
 				{

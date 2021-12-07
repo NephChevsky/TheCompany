@@ -5,9 +5,9 @@ import { Rectangle } from 'src/app/_models/rectangle';
 import { InvoiceService } from 'src/app/_services/invoice.service';
 
 @Component({
-  selector: 'app-preview',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+	selector: 'app-preview',
+	templateUrl: './preview.component.html',
+	styleUrls: ['./preview.component.scss']
 })
 export class PreviewComponent implements OnInit
 {
@@ -20,8 +20,8 @@ export class PreviewComponent implements OnInit
 	@Input()
 	file: any;
 	preview: SafeResourceUrl;
-	extraction : ExtractBlock[];
-	extractionSize : ExtractBlock;
+	extraction: ExtractBlock[];
+	extractionSize: ExtractBlock;
 	imgPosition: DOMRect = new DOMRect();
 	dragPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	canvasCtx: CanvasRenderingContext2D;
@@ -29,50 +29,53 @@ export class PreviewComponent implements OnInit
 	selectedPosition: Rectangle = new Rectangle(-1, -1, -1, -1);
 	selectedText: string = "";
 	loading: boolean = true;
+	noFile: boolean = false;
 
 	@Output() extractedTextEvent = new EventEmitter<string>();
 
-	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef, private sanitizer:DomSanitizer)
+	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef, private sanitizer: DomSanitizer)
 	{
 	}
 
 	ngOnInit(): void
 	{
-		this.canvasCtx = (<HTMLCanvasElement> document.getElementById('canvasPreview')).getContext('2d');
+		this.canvasCtx = (<HTMLCanvasElement>document.getElementById('canvasPreview')).getContext('2d');
 		if (this.dataSource == "Invoice")
 		{
 			if (this.file != null)
 			{
 				this.invoiceService.getPreviewOnTheFly(this.file)
-				.subscribe((data: any) =>{
-					
-					this.handlePreview(this.stringToArrayBuffer(data.preview));
-					this.handleExtraction(this.stringToArrayBuffer(data.extraction));
-					this.loading = false;
-				}, error =>
-				{
-					// TODO: handle errors
-				});
+					.subscribe((data: any) =>
+					{
+						this.handlePreview(this.stringToArrayBuffer(data.preview));
+						this.handleExtraction(this.stringToArrayBuffer(data.extraction));
+					}, error =>
+					{
+						// TODO: handle errors
+					});
 			}
 			else if (this.id != null)
 			{
 				this.invoiceService.getPreview(this.id, this.page)
-				.subscribe((data: any) =>{
-					this.handlePreview(data);
-					this.loading = this.extraction == null || this.preview == null;
-				}, error =>
-				{
-					// TODO: handle errors
-				});
+					.subscribe((data: any) =>
+					{
+						this.handlePreview(data);
+					}, error =>
+					{
+					});
 
 				this.invoiceService.getExtraction(this.id)
-				.subscribe((data: any) =>{
-					this.handleExtraction(data);
-					this.loading = this.extraction == null || this.preview == null;
-				}, error =>
-				{
-					// TODO: handle errors
-				});
+					.subscribe((data: any) =>
+					{
+						this.handleExtraction(data);
+					}, error =>
+					{
+						// TODO: handle errors
+					});
+			}
+			else
+			{
+				this.loading = false;
 			}
 		}
 	}
@@ -81,7 +84,8 @@ export class PreviewComponent implements OnInit
 	{
 		var buf = new ArrayBuffer(str.length); // 2 bytes for each char
 		var bufView = new Uint8Array(buf);
-		for (var i=0, strLen=str.length; i < strLen; i++) {
+		for (var i = 0, strLen = str.length; i < strLen; i++)
+		{
 			bufView[i] = str.charCodeAt(i);
 		}
 		return buf;
@@ -89,32 +93,54 @@ export class PreviewComponent implements OnInit
 
 	handlePreview(data: any)
 	{
-		var binary = '';
-		var bytes = new Uint8Array( data );
-		var len = bytes.byteLength;
-		for (var i = 0; i < len; i++) {
-			binary += String.fromCharCode(bytes[i]);
+		if (data.byteLength != 0)
+		{
+			var binary = '';
+			var bytes = new Uint8Array(data);
+			var len = bytes.byteLength;
+			for (var i = 0; i < len; i++)
+			{
+				binary += String.fromCharCode(bytes[i]);
+			}
+			this.preview = this.sanitizer.bypassSecurityTrustResourceUrl("data:image/png;base64," + binary);
+			let that = this;
+			document.getElementById("imgPreview").addEventListener('load', function ()
+			{
+				that.imgPosition = document.getElementById("imgPreview").getBoundingClientRect();
+			});
 		}
-		this.preview = this.sanitizer.bypassSecurityTrustResourceUrl("data:image/png;base64," + binary);
-		let that = this;
-		document.getElementById("imgPreview").addEventListener('load', function () {
-			that.imgPosition = document.getElementById("imgPreview").getBoundingClientRect();
-		});
+		else
+		{
+			this.noFile = true;
+		}
+
+		this.loading = (this.extraction == null || this.preview == null) && !this.noFile;
 	}
 
 	handleExtraction(data: any)
 	{
-		var binary = '';
-		var bytes = new Uint8Array( data );
-		var len = bytes.byteLength;
-		for (var i = 0; i < len; i++) {
-			binary += String.fromCharCode(bytes[i]);
+		if (data.byteLength != 0)
+		{
+			var binary = '';
+			var bytes = new Uint8Array(data);
+			var len = bytes.byteLength;
+			for (var i = 0; i < len; i++)
+			{
+				binary += String.fromCharCode(bytes[i]);
+			}
+			this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function (c)
+			{
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			}).join('')));
+			this.extractionSize = this.extraction[0];
+			this.extraction.shift();
 		}
-		this.extraction = JSON.parse(decodeURIComponent(atob(binary).split('').map(function(c) {
-			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-		}).join('')));
-		this.extractionSize = this.extraction[0];
-		this.extraction.shift();
+		else
+		{
+			this.noFile = true;
+		}
+
+		this.loading = (this.extraction == null || this.preview == null) && !this.noFile;
 	}
 
 	handleClick(event: PointerEvent)
@@ -122,7 +148,7 @@ export class PreviewComponent implements OnInit
 		if (event.offsetX >= this.selectedPosition.X && event.offsetX <= this.selectedPosition.X + this.selectedPosition.Width && event.offsetY >= this.selectedPosition.Y && event.offsetY <= this.selectedPosition.Y + this.selectedPosition.Height)
 		{
 			this.extractedTextEvent.emit(this.selectedText);
-			this.selectedPosition = new Rectangle(-1,-1,-1,-1);
+			this.selectedPosition = new Rectangle(-1, -1, -1, -1);
 			this.selectedText = "";
 		}
 		else
@@ -135,9 +161,9 @@ export class PreviewComponent implements OnInit
 	{
 		if (this.extraction && this.extraction.length != 0)
 		{
-			this.selectedPosition = new Rectangle(-1,-1,-1,-1);
+			this.selectedPosition = new Rectangle(-1, -1, -1, -1);
 			this.selectedText = "";
-			this.dragPosition = new Rectangle(event.offsetX,  event.offsetY, 0, 0);
+			this.dragPosition = new Rectangle(event.offsetX, event.offsetY, 0, 0);
 			let canvasPosition = document.getElementById("canvasPreview").getBoundingClientRect();
 			this.canvasCtx.clearRect(0, 0, canvasPosition.width, canvasPosition.height);
 		}
@@ -170,7 +196,6 @@ export class PreviewComponent implements OnInit
 
 	drawBox(rect: Rectangle)
 	{
-		debugger;
 		var result = this.extractText(rect);
 		result.position = this.reversePosition(result.position);
 		result.position.X = result.position.X - 3;
@@ -184,7 +209,7 @@ export class PreviewComponent implements OnInit
 		this.canvasCtx.strokeStyle = 'red';
 		this.canvasCtx.lineWidth = 1;
 		this.canvasCtx.strokeRect(result.position.X, result.position.Y, result.position.Width, result.position.Height);
-		
+
 		for (var i = 0; i < result.words.length; i++)
 		{
 			var wordPosition = this.reversePosition(result.words[i]);
@@ -195,7 +220,8 @@ export class PreviewComponent implements OnInit
 	}
 
 	@HostListener('window:resize', ['$event'])
-	onResize() {
+	onResize()
+	{
 		this.imgPosition = document.getElementById("imgPreview").getBoundingClientRect();
 	}
 
@@ -203,7 +229,7 @@ export class PreviewComponent implements OnInit
 	{
 		position = this.convertPosition(position);
 		var resultTxt = "";
-		var resultPosition = new Rectangle(-1,-1,-1,-1);
+		var resultPosition = new Rectangle(-1, -1, -1, -1);
 		var currentLine = -1;
 		var words = [];
 		for (var i = 1; i < this.extraction.length; i++)
@@ -212,7 +238,7 @@ export class PreviewComponent implements OnInit
 			var right = this.extraction[i].X > position.X + position.Width;
 			var above = this.extraction[i].Y > position.Y + position.Height;
 			var below = this.extraction[i].Y + this.extraction[i].Height < position.Y;
-			if (!( left || right || above || below ))
+			if (!(left || right || above || below))
 			{
 				words.push(this.extraction[i]);
 				if (resultTxt)
@@ -252,9 +278,9 @@ export class PreviewComponent implements OnInit
 	convertPosition(position: Rectangle)
 	{
 		var pos = new Rectangle(position.X * this.extractionSize.Width / this.imgPosition.width,
-								position.Y * this.extractionSize.Height / this.imgPosition.height,
-								position.Width * this.extractionSize.Width / this.imgPosition.width,
-								position.Height * this.extractionSize.Height / this.imgPosition.height);
+			position.Y * this.extractionSize.Height / this.imgPosition.height,
+			position.Width * this.extractionSize.Width / this.imgPosition.width,
+			position.Height * this.extractionSize.Height / this.imgPosition.height);
 		return pos;
 	}
 

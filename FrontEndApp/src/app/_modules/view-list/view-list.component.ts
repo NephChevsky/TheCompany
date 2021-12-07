@@ -47,7 +47,8 @@ export class ViewListComponent implements OnInit {
 			this.linesForm.addControl("values", this.formBuilder.array([]));
 		}
 
-		this.viewListService.getResults(this.dataSource, this.filters, this.fields).subscribe(x => {
+		this.viewListService.getResults(this.dataSource, this.filters, this.fields).subscribe(x =>
+		{
 			this.data = x.items;
 			this.fieldsData = x.fieldsData;
 			var items = this.linesForm.get("values") as FormArray;

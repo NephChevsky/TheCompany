@@ -1,15 +1,16 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
 import { InvoiceService } from 'src/app/_services/invoice.service';
 
 @Component({
-  selector: 'app-show-invoice',
-  templateUrl: './show-invoice.component.html',
-  styleUrls: ['./show-invoice.component.scss']
+	selector: 'app-show-invoice',
+	templateUrl: './show-invoice.component.html',
+	styleUrls: ['./show-invoice.component.scss']
 })
-export class ShowInvoiceComponent implements OnInit {
+export class ShowInvoiceComponent implements OnInit
+{
 
 	public id: string = "";
 	public invoiceData: any[];
@@ -21,29 +22,37 @@ export class ShowInvoiceComponent implements OnInit {
 	public focusedFieldId: string;
 
 	constructor(private invoiceService: InvoiceService,
-				private route: ActivatedRoute,
-				private formBuilder: FormBuilder)
-	{	
+		private route: ActivatedRoute,
+		private formBuilder: FormBuilder,
+		private router: Router)
+	{
 	}
 
 	ngOnInit(): void
 	{
 		this.id = this.route.snapshot.paramMap.get('id');
-		this.filters.push(new Filter("InvoiceId", "=", this.id));
 		if (this.id)
 		{
-			this.invoiceService.getInvoice(this.id)
-				.subscribe((data: any) =>{
-					this.invoiceData = data.fields;
-					for (var i = 0; i < this.invoiceData.length; i++)
-					{
-						this.invoiceForm.addControl(this.invoiceData[i].name, new FormControl(this.invoiceData[i].value));
-					}
-				}, error =>
-				{
-					// TODO: handle errors
-				});
+			this.filters.push(new Filter("InvoiceId", "=", this.id));
 		}
+		else
+		{
+			this.filters.push(new Filter("InvoiceId", "=", "00000000-0000-0000-0000-000000000000"));
+			this.editMode = true;
+		}
+
+		this.invoiceService.getInvoice(this.id)
+			.subscribe((data: any) =>
+			{
+				this.invoiceData = data.fields;
+				for (var i = 0; i < this.invoiceData.length; i++)
+				{
+					this.invoiceForm.addControl(this.invoiceData[i].name, new FormControl(this.invoiceData[i].value));
+				}
+			}, error =>
+			{
+				// TODO: handle errors
+			});
 	}
 
 	setEditMode()
@@ -53,7 +62,7 @@ export class ShowInvoiceComponent implements OnInit {
 
 	save()
 	{
-		
+
 		var fields: any[] = [];
 		for (const [key, value] of Object.entries(this.invoiceForm.value))
 		{
@@ -72,12 +81,16 @@ export class ShowInvoiceComponent implements OnInit {
 			for (const [key, value] of Object.entries(tmp.at(i).value))
 			{
 				if (key == "Id")
+				{
 					id = value as string;
+				}
 				else
+				{
 					lineItemsFields.push({
 						name: key,
 						value: value.toString()
 					});
+				}
 			}
 			var item = {
 				id: id,
@@ -93,8 +106,9 @@ export class ShowInvoiceComponent implements OnInit {
 		};
 
 		this.invoiceService.saveInvoice(obj)
-			.subscribe(data =>{
-				window.location.reload()
+			.subscribe(data =>
+			{
+				this.router.navigate(['/Invoices/Show/' + data]);
 			}, error =>
 			{
 				// TODO: handle errors
@@ -122,10 +136,10 @@ export class ShowInvoiceComponent implements OnInit {
 			var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
 			var tmp = this.focusedFieldId.split(".");
 			if (tmp.length == 2)
-				this.lineItemsForm.controls["values"].get([tmp[0]]).patchValue({[tmp[1]]:text});
+				this.lineItemsForm.controls["values"].get([tmp[0]]).patchValue({ [tmp[1]]: text });
 			else
-				this.invoiceForm.patchValue({[this.focusedFieldId]:text});
-			
+				this.invoiceForm.patchValue({ [this.focusedFieldId]: text });
+
 			input.focus();
 		}
 	}

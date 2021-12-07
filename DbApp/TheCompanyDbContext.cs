@@ -124,18 +124,15 @@ namespace DbApp.Models
 
                 entity.Property(e => e.LockedBy);
 
-                entity.Property(e => e.FileId)
-                    .IsRequired();
+                entity.Property(e => e.FileId);
 
-                entity.Property(e => e.FileName)
-                    .IsRequired();
+                entity.Property(e => e.FileName);
 
-                entity.Property(e => e.FileSize)
-                    .IsRequired();
+                entity.Property(e => e.FileSize);
 
                 entity.Property(e => e.ShouldBeExtracted)
                     .IsRequired()
-                    .HasDefaultValue(true);
+                    .HasDefaultValue(false);
 
                 entity.Property(e => e.IsExtracted)
                     .IsRequired()

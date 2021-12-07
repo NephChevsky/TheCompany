@@ -22,22 +22,23 @@ const routes: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'Login', component: LoginComponent },
 	{ path: 'SignUp', component: SignUpComponent },
-	{ path: 'Customers', component: CustomersComponent, canActivate: [AuthGuard]},
-	{ path: 'Customers/Create', component: CreateCustomerComponent, canActivate: [AuthGuard]},
-	{ path: 'Invoices', component: InvoicesComponent, canActivate: [AuthGuard]},
-	{ path: 'Invoices/Import', component: ImportInvoiceComponent, canActivate: [AuthGuard]},
-	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard]},
-	{ path: 'Settings', component: SettingsComponent, canActivate: [AuthGuard]},
-	{ path: 'Settings/Customer', component: CustomerComponent, canActivate: [AuthGuard]},
-	{ path: 'Settings/Invoice', component: InvoiceComponent, canActivate: [AuthGuard]},
-	{ path: 'Settings/InvoiceExtraction', component: InvoiceExtractionComponent, canActivate: [AuthGuard]},
-	{ path: 'Settings/ClearAll', component: ClearAllComponent, canActivate: [AuthGuard]},
-	{ path: 'AdditionalFields/Add/:dataSource', component: AddComponent, canActivate: [AuthGuard]},
+	{ path: 'Customers', component: CustomersComponent, canActivate: [AuthGuard] },
+	{ path: 'Customers/Create', component: CreateCustomerComponent, canActivate: [AuthGuard] },
+	{ path: 'Invoices', component: InvoicesComponent, canActivate: [AuthGuard] },
+	{ path: 'Invoices/Import', component: ImportInvoiceComponent, canActivate: [AuthGuard] },
+	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard] },
+	{ path: 'Invoices/Create', component: ShowInvoiceComponent, canActivate: [AuthGuard] },
+	{ path: 'Settings', component: SettingsComponent, canActivate: [AuthGuard] },
+	{ path: 'Settings/Customer', component: CustomerComponent, canActivate: [AuthGuard] },
+	{ path: 'Settings/Invoice', component: InvoiceComponent, canActivate: [AuthGuard] },
+	{ path: 'Settings/InvoiceExtraction', component: InvoiceExtractionComponent, canActivate: [AuthGuard] },
+	{ path: 'Settings/ClearAll', component: ClearAllComponent, canActivate: [AuthGuard] },
+	{ path: 'AdditionalFields/Add/:dataSource', component: AddComponent, canActivate: [AuthGuard] },
 	{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule { }
