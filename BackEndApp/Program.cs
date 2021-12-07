@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
@@ -28,6 +29,12 @@ namespace BackEndApp
 					logging.ClearProviders();
 					logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 				})
-				.UseNLog();
+				.UseNLog()
+				.ConfigureAppConfiguration(config =>
+				{
+					config.SetBasePath(Directory.GetCurrentDirectory());
+					config.AddJsonFile("appSettings.json", false);
+					config.AddJsonFile("appSettings.Development.json", true);
+				});
 	}
 }
