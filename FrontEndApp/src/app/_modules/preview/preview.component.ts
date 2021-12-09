@@ -114,7 +114,7 @@ export class PreviewComponent implements OnInit
 			this.noFile = true;
 		}
 
-		this.loading = (this.extraction == null || this.preview == null) && !this.noFile;
+		this.loading = this.preview == null && !this.noFile;
 	}
 
 	handleExtraction(data: any)
@@ -139,8 +139,6 @@ export class PreviewComponent implements OnInit
 		{
 			this.noFile = true;
 		}
-
-		this.loading = (this.extraction == null || this.preview == null) && !this.noFile;
 	}
 
 	handleClick(event: PointerEvent)

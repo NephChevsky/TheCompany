@@ -442,6 +442,7 @@ namespace BackEndApp.Controllers
                     invoice = new Invoice();
                     invoice.Id = Guid.NewGuid();
                     invoice.Owner = owner;
+                    invoice.ShouldBeGenerated = true;
                 }
                 else
                 {

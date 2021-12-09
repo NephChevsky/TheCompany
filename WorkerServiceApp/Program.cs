@@ -3,6 +3,7 @@ using NLog.Web;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using Microsoft.Extensions.Configuration;
 
 namespace WorkerServiceApp
 {
@@ -36,6 +37,13 @@ namespace WorkerServiceApp
 						loggingBuilder.AddNLog(nLogConfig, nLogOptions);
 					});
 					services.AddHostedService<ExtractDocument>();
+					services.AddHostedService<GenerateDocument>();
+				})
+				.ConfigureAppConfiguration(config =>
+				{
+					config.SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
+					config.AddJsonFile("appSettings.json", false);
+					config.AddJsonFile("appSettings.Development.json", true);
 				});
 	}
 }

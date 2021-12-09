@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using System;
+using System.Drawing;
 using System.IO;
 
 namespace MagickApp
@@ -17,8 +18,11 @@ namespace MagickApp
             //MagickNET.SetGhostscriptDirectory(@"C:\MyProgram\Ghostscript");
             //MagickNET.SetTempDirectory(@"C:\MyProgram\MyTempFiles");
             var settings = new MagickReadSettings();
+            settings = new MagickReadSettings();
             settings.FrameIndex = page-1;
             settings.Density = new Density(300, 300);
+            settings.ColorSpace = ColorSpace.CMYK;
+            settings.BackgroundColor = MagickColors.White;
             if (GrayScale)
 			{
                 settings.ColorSpace = ColorSpace.Gray;

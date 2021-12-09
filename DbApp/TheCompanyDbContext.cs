@@ -13,17 +13,17 @@ using System.Threading.Tasks;
 
 namespace DbApp.Models
 {
-	public partial class TheCompanyDbContext : DbContext
-	{
-		public TheCompanyDbContext(DbContextOptions<TheCompanyDbContext> options) : base(options)
-		{
-		}
+    public partial class TheCompanyDbContext : DbContext
+    {
+        public TheCompanyDbContext(DbContextOptions<TheCompanyDbContext> options) : base(options)
+        {
+        }
 
-		public TheCompanyDbContext()
-		{
-		}
+        public TheCompanyDbContext()
+        {
+        }
 
-		public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
@@ -33,12 +33,12 @@ namespace DbApp.Models
         public virtual DbSet<FilePreview> FilePreviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			base.OnConfiguring(optionsBuilder);
-			optionsBuilder.UseSqlServer("Server=localhost;Database=TheCompany;Trusted_Connection=True;"); // TODO: use configuration file
-		}
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer("Server=localhost;Database=TheCompany;Trusted_Connection=True;"); // TODO: use configuration file
+        }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
             {
@@ -58,7 +58,7 @@ namespace DbApp.Models
                     .HasMaxLength(512);
 
                 entity.Property(e => e.LastLoginDateTime);
-                
+
                 entity.Property(e => e.Deleted)
                     .IsRequired()
                     .HasDefaultValue(false);
@@ -93,7 +93,7 @@ namespace DbApp.Models
                 entity.Property(e => e.Address);
 
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired(); 
+                    .IsRequired();
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -142,8 +142,18 @@ namespace DbApp.Models
 
                 entity.Property(e => e.ExtractDateTime);
 
+                entity.Property(e => e.ShouldBeGenerated)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.IsGenerated)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.GenerationDateTime);
+
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired(); 
+                    .IsRequired();
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -202,7 +212,7 @@ namespace DbApp.Models
                 entity.Property(e => e.Width);
 
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired(); 
+                    .IsRequired();
 
                 entity.Property(e => e.Deleted)
                     .IsRequired()
@@ -372,7 +382,7 @@ namespace DbApp.Models
         public static IQueryable<T> FilterDynamic<T>(this IQueryable<T> query, List<Filter> filters)
         {
             if (filters != null)
-			{
+            {
                 filters.ForEach(x =>
                 {
                     var param = Expression.Parameter(typeof(T), "e");
@@ -384,13 +394,13 @@ namespace DbApp.Models
                             Expression left = prop;
                             Expression right;
                             if (prop.Type == typeof(Guid))
-							{
+                            {
                                 if (x.FieldValue == null)
                                     throw new Exception(x.FieldName + " property value cannot be null in query filters");
                                 right = Expression.Constant(Guid.Parse(x.FieldValue));
                             }
                             else
-							{
+                            {
                                 right = Expression.Constant(x.FieldValue);
                             }
                             Expression exp = Expression.Equal(left, right);
@@ -402,7 +412,7 @@ namespace DbApp.Models
                     query = query.Where(predicate);
                 });
             }
-            
+
             return query;
         }
     }
