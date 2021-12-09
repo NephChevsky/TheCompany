@@ -8,9 +8,9 @@
 					<td><app-field type="{{field.type}}" [form]="invoiceForm" key="{{field.name}}" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field></td>
 				</tr>
 			</table>
-			<br /><br />
-			<h4>Line items</h4>
 		</form>
+		<br /><br />
+		<h4>Line items</h4>
 		<form [formGroup]="lineItemsForm">
 			<app-view-list dataSource="InvoiceLineItem" [filters]="filters" [fields]="['Reference','Description','Quantity','UnitaryPrice','Price']" [editMode]="editMode" [linesForm]="lineItemsForm" (focusEvent)="onFocus($event)"></app-view-list>
 		</form>
