@@ -3,35 +3,40 @@ import { UserService } from './_services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss']
 })
 export class AppComponent
 {
 	title: string = 'TheCompany';
 	guest: boolean = true;
 	menu: any[] = [
-		{name: "Home", route: ""},
-		{name: "Customers", route: "Customers"},
-		{name: "Invoices", route: "Invoices"},
-		{name: "Settings", route: "Settings", childrens: [
-			{
-				name: "Customer",
-				route: "Settings/Customer"
-			},
-			{
-				name: "Invoice",
-				route: "Settings/Invoice"
-			},
-			{
-				name: "Invoice Extraction",
-				route: "Settings/InvoiceExtraction"
-			},
-			{
-				name: "Clear All",
-				route: "Settings/ClearAll"
-			}]
+		{ name: "Home", route: "" },
+		{ name: "Customers", route: "Customers" },
+		{ name: "Invoices", route: "Invoices" },
+		{
+			name: "Settings", route: "Settings", childrens: [
+				{
+					name: "Company information",
+					route: "Settings/Company"
+				},
+				{
+					name: "Customer",
+					route: "Settings/Customer"
+				},
+				{
+					name: "Invoice",
+					route: "Settings/Invoice"
+				},
+				{
+					name: "Invoice Extraction",
+					route: "Settings/InvoiceExtraction"
+				},
+				{
+					name: "Clear All",
+					route: "Settings/ClearAll"
+				}]
 		}
 	];
 

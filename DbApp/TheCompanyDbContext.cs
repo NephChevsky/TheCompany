@@ -31,6 +31,7 @@ namespace DbApp.Models
         public virtual DbSet<InvoiceLineItem> InvoiceLineItems { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FilePreview> FilePreviews { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -288,6 +289,37 @@ namespace DbApp.Models
                     .IsRequired();
 
                 entity.Property(e => e.Owner)
+                    .IsRequired();
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name)
+                    .IsRequired();
+
+                entity.Property(e => e.Address);
+
+                entity.Property(e => e.PhoneNumber);
+
+                entity.Property(e => e.MobilePhoneNumber);
+
+                entity.Property(e => e.Siret);
+
+                entity.Property(e => e.Logo);
+
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
                     .IsRequired();
 
                 entity.Property(e => e.Deleted)

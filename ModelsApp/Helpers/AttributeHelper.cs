@@ -46,7 +46,7 @@ namespace ModelsApp.Helpers
 			PropertyInfo[] properties = type.GetProperties();
 			foreach (PropertyInfo property in properties)
 			{
-				if (AttributeHelper.CheckAttribute<Extractable>(type, property))
+				if (AttributeHelper.CheckAttribute<T>(type, property))
 					result.Add(property);
 			}
 			return result;
@@ -92,6 +92,10 @@ namespace ModelsApp.Helpers
 				{
 					return "NumberField";
 				}
+				else if (attr is FileField)
+				{
+					return "FileField";
+				}
 			}
 			throw new Exception("Unknown field type for property " + property.Name);
 		}
@@ -130,6 +134,10 @@ namespace ModelsApp.Helpers
 					return property.GetValue(element).ToString();
 				}
 				else if (attr is NumberField)
+				{
+					return property.GetValue(element).ToString();
+				}
+				else if (attr is FileField)
 				{
 					return property.GetValue(element).ToString();
 				}

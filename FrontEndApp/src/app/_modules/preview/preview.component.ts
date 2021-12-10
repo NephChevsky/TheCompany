@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ExtractBlock } from 'src/app/_models/extractBlock';
 import { Rectangle } from 'src/app/_models/rectangle';
@@ -33,7 +33,7 @@ export class PreviewComponent implements OnInit
 
 	@Output() extractedTextEvent = new EventEmitter<string>();
 
-	constructor(private invoiceService: InvoiceService, private elementRef: ElementRef, private sanitizer: DomSanitizer)
+	constructor(private invoiceService: InvoiceService, private sanitizer: DomSanitizer)
 	{
 	}
 

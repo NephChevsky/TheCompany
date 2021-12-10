@@ -2,5 +2,7 @@
 	<input *ngIf="editMode && type=='TextField'" type="text" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" [size]="size" [readonly]="!editMode" (focus)="onFocus($event.target)" />
 	<textarea *ngIf="editMode && type=='MultilineTextField'" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" [rows]="rows" [cols]="cols" [readonly]="!editMode" (focus)="onFocus($event.target)"></textarea>
 	<input *ngIf="editMode && type=='NumberField'" type="number" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" style="width: 100px;" [readonly]="!editMode" (focus)="onFocus($event.target)" />
+	<img *ngIf="type=='FileField'" [id]="(index != null ? index + '.' : '') + key" [src]="image" />
+	<input *ngIf="editMode && type=='FileField'" type="file" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" (change)="onFileChange($event)" />
 	<div *ngIf="!editMode">{{form.get(key).value}}</div>
 </div>

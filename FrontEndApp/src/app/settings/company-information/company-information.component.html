@@ -1,0 +1,16 @@
+<div class="content">
+	<h4>Company details</h4>
+	<form [formGroup]="companyForm">
+		<table>
+			<tr *ngFor="let field of companyData">
+				<td class="fieldName">{{field.name}}</td>
+				<td><app-field type="{{field.type}}" [form]="companyForm" key="{{field.name}}" value="{{field.value}}" [editMode]="true"></app-field></td>
+			</tr>
+		</table>
+		<br /><br />
+		<div class="buttons">
+			<button class="btn btn-primary" (click)="save()">Save</button>
+			<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+		</div>
+	</form>
+</div>

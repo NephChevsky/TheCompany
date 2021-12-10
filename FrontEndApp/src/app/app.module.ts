@@ -27,49 +27,51 @@ import { CustomerComponent } from './settings/customer/customer.component';
 import { PreviewComponent } from './_modules/preview/preview.component';
 import { FieldComponent } from './_modules/field/field.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CompanyInformationComponent } from './settings/company-information/company-information.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    SignUpComponent,
-    LoginComponent,
-    CustomersComponent,
-    CreateCustomerComponent,
-    ViewListComponent,
-    InvoicesComponent,
-    ImportInvoiceComponent,
-	SettingsComponent,
-    InvoiceExtractionComponent,
-    ShowInvoiceComponent,
-    ClearAllComponent,
-    InvoiceComponent,
-    AddComponent,
-    CustomerComponent,
-    PreviewComponent,
-    FieldComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    AngularMaterialModule,
-    FormsModule,
-    CdkTreeModule,
-	ToastrModule.forRoot({
-		positionClass: 'toast-bottom-right',
-		preventDuplicates: true,
-	  })
-  ],
-  providers: [[{
-    provide: HTTP_INTERCEPTORS,
-    useClass: JwtInterceptor,
-    multi: true
-  }]],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+	declarations: [
+		AppComponent,
+		HomeComponent,
+		SignUpComponent,
+		LoginComponent,
+		CustomersComponent,
+		CreateCustomerComponent,
+		ViewListComponent,
+		InvoicesComponent,
+		ImportInvoiceComponent,
+		SettingsComponent,
+		InvoiceExtractionComponent,
+		ShowInvoiceComponent,
+		ClearAllComponent,
+		InvoiceComponent,
+		AddComponent,
+		CustomerComponent,
+		PreviewComponent,
+		FieldComponent,
+		CompanyInformationComponent
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		BrowserAnimationsModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		ReactiveFormsModule,
+		AngularMaterialModule,
+		FormsModule,
+		CdkTreeModule,
+		ToastrModule.forRoot({
+			positionClass: 'toast-bottom-right',
+			preventDuplicates: true,
+		})
+	],
+	providers: [[{
+		provide: HTTP_INTERCEPTORS,
+		useClass: JwtInterceptor,
+		multi: true
+	}]],
+	bootstrap: [AppComponent],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

@@ -29,7 +29,6 @@ namespace BackEndApp.Controllers
         private readonly ILogger<InvoiceController> _logger;
         private IConfiguration Configuration { get; }
 
-
         public InvoiceController(IConfiguration configuration, ILogger<InvoiceController> logger)
         {
             Configuration = configuration;
