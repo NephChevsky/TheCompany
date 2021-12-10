@@ -41,7 +41,8 @@ namespace WorkerServiceApp
 				})
 				.ConfigureAppConfiguration(config =>
 				{
-					config.SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
+					string executingAssembly = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+					config.SetBasePath(executingAssembly);
 					config.AddJsonFile("appSettings.json", false);
 					config.AddJsonFile("appSettings.Development.json", true);
 				});
