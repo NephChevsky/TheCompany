@@ -28,6 +28,7 @@ import { PreviewComponent } from './_modules/preview/preview.component';
 import { FieldComponent } from './_modules/field/field.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CompanyInformationComponent } from './settings/company-information/company-information.component';
+import { LineItemsComponent } from './line-items/line-items.component';
 
 @NgModule({
 	declarations: [
@@ -49,7 +50,8 @@ import { CompanyInformationComponent } from './settings/company-information/comp
 		CustomerComponent,
 		PreviewComponent,
 		FieldComponent,
-		CompanyInformationComponent
+		CompanyInformationComponent,
+  LineItemsComponent
 	],
 	imports: [
 		BrowserModule,

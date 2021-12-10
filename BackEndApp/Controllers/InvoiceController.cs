@@ -222,7 +222,7 @@ namespace BackEndApp.Controllers
             {
                 query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(Invoice)));
                 query.Add("LineItem");
-                query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(InvoiceLineItem)));
+                query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(LineItem)));
             }
 
             List<ExtractionSettings> results = new List<ExtractionSettings>();
@@ -488,19 +488,19 @@ namespace BackEndApp.Controllers
                 query.LineItems.ForEach(lineItem =>
                 {
                     Guid lineItemId;
-                    InvoiceLineItem currentItem;
+                    LineItem currentItem;
                     if (Guid.TryParse(lineItem.Id, out lineItemId) && lineItemId != Guid.Empty)
                     {
-                        currentItem = db.InvoiceLineItems.Where(x => x.Owner == owner && x.InvoiceId == invoice.Id && x.Id == lineItemId).SingleOrDefault();
+                        currentItem = db.LineItems.Where(x => x.Owner == owner && x.InvoiceId == invoice.Id && x.Id == lineItemId).SingleOrDefault();
                     }
                     else
                     {
-                        currentItem = new InvoiceLineItem();
+                        currentItem = new LineItem();
                         currentItem.CreationDateTime = DateTime.Now;
                         currentItem.InvoiceId = invoice.Id;
                         currentItem.Owner = owner;
                     }
-                    Type type = typeof(InvoiceLineItem);
+                    Type type = typeof(LineItem);
                     lineItem.Fields.ForEach(field =>
                     {
                         PropertyInfo property = type.GetProperty(field.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
@@ -535,7 +535,7 @@ namespace BackEndApp.Controllers
 
                     if (lineItemId == Guid.Empty)
                     {
-                        db.InvoiceLineItems.Add(currentItem);
+                        db.LineItems.Add(currentItem);
                     }
                 });
                 if (notEditableField)

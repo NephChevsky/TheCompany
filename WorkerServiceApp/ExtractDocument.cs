@@ -133,7 +133,7 @@ namespace WorkerServiceApp
                                 invoice.CustomerId = dbIndividual.Id;
                             }
 
-                            db.InvoiceLineItems.RemoveRange(db.InvoiceLineItems.Where(x => x.Owner == invoice.Owner && x.InvoiceId == invoice.Id));
+                            db.LineItems.RemoveRange(db.LineItems.Where(x => x.Owner == invoice.Owner && x.InvoiceId == invoice.Id));
 
                             ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
                             if (dbBox != null)
@@ -153,7 +153,7 @@ namespace WorkerServiceApp
                                             for (int i = 0; i < references.Count; i++)
                                             {
                                                 ExtractBlock referenceLine = references.ElementAt(i);
-                                                InvoiceLineItem lineItem = new InvoiceLineItem(invoice.Id, invoice.Owner);
+                                                LineItem lineItem = new LineItem(invoice.Id, invoice.Owner);
                                                 lineItem.Reference = referenceLine.Text;
                                                 if (lineItemFields.Count != 0)
                                                 {
@@ -195,7 +195,7 @@ namespace WorkerServiceApp
                                                 if (!(lineItem.Quantity == 0 && lineItem.UnitaryPrice == 0 && lineItem.Price == 0))
                                                 {
                                                     lineItem.CreationDateTime = DateTime.Now;
-                                                    db.InvoiceLineItems.Add(lineItem);
+                                                    db.LineItems.Add(lineItem);
                                                 }
                                             }
                                         }

@@ -108,7 +108,7 @@ namespace WorkerServiceApp
 
                             y+=30;
                             double total = 0;
-                            List<InvoiceLineItem> lineItems = db.InvoiceLineItems.Where(x => x.Owner == dbInvoice.Owner && x.InvoiceId == dbInvoice.Id).ToList();
+                            List<LineItem> lineItems = db.LineItems.Where(x => x.Owner == dbInvoice.Owner && x.InvoiceId == dbInvoice.Id).ToList();
                             lineItems.ForEach(item =>
                             {
                                 pdfEngine.AddText(item.Reference, 20, y );

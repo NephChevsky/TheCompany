@@ -15,6 +15,7 @@ export class AppComponent
 		{ name: "Home", route: "" },
 		{ name: "Customers", route: "Customers" },
 		{ name: "Invoices", route: "Invoices" },
+		{ name: "Line items", route: "LineItems" },
 		{
 			name: "Settings", route: "Settings", childrens: [
 				{

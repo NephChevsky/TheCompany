@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211207200534_add-generatable")]
-    partial class addgeneratable
+    [Migration("20211210153958_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,50 @@ namespace DbApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AdditionalFields");
+                });
+
+            modelBuilder.Entity("ModelsApp.DbModels.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("LastModificationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Logo")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MobilePhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Owner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Siret")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.ExtractionSettings", b =>
@@ -257,6 +301,9 @@ namespace DbApp.Migrations
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("GenerationDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("InvoiceNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -298,7 +345,7 @@ namespace DbApp.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("ModelsApp.DbModels.InvoiceLineItem", b =>
+            modelBuilder.Entity("ModelsApp.DbModels.LineItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -338,7 +385,50 @@ namespace DbApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceLineItems");
+                    b.ToTable("LineItems");
+                });
+
+            modelBuilder.Entity("ModelsApp.DbModels.LineItemDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModificationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Owner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("UnitaryPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LineItemsDefinitions");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.User", b =>

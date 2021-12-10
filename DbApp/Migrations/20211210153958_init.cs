@@ -25,6 +25,27 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Address = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    MobilePhoneNumber = table.Column<string>(nullable: true),
+                    Siret = table.Column<string>(nullable: true),
+                    Logo = table.Column<Guid>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExtractionSettings",
                 columns: table => new
                 {
@@ -103,7 +124,39 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvoiceLineItems",
+                name: "Invoices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    InvoiceNumber = table.Column<string>(nullable: true),
+                    CustomerNumber = table.Column<string>(nullable: true),
+                    CustomerId = table.Column<Guid>(nullable: false),
+                    CustomerFirstName = table.Column<string>(nullable: true),
+                    CustomerLastName = table.Column<string>(nullable: true),
+                    CustomerAddress = table.Column<string>(nullable: true),
+                    LockedBy = table.Column<string>(nullable: true),
+                    FileId = table.Column<Guid>(nullable: false),
+                    FileName = table.Column<string>(nullable: true),
+                    FileSize = table.Column<long>(nullable: false),
+                    ShouldBeExtracted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsExtracted = table.Column<bool>(nullable: false, defaultValue: false),
+                    ShouldBeGenerated = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsGenerated = table.Column<bool>(nullable: false, defaultValue: false),
+                    GenerationDateTime = table.Column<DateTime>(nullable: false),
+                    ExtractId = table.Column<Guid>(nullable: false),
+                    ExtractDateTime = table.Column<DateTime>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LineItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -120,28 +173,20 @@ namespace DbApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InvoiceLineItems", x => x.Id);
+                    table.PrimaryKey("PK_LineItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invoices",
+                name: "LineItemsDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    InvoiceNumber = table.Column<string>(nullable: true),
-                    CustomerNumber = table.Column<string>(nullable: true),
-                    CustomerId = table.Column<Guid>(nullable: false),
-                    CustomerFirstName = table.Column<string>(nullable: true),
-                    CustomerLastName = table.Column<string>(nullable: true),
-                    CustomerAddress = table.Column<string>(nullable: true),
-                    LockedBy = table.Column<string>(nullable: true),
-                    FileId = table.Column<Guid>(nullable: false),
-                    FileName = table.Column<string>(nullable: false),
-                    FileSize = table.Column<long>(nullable: false),
-                    ShouldBeExtracted = table.Column<bool>(nullable: false, defaultValue: true),
-                    IsExtracted = table.Column<bool>(nullable: false, defaultValue: false),
-                    ExtractId = table.Column<Guid>(nullable: false),
-                    ExtractDateTime = table.Column<DateTime>(nullable: false),
+                    InvoiceId = table.Column<Guid>(nullable: false),
+                    Reference = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Quantity = table.Column<double>(nullable: false),
+                    UnitaryPrice = table.Column<double>(nullable: false),
+                    Price = table.Column<double>(nullable: false),
                     Owner = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),
@@ -149,7 +194,7 @@ namespace DbApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                    table.PrimaryKey("PK_LineItemsDefinitions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +228,9 @@ namespace DbApp.Migrations
                 name: "AdditionalFields");
 
             migrationBuilder.DropTable(
+                name: "Companies");
+
+            migrationBuilder.DropTable(
                 name: "ExtractionSettings");
 
             migrationBuilder.DropTable(
@@ -195,10 +243,13 @@ namespace DbApp.Migrations
                 name: "Individuals");
 
             migrationBuilder.DropTable(
-                name: "InvoiceLineItems");
+                name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Invoices");
+                name: "LineItems");
+
+            migrationBuilder.DropTable(
+                name: "LineItemsDefinitions");
 
             migrationBuilder.DropTable(
                 name: "Users");

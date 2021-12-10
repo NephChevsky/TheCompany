@@ -28,7 +28,8 @@ namespace DbApp.Models
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
-        public virtual DbSet<InvoiceLineItem> InvoiceLineItems { get; set; }
+        public virtual DbSet<LineItemDefinition> LineItemsDefinitions { get; set; }
+        public virtual DbSet<LineItem> LineItems { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FilePreview> FilePreviews { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
@@ -225,7 +226,7 @@ namespace DbApp.Models
                 entity.Property(e => e.LastModificationDateTime);
             });
 
-            modelBuilder.Entity<InvoiceLineItem>(entity =>
+            modelBuilder.Entity<LineItem>(entity =>
             {
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
@@ -240,6 +241,32 @@ namespace DbApp.Models
                 entity.Property(e => e.Quantity);
 
                 entity.Property(e => e.UnitaryPrice);
+
+                entity.Property(e => e.Price);
+
+                entity.Property(e => e.Owner) // TODO: handle owner automatically
+                    .IsRequired();
+
+                entity.Property(e => e.Deleted)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreationDateTime)
+                   .IsRequired();
+
+                entity.Property(e => e.LastModificationDateTime);
+            });
+
+            modelBuilder.Entity<LineItemDefinition>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Reference)
+                    .IsRequired();
+
+                entity.Property(e => e.Description)
+                    .IsRequired();
 
                 entity.Property(e => e.Price);
 

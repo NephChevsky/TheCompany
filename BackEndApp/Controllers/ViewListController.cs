@@ -75,8 +75,8 @@ namespace BackEndApp.Controllers
                                                                                     .ToList();
                         values = FormatResultValues(additionalFields, query.Fields);
                         break;
-                    case "InvoiceLineItem":
-                        List<InvoiceLineItem> lineItems = db.InvoiceLineItems.Where(obj => obj.Owner == owner)
+                    case "LineItem":
+                        List<LineItem> lineItems = db.LineItems.Where(obj => obj.Owner == owner)
                                                                             .OrderBy(obj => obj.CreationDateTime)
                                                                             .FilterDynamic(query.Filters)
                                                                             .ToList();
