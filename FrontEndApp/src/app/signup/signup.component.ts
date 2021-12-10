@@ -22,7 +22,7 @@ export class SignUpComponent implements OnInit
 	ngOnInit()
 	{
 		this.registerForm = this.formBuilder.group({
-			login: ['', [
+			email: ['', [
 				Validators.email,
 				Validators.required]],
 			password: ['', [
@@ -64,7 +64,7 @@ export class SignUpComponent implements OnInit
 
 		this.loading = true;
 		var user = {
-			login: this.registerForm.get("login").value,
+			email: this.registerForm.get("email").value,
 			password: this.registerForm.get("password").value
 		}
 		this.userService.register(user)
@@ -78,7 +78,7 @@ export class SignUpComponent implements OnInit
 				{
 					this.loading = false;
          			if (error.status == 409)
-						this.registerForm.controls['login'].setErrors({ taken: true });
+						this.registerForm.controls['email'].setErrors({ taken: true });
 				});
 	}
 }

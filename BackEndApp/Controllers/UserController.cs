@@ -35,14 +35,14 @@ namespace BackEndApp.Controllers
 		public ActionResult Login([FromBody] UserLoginQuery user)
 		{
 			_logger.LogInformation("Start of Login method");
-			if (string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password))
+			if (string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
 			{
 				_logger.LogInformation("End of Login method");
 				return BadRequest();
 			}
 			using (var db = new TheCompanyDbContext())
 			{
-				User dbUser = db.Users.Where(obj => obj.Login == user.Login).SingleOrDefault();
+				User dbUser = db.Users.Where(obj => obj.Login == user.Email).SingleOrDefault();
 				if (dbUser != null)
 				{
 					if (BCrypt.Net.BCrypt.Verify(user.Password, dbUser.Password))
@@ -82,7 +82,7 @@ namespace BackEndApp.Controllers
 		public ActionResult Register([FromBody] UserRegisterQuery user)
 		{
 			_logger.LogInformation("Start of Register method");
-			if (string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password))
+			if (string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
 			{
 				return BadRequest();
 			}

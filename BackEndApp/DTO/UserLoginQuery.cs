@@ -7,13 +7,13 @@ namespace BackEndApp.DTO
 {
 	public class UserLoginQuery
 	{
-		public string Login { get; set; }
+		public string Email { get; set; }
 		public string Password { get; set; }
 
 		public static explicit operator UserLoginQuery(UserRegisterQuery user)
 		{
 			UserLoginQuery newUser = new UserLoginQuery();
-			newUser.Login = user.Login;
+			newUser.Email = user.Email;
 			newUser.Password = user.Password;
 			return newUser;
 		}
