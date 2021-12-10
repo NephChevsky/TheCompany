@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageApp", "StorageApp\St
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "FrontEndApp", "FrontEndApp\FrontEndApp.esproj", "{35BA1E61-7B8B-4A8A-9A5F-F3E1249FF38E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfApp", "PdfApp\PdfApp.csproj", "{21DAF6B6-D477-46B5-8A6F-F91423D28E1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfApp", "PdfApp\PdfApp.csproj", "{21DAF6B6-D477-46B5-8A6F-F91423D28E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
