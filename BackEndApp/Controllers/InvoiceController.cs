@@ -260,7 +260,7 @@ namespace BackEndApp.Controllers
             if (id == null || id == "null")
             {
                 Invoice invoice = new Invoice();
-                return Ok((InvoiceShowResponse)invoice);
+                return Ok((InvoiceShowResponse<Editable>)invoice);
             }
             else
             {
@@ -275,7 +275,7 @@ namespace BackEndApp.Controllers
                     else
                     {
                         _logger.LogInformation("End of Show method");
-                        return Ok((InvoiceShowResponse)dbInvoice);
+                        return Ok((InvoiceShowResponse<Viewable>)dbInvoice);
                     }
                 }
             }
@@ -367,7 +367,7 @@ namespace BackEndApp.Controllers
 
             string fileExtension = File.FileName.Split(".").Last();
             string tempFileName = Path.GetTempFileName().Replace(".tmp", string.Concat(".", fileExtension));
-            using (var fs = new FileStream(tempFileName, FileMode.OpenOrCreate))
+            using (var fs = new FileStream(tempFileName, FileMode.Create))
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 stream.CopyTo(fs);

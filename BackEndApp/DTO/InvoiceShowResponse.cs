@@ -7,15 +7,15 @@ using System.Reflection;
 
 namespace BackEndApp.DTO
 {
-	public class InvoiceShowResponse
+	public class InvoiceShowResponse<T>
 	{
 		public List<Field> Fields { get; set; }
 
-		public static implicit operator InvoiceShowResponse(Invoice invoice)
+		public static implicit operator InvoiceShowResponse<T>(Invoice invoice)
 		{
-			InvoiceShowResponse result = new InvoiceShowResponse();
+			InvoiceShowResponse<T> result = new InvoiceShowResponse<T>();
 			result.Fields = new List<Field>();
-			List<PropertyInfo> properties = AttributeHelper.GetAuthorizedProperties<Viewable>(typeof(Invoice));
+			List<PropertyInfo> properties = AttributeHelper.GetAuthorizedProperties<T>(typeof(Invoice));
 			properties.ForEach(property =>
 			{
 				Field field = new Field();
