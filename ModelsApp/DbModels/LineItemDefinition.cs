@@ -15,19 +15,16 @@ namespace ModelsApp.DbModels
 		[TextField]
 		[Viewable]
 		[Editable]
-		[Extractable]
 		public string Reference { get; set; }
 
 		[TextField]
 		[Viewable]
 		[Editable]
-		[Extractable]
 		public string Description { get; set; }
 
 		[NumberField]
 		[Viewable]
 		[Editable]
-		[Extractable]
 		public double Price { get; set; }
 
 		// IOwnable

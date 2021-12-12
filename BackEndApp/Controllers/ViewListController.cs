@@ -82,6 +82,13 @@ namespace BackEndApp.Controllers
                                                                             .ToList();
                         values = FormatResultValues(lineItems, query.Fields);
                         break;
+                    case "LineItemDefinition":
+                        List<LineItemDefinition> lineItemDefinitions = db.LineItemsDefinitions.Where(obj => obj.Owner == owner)
+                                                                            .OrderBy(obj => obj.CreationDateTime)
+                                                                            .FilterDynamic(query.Filters)
+                                                                            .ToList();
+                        values = FormatResultValues(lineItemDefinitions, query.Fields);
+                        break;
                     default:
                         return BadRequest();
                 }

@@ -19,6 +19,7 @@ import { AddComponent } from './settings/additional-fields/add/add.component';
 import { CustomerComponent } from './settings/customer/customer.component';
 import { CompanyInformationComponent } from './settings/company-information/company-information.component';
 import { LineItemsComponent } from './line-items/line-items.component';
+import { CreateLineItemComponent } from './line-items/create-line-item/create-line-item.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
 	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard] },
 	{ path: 'Invoices/Create', component: ShowInvoiceComponent, canActivate: [AuthGuard] },
 	{ path: 'LineItems', component: LineItemsComponent, canActivate: [AuthGuard] },
+	{ path: 'LineItems/Create', component: CreateLineItemComponent, canActivate: [AuthGuard] },
 	{ path: 'Settings', component: SettingsComponent, canActivate: [AuthGuard] },
 	{ path: 'Settings/Company', component: CompanyInformationComponent, canActivate: [AuthGuard] },
 	{ path: 'Settings/Customer', component: CustomerComponent, canActivate: [AuthGuard] },
