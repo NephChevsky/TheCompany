@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BackEndApp.DTO
 {
-    public class LineItemCreateQuery
+    public class LineItemSaveQuery
     {
+        public string Id { get; set; }
         public List<Field> Fields { get; set; }
 
         public class Field

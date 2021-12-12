@@ -1,5 +1,5 @@
-import { Component, OnInit, SecurityContext } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
 import { InvoiceService } from 'src/app/_services/invoice.service';
@@ -11,7 +11,6 @@ import { InvoiceService } from 'src/app/_services/invoice.service';
 })
 export class ShowInvoiceComponent implements OnInit
 {
-
 	public id: string = "";
 	public invoiceData: any[];
 	public page: number = 1;

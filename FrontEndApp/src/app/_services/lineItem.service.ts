@@ -10,13 +10,18 @@ export class LineItemService
 	{
 	}
 
-	getFields()
+	get(data: any)
 	{
-		return this.http.get<any>(environment.baseUrl + `LineItem/GetFields`);
+		return this.http.get(environment.baseUrl + `LineItem/Show/` + data);
 	}
 
 	create(data: any)
 	{
 		return this.http.post(environment.baseUrl + `LineItem/Create`, data);
+	}
+
+	save(data: any)
+	{
+		return this.http.post(environment.baseUrl + `LineItem/Save`, data);
 	}
 }

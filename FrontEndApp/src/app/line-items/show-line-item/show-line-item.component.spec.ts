@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateLineItemComponent } from './create-line-item.component';
+import { ShowLineItemComponent } from './show-line-item.component';
 
-describe('CreateLineItemComponent', () => {
-  let component: CreateLineItemComponent;
-  let fixture: ComponentFixture<CreateLineItemComponent>;
+describe('ShowLineItemComponent', () => {
+  let component: ShowLineItemComponent;
+  let fixture: ComponentFixture<ShowLineItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateLineItemComponent ]
+      declarations: [ ShowLineItemComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateLineItemComponent);
+    fixture = TestBed.createComponent(ShowLineItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

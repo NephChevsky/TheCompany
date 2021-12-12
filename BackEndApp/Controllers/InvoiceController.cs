@@ -479,7 +479,7 @@ namespace BackEndApp.Controllers
                     }
                     else
                     {
-                        notEditableField = true;
+                        notEditableField = true; //TODO need to fix this for filename field
                     }
                 });
                 if (notEditableField)

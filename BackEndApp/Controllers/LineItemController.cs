@@ -6,9 +6,8 @@ using Microsoft.Extensions.Logging;
 using ModelsApp.Attributes;
 using ModelsApp.DbModels;
 using ModelsApp.Helpers;
-using ModelsApp.Models;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -26,65 +25,84 @@ namespace BackEndApp.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetFields")]
-        public ActionResult GetFields()
+        [HttpGet("Show/{id}")]
+        public ActionResult Show(string id)
         {
-            _logger.LogInformation("Start of GetFields method");
-            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-            List<PropertyInfo> properties = AttributeHelper.GetAuthorizedProperties<Editable>(typeof(LineItemDefinition));
-            LineItemGetFieldsResponse result = new LineItemGetFieldsResponse();
+            _logger.LogInformation("Start of Show method");
 
-            properties.ForEach(property =>
+            if (id == null || id == "null")
             {
-                Field field = new Field();
-                field.Name = property.Name;
-                field.Type = AttributeHelper.GetFieldType(property);
-                field.Value = "";
-                result.Fields.Add(field);
-            });
-
-            _logger.LogInformation("End of GetFields method");
-            return Ok(result);
+                LineItemDefinition lineItem = new LineItemDefinition();
+                return Ok((LineItemShowResponse<Editable>)lineItem);
+            }
+            else
+            {
+                using (var db = new TheCompanyDbContext())
+                {
+                    Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+                    LineItemDefinition dbLineItem = db.LineItemsDefinitions.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+                    if (dbLineItem == null)
+                    {
+                        return UnprocessableEntity("NotFound");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("End of Show method");
+                        return Ok((LineItemShowResponse<Viewable>)dbLineItem);
+                    }
+                }
+            }
         }
 
-        [HttpPost("Create")]
-        public ActionResult Create([FromBody] LineItemCreateQuery query)
+        [HttpPost("Save")]
+        public ActionResult Save([FromBody] LineItemSaveQuery query)
         {
-            _logger.LogInformation("Start of Create method");
+            _logger.LogInformation("Start of Save method");
 
             if (query == null || query.Fields == null || query.Fields.Count == 0)
             {
                 return BadRequest();
             }
 
+            Guid retValue;
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
             using (var db = new TheCompanyDbContext())
             {
-                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                LineItemDefinition lineItem = new LineItemDefinition();
-                lineItem.Owner = owner;
+                LineItemDefinition lineItemDefinition;
+                if (query.Id == null || query.Id == "null")
+                {
+                    lineItemDefinition = new LineItemDefinition();
+                    lineItemDefinition.Id = Guid.NewGuid();
+                    lineItemDefinition.Owner = owner;
+                }
+                else
+                {
+                    Guid lineItemId = Guid.Parse(query.Id);
+                    lineItemDefinition = db.LineItemsDefinitions.Where(x => x.Owner == owner && x.Id == lineItemId).SingleOrDefault();
+                }
 
                 Type type = typeof(LineItemDefinition);
                 bool notEditableField = false;
-                query.Fields.ForEach(field =>
+                query.Fields.ForEach(x =>
                 {
-                    PropertyInfo property = type.GetProperty(field.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                    PropertyInfo property = type.GetProperty(x.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                     if (AttributeHelper.CheckAttribute<Editable>(type, property))
                     {
                         if (property.PropertyType == typeof(DateTime))
                         {
-                            property.SetValue(lineItem, DateTime.Parse(field.Value));
+                            property.SetValue(lineItemDefinition, DateTime.Parse(x.Value));
                         }
                         else if (property.PropertyType == typeof(string))
                         {
-                            property.SetValue(lineItem, field.Value);
+                            property.SetValue(lineItemDefinition, x.Value);
                         }
                         else if (property.PropertyType == typeof(double))
                         {
-                            property.SetValue(lineItem, Double.Parse(field.Value));
+                            property.SetValue(lineItemDefinition, Double.Parse(x.Value));
                         }
                         else if (property.PropertyType == typeof(Guid))
                         {
-                            property.SetValue(lineItem, Guid.Parse(field.Value));
+                            property.SetValue(lineItemDefinition, Guid.Parse(x.Value));
                         }
                         else
                         {
@@ -96,17 +114,20 @@ namespace BackEndApp.Controllers
                         notEditableField = true;
                     }
                 });
-
                 if (notEditableField)
-                {
                     return BadRequest();
+
+                if (query.Id == null || query.Id == "null")
+                {
+                    db.Add(lineItemDefinition);
                 }
 
-                db.Add(lineItem);
+                retValue = lineItemDefinition.Id;
+
                 db.SaveChanges();
 
-                _logger.LogInformation("End of Create method");
-                return Ok();
+                _logger.LogInformation("End of Save method");
+                return Ok(retValue);
             }
         }
     }

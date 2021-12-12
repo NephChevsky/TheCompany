@@ -29,7 +29,7 @@ import { FieldComponent } from './_modules/field/field.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CompanyInformationComponent } from './settings/company-information/company-information.component';
 import { LineItemsComponent } from './line-items/line-items.component';
-import { CreateLineItemComponent } from './line-items/create-line-item/create-line-item.component';
+import { ShowLineItemComponent } from './line-items/show-line-item/show-line-item.component';
 
 @NgModule({
 	declarations: [
@@ -52,8 +52,8 @@ import { CreateLineItemComponent } from './line-items/create-line-item/create-li
 		PreviewComponent,
 		FieldComponent,
 		CompanyInformationComponent,
-  LineItemsComponent,
-  CreateLineItemComponent
+		LineItemsComponent,
+		ShowLineItemComponent
 	],
 	imports: [
 		BrowserModule,
