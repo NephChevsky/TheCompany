@@ -61,14 +61,17 @@ export class ShowInvoiceComponent implements OnInit
 
 	save()
 	{
-
 		var fields: any[] = [];
 		for (const [key, value] of Object.entries(this.invoiceForm.value))
 		{
-			fields.push({
-				name: key,
-				value: value
-			})
+			var field = this.invoiceData.find(x => x.name == key);
+			if (field.editable)
+			{
+				fields.push({
+					name: key,
+					value: value
+				});
+			}
 		}
 
 		var lineItems: any[] = [];
@@ -107,6 +110,7 @@ export class ShowInvoiceComponent implements OnInit
 		this.invoiceService.saveInvoice(obj)
 			.subscribe(data =>
 			{
+				this.editMode = false;
 				this.router.navigate(['/Invoices/Show/' + data]);
 			}, error =>
 			{

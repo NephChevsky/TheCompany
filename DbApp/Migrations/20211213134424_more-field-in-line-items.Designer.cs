@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211213134424_more-field-in-line-items")]
+    partial class morefieldinlineitems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,10 +412,10 @@ namespace DbApp.Migrations
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("PriceNoVAT")
+                    b.Property<double>("PriceNoVAT")
                         .HasColumnType("float");
 
-                    b.Property<double?>("PriceVAT")
+                    b.Property<double>("PriceVAT")
                         .HasColumnType("float");
 
                     b.Property<string>("Reference")
@@ -423,7 +425,7 @@ namespace DbApp.Migrations
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("VAT")
+                    b.Property<double>("VAT")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

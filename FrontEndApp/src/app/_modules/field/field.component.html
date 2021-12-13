@@ -1,8 +1,12 @@
 <div [formGroup]="form">
-	<input *ngIf="editMode && type=='TextField'" type="text" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" [size]="size" [readonly]="!editMode" (focus)="onFocus($event.target)" />
-	<textarea *ngIf="editMode && type=='MultilineTextField'" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" [rows]="rows" [cols]="cols" [readonly]="!editMode" (focus)="onFocus($event.target)"></textarea>
-	<input *ngIf="editMode && type=='NumberField'" type="number" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" style="width: 100px;" [readonly]="!editMode" (focus)="onFocus($event.target)" />
-	<img *ngIf="type=='FileField'" [id]="(index != null ? index + '.' : '') + key" [src]="image" />
-	<input *ngIf="editMode && type=='FileField'" type="file" [id]="(index != null ? index + '.' : '') + key" [formControlName]="key" (change)="onFileChange($event)" />
-	<div *ngIf="!editMode">{{form.get(key).value}}</div>
+	<input *ngIf="editMode && field.editable && field.type=='TextField'" type="text" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" [size]="size" [readonly]="!editMode" (focus)="onFocus($event.target)" />
+	<textarea *ngIf="editMode && field.editable && field.type=='MultilineTextField'" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" [rows]="rows" [cols]="cols" [readonly]="!editMode" (focus)="onFocus($event.target)"></textarea>
+	<input *ngIf="editMode && field.editable && field.type=='NumberField'" type="number" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" style="width: 100px;" [readonly]="!editMode" (focus)="onFocus($event.target)" />
+	<img *ngIf="field.type=='FileField'" [id]="(index != null ? index + '.' : '') + field.name" [src]="image" />
+	<input *ngIf="editMode && field.editable && field.type=='FileField'" type="file" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" (change)="onFileChange($event)" />
+	<select *ngIf="editMode && field.editable && field.type=='ComboField'" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name">
+		<option value=""></option>
+		<option *ngFor="let value of field.possibleValues" value="{{value}}">{{value}}</option>
+	</select>
+	<div *ngIf="!editMode || !field.editable">{{form.get(field.name).value}}</div>
 </div>

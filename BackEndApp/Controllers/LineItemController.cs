@@ -96,7 +96,7 @@ namespace BackEndApp.Controllers
                         {
                             property.SetValue(lineItemDefinition, x.Value);
                         }
-                        else if (property.PropertyType == typeof(double))
+                        else if (property.PropertyType == typeof(double) || property.PropertyType == typeof(double?))
                         {
                             property.SetValue(lineItemDefinition, Double.Parse(x.Value));
                         }

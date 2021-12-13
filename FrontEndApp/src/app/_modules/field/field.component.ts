@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Field } from '../../_models/field';
 import { FieldService } from '../../_services/field.service';
 
 @Component({
@@ -11,15 +12,11 @@ import { FieldService } from '../../_services/field.service';
 export class FieldComponent implements OnInit {
 
 	@Input()
-	public type: string
+	public field: Field
 	@Input()
 	public form: FormGroup;
 	@Input()
 	public index: number = null;
-	@Input()
-	public key: string = "";
-	@Input()
-	public value: string = "";
 	@Input()
 	public size: string = "50";
 	@Input()
@@ -35,9 +32,9 @@ export class FieldComponent implements OnInit {
 
 	ngOnInit(): void
 	{
-		if (this.type == "FileField")
+		if (this.field.type == "FileField")
 		{
-			this.fieldService.getFile(this.value)
+			this.fieldService.getFile(this.field.value)
 				.subscribe((data: any) =>
 				{
 					var binary = '';

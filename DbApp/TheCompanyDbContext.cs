@@ -268,7 +268,13 @@ namespace DbApp.Models
                 entity.Property(e => e.Description)
                     .IsRequired();
 
-                entity.Property(e => e.Price);
+                entity.Property(e => e.Unit);
+
+                entity.Property(e => e.VAT);
+
+                entity.Property(e => e.PriceNoVAT);
+
+                entity.Property(e => e.PriceVAT);
 
                 entity.Property(e => e.Owner) // TODO: handle owner automatically
                     .IsRequired();

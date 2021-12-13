@@ -1,4 +1,5 @@
 ﻿using ModelsApp.Attributes;
+using ModelsApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -38,6 +39,62 @@ namespace ModelsApp.Helpers
 				}
 			}
 			return false;
+		}
+
+		public static Field GetProperty(object element, string name)
+        {
+			PropertyInfo property = element.GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+			Field field = new Field();
+			field.DataSource = element.GetType().Name;
+			field.Name = property.Name;
+			field.Value = AttributeHelper.GetFieldValue(element, property);
+			field.Type = AttributeHelper.GetFieldType(property);
+			field.Editable = AttributeHelper.CheckAttribute<Editable>(element.GetType(), property.Name);
+			if (field.Type == "ComboField")
+			{
+				ComboField attr = property.GetCustomAttribute<ComboField>(false);
+				field.PossibleValues = attr.Values;
+			}
+			return field;
+		}
+
+		public static Field GetProperty(Type type, string name)
+        {
+			PropertyInfo property = type.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+			Field field = new Field();
+			field.DataSource = type.Name;
+			field.Name = property.Name;
+			field.Value = "";
+			field.Type = AttributeHelper.GetFieldType(property);
+			field.Editable = AttributeHelper.CheckAttribute<Editable>(type, property.Name);
+			if (field.Type == "ComboField")
+			{
+				ComboField attr = property.GetCustomAttribute<ComboField>(false);
+				field.PossibleValues = attr.Values;
+			}
+			return field;
+		}
+
+		public static List<Field> GetAuthorizedProperties<T>(object element)
+		{
+			List<Field> result = new List<Field>();
+			List<PropertyInfo> properties = GetAuthorizedProperties<T>(element.GetType());
+			foreach (PropertyInfo property in properties)
+			{
+				Field field = new Field();
+				field.DataSource = element.GetType().Name;
+				field.Name = property.Name;
+				field.Value = AttributeHelper.GetFieldValue(element, property);
+				field.Type = AttributeHelper.GetFieldType(property);
+				field.Editable = AttributeHelper.CheckAttribute<Editable>(element.GetType(), property.Name);
+				if (field.Type == "ComboField")
+				{
+					ComboField attr = property.GetCustomAttribute<ComboField>(false);
+					field.PossibleValues = attr.Values;
+				}
+				result.Add(field);
+			}
+			return result;
 		}
 
 		public static List<PropertyInfo> GetAuthorizedProperties<T>(Type type)
@@ -96,6 +153,10 @@ namespace ModelsApp.Helpers
 				{
 					return "FileField";
 				}
+				else if (attr is ComboField)
+				{
+					return "ComboField";
+				}
 			}
 			throw new Exception("Unknown field type for property " + property.Name);
 		}
@@ -135,11 +196,23 @@ namespace ModelsApp.Helpers
 				}
 				else if (attr is NumberField)
 				{
-					return property.GetValue(element).ToString();
+					var value = property.GetValue(element);
+					if (value != null)
+						return property.GetValue(element).ToString();
+					else
+						return "";
 				}
 				else if (attr is FileField)
 				{
 					return property.GetValue(element).ToString();
+				}
+				else if (attr is ComboField)
+				{
+					var value = property.GetValue(element);
+					if (value != null)
+						return property.GetValue(element).ToString();
+					else
+						return "";
 				}
 			}
 			throw new Exception("Unknown field type for property " + property.Name);

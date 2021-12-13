@@ -3,16 +3,18 @@ import { AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup }
 import { Router } from '@angular/router';
 import { Filter } from 'src/app/_models/filter';
 import { ViewListService } from 'src/app/_services/view-list.service';
+import { Field } from '../../_models/field';
 
 @Component({
-  selector: 'app-view-list',
-  templateUrl: './view-list.component.html',
-  styleUrls: ['./view-list.component.scss']
+	selector: 'app-view-list',
+	templateUrl: './view-list.component.html',
+	styleUrls: ['./view-list.component.scss']
 })
-export class ViewListComponent implements OnInit {
+export class ViewListComponent implements OnInit
+{
 
 	@Input()
-    public dataSource: string = "";
+	public dataSource: string = "";
 	@Input()
 	public linkable: boolean = false;
 	@Input()
@@ -28,11 +30,12 @@ export class ViewListComponent implements OnInit {
 	@Output() focusEvent = new EventEmitter<EventTarget>();
 
 	public data: any[] = [];
-	public fieldsData: any[] = [];
+	public fieldsData: Field[] = [];
 
 	constructor(private viewListService: ViewListService,
-				private router: Router,
-				private formBuilder: FormBuilder) {
+		private router: Router,
+		private formBuilder: FormBuilder)
+	{
 	}
 
 	ngOnInit(): void
@@ -41,7 +44,7 @@ export class ViewListComponent implements OnInit {
 		{
 			this.linesForm = new FormGroup({});
 		}
-		
+
 		if (this.linesForm.get("values") == null)
 		{
 			this.linesForm.addControl("values", this.formBuilder.array([]));
@@ -58,6 +61,7 @@ export class ViewListComponent implements OnInit {
 				controls.addControl("Id", new FormControl(this.data[i].linkValue));
 				for (var j = 0; j < this.data[i].fields.length; j++)
 				{
+					var field = (this.data[i].fields[j] as Field);
 					controls.addControl(this.data[i].fields[j].name, new FormControl(this.data[i].fields[j].value));
 				}
 				items.push(controls);
@@ -88,13 +92,12 @@ export class ViewListComponent implements OnInit {
 
 	getItem(index: number)
 	{
-		var test = (this.linesForm.controls["values"] as FormArray).at(index) as FormGroup;
-		return test;
+		return (this.linesForm.controls["values"] as FormArray).at(index) as FormGroup;
 	}
 
-	getFieldType(name: string)
+	getField(name: string) : Field
 	{
-		return this.fieldsData.find(x => x.name == name).type;
+		return this.fieldsData.find(x => x.name == name);
 	}
 
 	onFocus(target: EventTarget)

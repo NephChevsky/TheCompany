@@ -4,7 +4,7 @@
 		<table>
 			<tr *ngFor="let field of lineItemData">
 				<td class="fieldName">{{field.name}}</td>
-				<td><app-field type="{{field.type}}" [form]="lineItemForm" key="{{field.name}}" [editMode]="editMode"></app-field></td>
+				<td><app-field [field]="field" [form]="lineItemForm" key="{{field.name}}" [editMode]="editMode"></app-field></td>
 			</tr>
 		</table>
 		<div class="buttons">

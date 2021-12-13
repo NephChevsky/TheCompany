@@ -106,9 +106,7 @@ namespace BackEndApp.Controllers
             fields.ForEach(field =>
             {
                 PropertyInfo property = type.GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                Field newField = new Field();
-                newField.Name = field;
-                newField.Type = AttributeHelper.GetFieldType(property);
+                Field newField = AttributeHelper.GetProperty(typeof(T), field);
                 result.FieldsData.Add(newField);
             });
 
@@ -121,10 +119,7 @@ namespace BackEndApp.Controllers
                 fields.ForEach(field =>
                 {
                     PropertyInfo property = type.GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                    Field newField = new Field();
-                    newField.Name = property.Name;
-                    newField.Type = AttributeHelper.GetFieldType(property);
-                    newField.Value = AttributeHelper.GetFieldValue(value, property);
+                    Field newField = AttributeHelper.GetProperty(value, field);
                     item.Fields.Add(newField);
                 });
                 result.Items.Add(item);

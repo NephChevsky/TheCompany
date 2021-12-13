@@ -22,10 +22,25 @@ namespace ModelsApp.DbModels
 		[Editable]
 		public string Description { get; set; }
 
+		[ComboField("kg", "m2", "m3", "L", "U", "m", "mL")]
+		[Viewable]
+		[Editable]
+		public string Unit { get; set; }
+
 		[NumberField]
 		[Viewable]
 		[Editable]
-		public double Price { get; set; }
+		public double? VAT { get; set; }
+
+		[NumberField]
+		[Viewable]
+		[Editable]
+		public double? PriceNoVAT { get; set; }
+
+		[NumberField]
+		[Viewable]
+		[Editable]
+		public double? PriceVAT { get; set; }
 
 		// IOwnable
 		[IdentifierField]
