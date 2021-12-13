@@ -51,7 +51,7 @@ namespace ModelsApp.DbModels
 		{
 		}
 		
-		public ExtractionSettings(string dataSource, bool isLineItem, string field, int x, int y, int width, int height, Guid owner)
+		public ExtractionSettings(string dataSource, bool isLineItem, string field, int x, int y, int width, int height)
 		{
 			DataSource = dataSource;
 			IsLineItem = isLineItem;
@@ -60,7 +60,6 @@ namespace ModelsApp.DbModels
 			Y = y;
 			Width = width;
 			Height = height;
-			Owner = owner;
 		}
 	}
 }

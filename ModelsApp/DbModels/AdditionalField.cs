@@ -39,11 +39,10 @@ namespace ModelsApp.DbModels
 
 		}
 
-		public AdditionalField(string dataSource, string name, Guid owner)
+		public AdditionalField(string dataSource, string name)
 		{
 			DataSource = dataSource;
 			Name = name;
-			Owner = owner;
 		}
 	}
 }

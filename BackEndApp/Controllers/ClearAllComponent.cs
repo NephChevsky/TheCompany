@@ -30,9 +30,9 @@ namespace BackEndApp.Controllers
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			if (json.GetProperty("customers").GetBoolean())
 			{
-				using (var db = new TheCompanyDbContext())
+				using (var db = new TheCompanyDbContext(owner))
 				{
-					List<Individual> dbIndividuals = db.Individuals.Where(x => x.Owner == owner).ToList();
+					List<Individual> dbIndividuals = db.Individuals.ToList();
 					dbIndividuals.ForEach(individual =>
 					{
 						db.Remove(individual);
@@ -42,9 +42,9 @@ namespace BackEndApp.Controllers
 			}
 			if (json.GetProperty("invoices").GetBoolean())
 			{
-				using (var db = new TheCompanyDbContext())
+				using (var db = new TheCompanyDbContext(owner))
 				{
-					List<Invoice> dbInvoices = db.Invoices.Where(x => x.Owner == owner).ToList();
+					List<Invoice> dbInvoices = db.Invoices.ToList();
 					dbInvoices.ForEach(invoice =>
 					{
 						// Uncomment this code when true delete is impleted
@@ -62,9 +62,9 @@ namespace BackEndApp.Controllers
 			}
 			if (json.GetProperty("extractionSettings").GetBoolean())
 			{
-				using (var db = new TheCompanyDbContext())
+				using (var db = new TheCompanyDbContext(owner))
 				{
-					List<ExtractionSettings> dbExtractionSettings = db.ExtractionSettings.Where(x => x.Owner == owner).ToList();
+					List<ExtractionSettings> dbExtractionSettings = db.ExtractionSettings.ToList();
 					dbExtractionSettings.ForEach(extractionSettings =>
 					{
 						db.Remove(extractionSettings);

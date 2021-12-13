@@ -40,7 +40,7 @@ namespace BackEndApp.Controllers
 				_logger.LogInformation("End of Login method");
 				return BadRequest();
 			}
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(Guid.Empty))
 			{
 				User dbUser = db.Users.Where(obj => obj.Login == user.Email).SingleOrDefault();
 				if (dbUser != null)
@@ -89,7 +89,7 @@ namespace BackEndApp.Controllers
 			string salt = BCrypt.Net.BCrypt.GenerateSalt(10);
 			string password = user.Password;
 			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(Guid.Empty))
 			{
 				db.Users.Add((User) user);
 				try

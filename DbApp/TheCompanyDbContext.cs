@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ModelsApp;
 using ModelsApp.DbInterfaces;
 using ModelsApp.DbModels;
@@ -15,12 +16,20 @@ namespace DbApp.Models
 {
     public partial class TheCompanyDbContext : DbContext
     {
+        private Guid Owner;
+
         public TheCompanyDbContext(DbContextOptions<TheCompanyDbContext> options) : base(options)
         {
         }
 
-        public TheCompanyDbContext()
+        public TheCompanyDbContext(Guid owner)
         {
+            Owner = owner;
+        }
+
+        public void SetOwner(Guid owner)
+        {
+            Owner = owner;
         }
 
         public virtual DbSet<User> Users { get; set; }
@@ -44,9 +53,6 @@ namespace DbApp.Models
         {
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.Login)
                     .IsRequired()
                     .HasMaxLength(512);
@@ -61,23 +67,13 @@ namespace DbApp.Models
 
                 entity.Property(e => e.LastLoginDateTime);
 
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<User>(entity);
             });
 
             modelBuilder.Entity<User>().HasIndex(t => new { t.Login }).IsUnique(true);
 
             modelBuilder.Entity<Individual>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.CustomerNumber)
                     .IsRequired();
 
@@ -94,24 +90,11 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Address);
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<Individual>(entity);
             });
 
             modelBuilder.Entity<Invoice>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.InvoiceNumber);
 
                 entity.Property(e => e.CustomerNumber);
@@ -124,78 +107,22 @@ namespace DbApp.Models
 
                 entity.Property(e => e.CustomerAddress);
 
-                entity.Property(e => e.LockedBy);
-
-                entity.Property(e => e.FileId);
-
-                entity.Property(e => e.FileName);
-
-                entity.Property(e => e.FileSize);
-
-                entity.Property(e => e.ShouldBeExtracted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.IsExtracted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.ExtractId);
-
-                entity.Property(e => e.ExtractDateTime);
-
-                entity.Property(e => e.ShouldBeGenerated)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.IsGenerated)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.GenerationDateTime);
-
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<Invoice>(entity);
             });
 
             modelBuilder.Entity<AdditionalField>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.DataSource)
                     .IsRequired();
 
                 entity.Property(e => e.Name)
                     .IsRequired();
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<AdditionalField>(entity);
             });
 
             modelBuilder.Entity<ExtractionSettings>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.DataSource)
                     .IsRequired();
 
@@ -213,24 +140,11 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Width);
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<ExtractionSettings>(entity);
             });
 
             modelBuilder.Entity<LineItem>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.InvoiceId)
                     .IsRequired();
 
@@ -244,24 +158,11 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Price);
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<LineItem>(entity);
             });
 
             modelBuilder.Entity<LineItemDefinition>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.Reference)
                     .IsRequired();
 
@@ -276,69 +177,30 @@ namespace DbApp.Models
 
                 entity.Property(e => e.PriceVAT);
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<LineItemDefinition>(entity);
             });
 
             modelBuilder.Entity<File>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.FilePath)
                     .IsRequired();
 
-                entity.Property(e => e.Owner)
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<File>(entity);
             });
 
             modelBuilder.Entity<FilePreview>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.FileId)
                     .IsRequired();
 
                 entity.Property(e => e.Page)
                     .IsRequired();
 
-                entity.Property(e => e.Owner)
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<FilePreview>(entity);
             });
 
             modelBuilder.Entity<Company>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-
                 entity.Property(e => e.Name)
                     .IsRequired();
 
@@ -352,22 +214,14 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Logo);
 
-                entity.Property(e => e.Owner) // TODO: handle owner automatically
-                    .IsRequired();
-
-                entity.Property(e => e.Deleted)
-                    .IsRequired()
-                    .HasDefaultValue(false);
-
-                entity.Property(e => e.CreationDateTime)
-                   .IsRequired();
-
-                entity.Property(e => e.LastModificationDateTime);
+                AddGenericFields<Company>(entity);
             });
 
             foreach (var type in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDeleteable).IsAssignableFrom(type.ClrType))
+                    modelBuilder.SetSoftDeleteFilter(type.ClrType);
+                if (typeof(IOwnable).IsAssignableFrom(type.ClrType))
                     modelBuilder.SetSoftDeleteFilter(type.ClrType);
             }
 
@@ -376,10 +230,80 @@ namespace DbApp.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
+        public void AddGenericFields<T>(EntityTypeBuilder entity)
+        {
+            entity.Property("Id")
+                  .ValueGeneratedOnAdd();
+
+            if (typeof(IAttachment).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("FileId");
+
+                entity.Property("FileName");
+
+                entity.Property("FileSize");
+            }
+
+            if (typeof(IDateTimeTrackable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("CreationDateTime")
+                   .IsRequired();
+
+                entity.Property("LastModificationDateTime");
+            }
+
+            if (typeof(IExtractable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("ShouldBeExtracted")
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property("IsExtracted")
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property("ExtractId");
+
+                entity.Property("ExtractDateTime");
+            }
+
+            if (typeof(IGeneratable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("ShouldBeGenerated")
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property("IsGenerated")
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property("GenerationDateTime");
+            }
+
+            if (typeof(ILockable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("LockedBy");
+            }
+
+            if (typeof(IOwnable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("Owner")
+                      .IsRequired();
+            }
+
+            if (typeof(ISoftDeleteable).IsAssignableFrom(typeof(T)))
+            {
+                entity.Property("Deleted")
+                    .IsRequired()
+                    .HasDefaultValue(false);
+            }
+        }
+
         public override int SaveChanges()
         {
             SoftDelete();
             TimeTrack();
+            Ownable();
             return base.SaveChanges();
         }
 
@@ -387,6 +311,7 @@ namespace DbApp.Models
         {
             SoftDelete();
             TimeTrack();
+            Ownable();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
@@ -421,6 +346,26 @@ namespace DbApp.Models
                 }
             }
         }
+
+        private void Ownable()
+        {
+            ChangeTracker.DetectChanges();
+            var markedEntries = ChangeTracker.Entries();
+            foreach (var item in markedEntries)
+            {
+                if (item.Entity is IOwnable entity)
+                {
+                    if (item.State == EntityState.Added)
+                    {
+                        entity.Owner = Owner;
+                    }
+                    if (entity.Owner != Owner)
+                    {
+                        throw new Exception("Unauthorized database request detected");
+                    }
+                }
+            }
+        }
     }
 
     public static class EFFilterExtensions
@@ -439,6 +384,22 @@ namespace DbApp.Models
             where TEntity : class, ISoftDeleteable
         {
             modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.Deleted);
+        }
+
+        public static void SetOwnerFilter(this ModelBuilder modelBuilder, Type entityType)
+        {
+            SetOwnerFilterMethod.MakeGenericMethod(entityType)
+                .Invoke(null, new object[] { modelBuilder });
+        }
+
+        static readonly MethodInfo SetOwnerFilterMethod = typeof(EFFilterExtensions)
+                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                   .Single(t => t.IsGenericMethod && t.Name == "SetSoftDeleteFilter");
+
+        public static void SetOwnerFilter<TEntity>(this ModelBuilder modelBuilder, Guid owner)
+            where TEntity : class, IOwnable
+        {
+            modelBuilder.Entity<TEntity>().HasQueryFilter(x => x.Owner == owner);
         }
     }
 

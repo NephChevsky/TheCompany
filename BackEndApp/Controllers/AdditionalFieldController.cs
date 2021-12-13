@@ -33,9 +33,9 @@ namespace BackEndApp.Controllers
 				return BadRequest();
 
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			AdditionalField field = new AdditionalField(query.DataSource, query.Name, owner);
+			AdditionalField field = new AdditionalField(query.DataSource, query.Name);
 
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(owner))
 			{
 				db.AdditionalFields.Add(field);
 				try
@@ -64,9 +64,9 @@ namespace BackEndApp.Controllers
 			_logger.LogInformation("Start of Get method");
 			List<AdditionalFieldGetResponse> result = new List<AdditionalFieldGetResponse>();
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(owner))
 			{
-				List<AdditionalField> dbAdditionalFields = db.AdditionalFields.Where(x => x.Owner == owner && x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
+				List<AdditionalField> dbAdditionalFields = db.AdditionalFields.Where(x => x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
 				dbAdditionalFields.ForEach(additionalField =>
 				{
 					result.Add((AdditionalFieldGetResponse)additionalField);

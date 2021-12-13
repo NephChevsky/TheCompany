@@ -102,9 +102,8 @@ namespace ModelsApp.DbModels
 
         public Invoice() { }
 
-        public Invoice(Guid owner, Guid id, string fileName, long fileSize)
+        public Invoice(Guid id, string fileName, long fileSize)
         {
-            Owner = owner;
             FileId = id;
             FileName = fileName;
             FileSize = fileSize;

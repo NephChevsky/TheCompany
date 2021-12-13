@@ -32,10 +32,10 @@ namespace BackEndApp.Controllers
         public ActionResult Get()
         {
             _logger.LogInformation("Start of Get method");
-            using (var db = new TheCompanyDbContext())
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+            using (var db = new TheCompanyDbContext(owner))
             {
-                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                Company dbCompany = db.Companies.Where(x => x.Owner == owner).SingleOrDefault();
+                Company dbCompany = db.Companies.SingleOrDefault();
                 if (dbCompany == null)
                 {
                     dbCompany = new Company();
@@ -55,15 +55,14 @@ namespace BackEndApp.Controllers
                 return BadRequest();
             }
 
-            using (var db = new TheCompanyDbContext())
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+            using (var db = new TheCompanyDbContext(owner))
             {
-                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                Company dbCompany = db.Companies.Where(x => x.Owner == owner).SingleOrDefault();
+                Company dbCompany = db.Companies.SingleOrDefault();
                 Company currentCompany;
                 if (dbCompany == null)
                 {
                     currentCompany = new Company();
-                    currentCompany.Owner = owner;
                 }
                 else
                 {
@@ -134,10 +133,10 @@ namespace BackEndApp.Controllers
                 return UnprocessableEntity("InvalidCharacters");
             }
 
-            using (var db = new TheCompanyDbContext())
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+            using (var db = new TheCompanyDbContext(owner))
             {
-                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                Company dbCompany = db.Companies.Where(x => x.Owner == owner).SingleOrDefault();
+                Company dbCompany = db.Companies.SingleOrDefault();
                 if (dbCompany == null)
                 {
                     return UnprocessableEntity();

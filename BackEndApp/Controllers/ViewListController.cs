@@ -50,43 +50,38 @@ namespace BackEndApp.Controllers
 
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
             ViewListGetResponse values;
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
                 switch (query.DataSource)
                 {
                     case "Individual":
-                        List<Individual> individuals = db.Individuals.Where(obj => obj.Owner == owner)
-                                                                    .OrderBy(obj => obj.CustomerNumber)
+                        List<Individual> individuals = db.Individuals.OrderBy(obj => obj.CustomerNumber)
                                                                     .FilterDynamic(query.Filters)
                                                                     .ToList();
                         values = FormatResultValues(individuals, query.Fields);
                         break;
                     case "Invoice":
-                        List<Invoice> invoices = db.Invoices.Where(obj => obj.Owner == owner)
-                                                            .OrderBy(obj => obj.InvoiceNumber)
+                        List<Invoice> invoices = db.Invoices.OrderBy(obj => obj.InvoiceNumber)
                                                             .FilterDynamic(query.Filters)
                                                             .ToList();
                         values = FormatResultValues(invoices, query.Fields);
                         break;
                     case "AdditionalField":
-                        List<AdditionalField> additionalFields = db.AdditionalFields.Where(obj => obj.Owner == owner)
-                                                                                    .OrderBy(obj => obj.Name)
+                        List<AdditionalField> additionalFields = db.AdditionalFields.OrderBy(obj => obj.Name)
                                                                                     .FilterDynamic(query.Filters)
                                                                                     .ToList();
                         values = FormatResultValues(additionalFields, query.Fields);
                         break;
                     case "LineItem":
-                        List<LineItem> lineItems = db.LineItems.Where(obj => obj.Owner == owner)
-                                                                            .OrderBy(obj => obj.CreationDateTime)
-                                                                            .FilterDynamic(query.Filters)
-                                                                            .ToList();
+                        List<LineItem> lineItems = db.LineItems.OrderBy(obj => obj.CreationDateTime)
+                                                               .FilterDynamic(query.Filters)
+                                                               .ToList();
                         values = FormatResultValues(lineItems, query.Fields);
                         break;
                     case "LineItemDefinition":
-                        List<LineItemDefinition> lineItemDefinitions = db.LineItemsDefinitions.Where(obj => obj.Owner == owner)
-                                                                            .OrderBy(obj => obj.CreationDateTime)
-                                                                            .FilterDynamic(query.Filters)
-                                                                            .ToList();
+                        List<LineItemDefinition> lineItemDefinitions = db.LineItemsDefinitions.OrderBy(obj => obj.CreationDateTime)
+                                                                                              .FilterDynamic(query.Filters)
+                                                                                              .ToList();
                         values = FormatResultValues(lineItemDefinitions, query.Fields);
                         break;
                     default:

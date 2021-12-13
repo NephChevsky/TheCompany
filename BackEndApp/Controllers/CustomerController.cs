@@ -30,10 +30,10 @@ namespace BackEndApp.Controllers
 				return BadRequest();
 			}
 
-			using (var db = new TheCompanyDbContext())
+			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+			using (var db = new TheCompanyDbContext(owner))
 			{
 				Individual newCustomer = (Individual) customer;
-				newCustomer.Owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 				db.Individuals.Add(newCustomer);
 				try
 				{

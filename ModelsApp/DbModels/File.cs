@@ -32,11 +32,10 @@ namespace ModelsApp.DbModels
 
 		}
 
-		public File(Guid id, string filePath, Guid owner)
+		public File(Guid id, string filePath)
 		{
 			Id = id;
 			FilePath = filePath;
-			Owner = owner;
 		}
 	}
 }

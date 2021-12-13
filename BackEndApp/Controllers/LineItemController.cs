@@ -37,10 +37,10 @@ namespace BackEndApp.Controllers
             }
             else
             {
-                using (var db = new TheCompanyDbContext())
+                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+                using (var db = new TheCompanyDbContext(owner))
                 {
-                    Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                    LineItemDefinition dbLineItem = db.LineItemsDefinitions.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+                    LineItemDefinition dbLineItem = db.LineItemsDefinitions.Where(x => x.Id.ToString() == id).SingleOrDefault();
                     if (dbLineItem == null)
                     {
                         return UnprocessableEntity("NotFound");
@@ -66,19 +66,18 @@ namespace BackEndApp.Controllers
 
             Guid retValue;
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
                 LineItemDefinition lineItemDefinition;
                 if (query.Id == null || query.Id == "null")
                 {
                     lineItemDefinition = new LineItemDefinition();
                     lineItemDefinition.Id = Guid.NewGuid();
-                    lineItemDefinition.Owner = owner;
                 }
                 else
                 {
                     Guid lineItemId = Guid.Parse(query.Id);
-                    lineItemDefinition = db.LineItemsDefinitions.Where(x => x.Owner == owner && x.Id == lineItemId).SingleOrDefault();
+                    lineItemDefinition = db.LineItemsDefinitions.Where(x => x.Id == lineItemId).SingleOrDefault();
                 }
 
                 Type type = typeof(LineItemDefinition);

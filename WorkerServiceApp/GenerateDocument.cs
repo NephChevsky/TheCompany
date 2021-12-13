@@ -46,7 +46,7 @@ namespace WorkerServiceApp
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                using (var db = new TheCompanyDbContext())
+                using (var db = new TheCompanyDbContext(Guid.Empty))
                 {
                     bool stop = false;
                     while (!stop && !stoppingToken.IsCancellationRequested)
@@ -55,6 +55,7 @@ namespace WorkerServiceApp
                         if (dbInvoice != null)
                         {
                             _logger.LogInformation(string.Concat("Start processing invoice " + dbInvoice.Id.ToString()));
+                            db.SetOwner(dbInvoice.Owner);
                             dbInvoice.LockedBy = string.Concat("GenerateDocument-", AppId);
                             db.SaveChanges();
 
@@ -66,7 +67,7 @@ namespace WorkerServiceApp
 
                             int y = 20;
 
-                            Company dbCompany = db.Companies.Where(x => x.Owner == dbInvoice.Owner).SingleOrDefault();
+                            Company dbCompany = db.Companies.SingleOrDefault();
                             if (dbCompany != null)
                             {
                                 MemoryStream logo;
@@ -108,7 +109,7 @@ namespace WorkerServiceApp
 
                             y+=30;
                             double total = 0;
-                            List<LineItem> lineItems = db.LineItems.Where(x => x.Owner == dbInvoice.Owner && x.InvoiceId == dbInvoice.Id).ToList();
+                            List<LineItem> lineItems = db.LineItems.Where(x => x.InvoiceId == dbInvoice.Id).ToList();
                             lineItems.ForEach(item =>
                             {
                                 pdfEngine.AddText(item.Reference, 20, y );
@@ -145,6 +146,7 @@ namespace WorkerServiceApp
                             dbInvoice.IsGenerated = true;
                             dbInvoice.GenerationDateTime = DateTime.Now;
                             db.SaveChanges();
+                            db.SetOwner(Guid.Empty);
                             _logger.LogInformation(string.Concat("Invoice " + dbInvoice.Id.ToString() + " has been processed"));
                         }
                         else

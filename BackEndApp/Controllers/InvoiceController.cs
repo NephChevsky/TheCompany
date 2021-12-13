@@ -48,7 +48,7 @@ namespace BackEndApp.Controllers
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
             Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
 
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
                 if (File.ContentType == "application/x-zip-compressed")
                 {
@@ -58,7 +58,7 @@ namespace BackEndApp.Controllers
                         {
                             using (Stream stream = entry.Open())
                             {
-                                if (!CreateInvoice(db, storage, stream, owner, entry.Name, entry.Length))
+                                if (!CreateInvoice(db, storage, stream, entry.Name, entry.Length))
                                 {
                                     return UnprocessableEntity();
                                 }
@@ -68,7 +68,7 @@ namespace BackEndApp.Controllers
                 }
                 else
                 {
-                    if (!CreateInvoice(db, storage, File.OpenReadStream(), owner, File.FileName, File.Length))
+                    if (!CreateInvoice(db, storage, File.OpenReadStream(), File.FileName, File.Length))
                     {
                         return UnprocessableEntity();
                     }
@@ -79,14 +79,14 @@ namespace BackEndApp.Controllers
             return Ok();
         }
 
-        private bool CreateInvoice(TheCompanyDbContext db, Storage storage, Stream stream, Guid owner, string fileName, long fileSize)
+        private bool CreateInvoice(TheCompanyDbContext db, Storage storage, Stream stream, string fileName, long fileSize)
         {
             MemoryStream tmp = new MemoryStream();
             stream.CopyTo(tmp);
             Guid id;
-            if (UploadFile(storage, tmp, owner, out id))
+            if (UploadFile(storage, tmp, out id))
             {
-                Invoice newInvoice = new Invoice(owner, id, fileName, fileSize);
+                Invoice newInvoice = new Invoice(id, fileName, fileSize);
                 newInvoice.ShouldBeExtracted = true;
                 db.Invoices.Add(newInvoice);
             }
@@ -97,7 +97,7 @@ namespace BackEndApp.Controllers
             return true;
         }
 
-        private bool UploadFile(Storage storage, MemoryStream stream, Guid owner, out Guid fileId)
+        private bool UploadFile(Storage storage, MemoryStream stream, out Guid fileId)
         {
             fileId = Guid.Empty;
             if (!storage.CreateFile(stream, out fileId))
@@ -118,7 +118,7 @@ namespace BackEndApp.Controllers
             }
 
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
                 query.InvoiceSettings.Fields.ForEach(field =>
                 {
@@ -127,8 +127,8 @@ namespace BackEndApp.Controllers
                         Guid id;
                         if (Guid.TryParse(field.Id, out id) && id != Guid.Empty)
                             field.Name = field.Id.ToString();
-                        ExtractionSettings extSet = new ExtractionSettings("Invoice", false, field.Name, field.X, field.Y, field.Width, field.Height, owner);
-                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings extSet = new ExtractionSettings("Invoice", false, field.Name, field.X, field.Y, field.Width, field.Height);
+                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name).SingleOrDefault();
                         if (dbExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbExtSet);
@@ -137,7 +137,7 @@ namespace BackEndApp.Controllers
                     }
                     else if (field.X == -1 && field.Y == -1 && field.Width == -1 && field.Height == -1)
                     {
-                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name).SingleOrDefault();
                         if (dbExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbExtSet);
@@ -147,61 +147,61 @@ namespace BackEndApp.Controllers
 
                 if (query.LineItemSettings.BoxYMin !=-1 && query.LineItemSettings.BoxYMax != -1)
                 {
-                    ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem" && x.Owner == owner).SingleOrDefault();
+                    ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
                     if (dbExtSet != null)
                     {
                         db.ExtractionSettings.Remove(dbExtSet);
                     }
-                    ExtractionSettings extSet = new ExtractionSettings("Invoice", true, "LineItem", 0, query.LineItemSettings.BoxYMin, 0, query.LineItemSettings.BoxYMax - query.LineItemSettings.BoxYMin, owner);
+                    ExtractionSettings extSet = new ExtractionSettings("Invoice", true, "LineItem", 0, query.LineItemSettings.BoxYMin, 0, query.LineItemSettings.BoxYMax - query.LineItemSettings.BoxYMin);
                     db.ExtractionSettings.Add(extSet);
                     if (query.LineItemSettings.ReferenceXMin != -1 && query.LineItemSettings.ReferenceXMax != -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference" && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
                         if (dbFieldExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbFieldExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Reference", query.LineItemSettings.ReferenceXMin, 0, query.LineItemSettings.ReferenceXMax - query.LineItemSettings.ReferenceXMin, 0, owner);
+                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Reference", query.LineItemSettings.ReferenceXMin, 0, query.LineItemSettings.ReferenceXMax - query.LineItemSettings.ReferenceXMin, 0);
                         db.ExtractionSettings.Add(fieldExtSet);
                     }
                     if (query.LineItemSettings.DescriptionXMin != -1 && query.LineItemSettings.DescriptionXMax != -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Description" && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Description").SingleOrDefault();
                         if (dbFieldExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbFieldExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Description", query.LineItemSettings.DescriptionXMin, 0, query.LineItemSettings.DescriptionXMax - query.LineItemSettings.DescriptionXMin, 0, owner);
+                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Description", query.LineItemSettings.DescriptionXMin, 0, query.LineItemSettings.DescriptionXMax - query.LineItemSettings.DescriptionXMin, 0);
                         db.ExtractionSettings.Add(fieldExtSet);
                     }
                     if (query.LineItemSettings.QuantityXMin != -1 && query.LineItemSettings.QuantityXMax != -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Quantity" && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Quantity").SingleOrDefault();
                         if (dbFieldExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbFieldExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Quantity", query.LineItemSettings.QuantityXMin, 0, query.LineItemSettings.QuantityXMax - query.LineItemSettings.QuantityXMin, 0, owner);
+                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Quantity", query.LineItemSettings.QuantityXMin, 0, query.LineItemSettings.QuantityXMax - query.LineItemSettings.QuantityXMin, 0);
                         db.ExtractionSettings.Add(fieldExtSet);
                     }
                     if (query.LineItemSettings.UnitaryPriceXMin != -1 && query.LineItemSettings.UnitaryPriceXMax != -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "UnitaryPrice" && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "UnitaryPrice").SingleOrDefault();
                         if (dbFieldExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbFieldExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "UnitaryPrice", query.LineItemSettings.UnitaryPriceXMin, 0, query.LineItemSettings.UnitaryPriceXMax - query.LineItemSettings.UnitaryPriceXMin, 0, owner);
+                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "UnitaryPrice", query.LineItemSettings.UnitaryPriceXMin, 0, query.LineItemSettings.UnitaryPriceXMax - query.LineItemSettings.UnitaryPriceXMin, 0);
                         db.ExtractionSettings.Add(fieldExtSet);
                     }
                     if (query.LineItemSettings.PriceXMin != -1 && query.LineItemSettings.PriceXMax != -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Price" && x.Owner == owner).SingleOrDefault();
+                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Price").SingleOrDefault();
                         if (dbFieldExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbFieldExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Price", query.LineItemSettings.PriceXMin, 0, query.LineItemSettings.PriceXMax - query.LineItemSettings.PriceXMin, 0, owner);
+                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Price", query.LineItemSettings.PriceXMin, 0, query.LineItemSettings.PriceXMax - query.LineItemSettings.PriceXMin, 0);
                         db.ExtractionSettings.Add(fieldExtSet);
                     }
                 }
@@ -226,9 +226,9 @@ namespace BackEndApp.Controllers
             }
 
             List<ExtractionSettings> results = new List<ExtractionSettings>();
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
-                results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Owner == owner && query.Contains(x.Field)).ToList();
+                results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && query.Contains(x.Field)).ToList();
             }
             List<InvoiceGetExtractionSettingsResponse> returnValues = new List<InvoiceGetExtractionSettingsResponse>();
             bool lineItem = false;
@@ -264,10 +264,10 @@ namespace BackEndApp.Controllers
             }
             else
             {
-                using (var db = new TheCompanyDbContext())
+                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+                using (var db = new TheCompanyDbContext(owner))
                 {
-                    Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                    Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+                    Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id).SingleOrDefault();
                     if (dbInvoice == null)
                     {
                         return UnprocessableEntity("NotFound");
@@ -285,10 +285,11 @@ namespace BackEndApp.Controllers
         public ActionResult GetPreview(string id, int page)
         {
             _logger.LogInformation("Start of Preview method");
-            using (var db = new TheCompanyDbContext())
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+            using (var db = new TheCompanyDbContext(owner))
             {
-                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-                Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+                
+                Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id).SingleOrDefault();
                 if (dbInvoice == null)
                 {
                     return UnprocessableEntity("NotFound");
@@ -304,7 +305,7 @@ namespace BackEndApp.Controllers
                         Storage storage = new Storage(Configuration.GetSection("Storage"), owner);
                         MemoryStream output;
 
-                        FilePreview filePreview = db.FilePreviews.Where(x => x.Owner == owner && x.FileId == dbInvoice.FileId && x.Page == page).SingleOrDefault();
+                        FilePreview filePreview = db.FilePreviews.Where(x => x.FileId == dbInvoice.FileId && x.Page == page).SingleOrDefault();
                         if (filePreview == null)
                         {
                             MemoryStream stream;
@@ -320,7 +321,6 @@ namespace BackEndApp.Controllers
                                 filePreview = new FilePreview();
                                 filePreview.Id = previewId;
                                 filePreview.FileId = dbInvoice.FileId;
-                                filePreview.Owner = dbInvoice.Owner;
                                 filePreview.Page = page;
                                 db.FilePreviews.Add(filePreview);
                                 db.SaveChanges();
@@ -390,9 +390,9 @@ namespace BackEndApp.Controllers
         {
             _logger.LogInformation("Start of Extraction method");
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
-                Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id && x.Owner == owner).SingleOrDefault();
+                Invoice dbInvoice = db.Invoices.Where(x => x.Id.ToString() == id).SingleOrDefault();
                 if (dbInvoice == null)
                 {
                     return UnprocessableEntity("NotFound");
@@ -433,20 +433,19 @@ namespace BackEndApp.Controllers
 
             Guid retValue;
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-            using (var db = new TheCompanyDbContext())
+            using (var db = new TheCompanyDbContext(owner))
             {
                 Invoice invoice;
                 if (query.Id == null || query.Id == "null")
                 {
                     invoice = new Invoice();
                     invoice.Id = Guid.NewGuid();
-                    invoice.Owner = owner;
                     invoice.ShouldBeGenerated = true;
                 }
                 else
                 {
                     Guid invoiceId = Guid.Parse(query.Id);
-                    invoice = db.Invoices.Where(x => x.Owner == owner && x.Id == invoiceId).SingleOrDefault();
+                    invoice = db.Invoices.Where(x => x.Id == invoiceId).SingleOrDefault();
                 }
 
                 Type type = typeof(Invoice);
@@ -479,7 +478,7 @@ namespace BackEndApp.Controllers
                     }
                     else
                     {
-                        notEditableField = true; //TODO need to fix this for filename field
+                        notEditableField = true;
                     }
                 });
                 if (notEditableField)
@@ -491,14 +490,13 @@ namespace BackEndApp.Controllers
                     LineItem currentItem;
                     if (Guid.TryParse(lineItem.Id, out lineItemId) && lineItemId != Guid.Empty)
                     {
-                        currentItem = db.LineItems.Where(x => x.Owner == owner && x.InvoiceId == invoice.Id && x.Id == lineItemId).SingleOrDefault();
+                        currentItem = db.LineItems.Where(x => x.InvoiceId == invoice.Id && x.Id == lineItemId).SingleOrDefault();
                     }
                     else
                     {
                         currentItem = new LineItem();
                         currentItem.CreationDateTime = DateTime.Now;
                         currentItem.InvoiceId = invoice.Id;
-                        currentItem.Owner = owner;
                     }
                     Type type = typeof(LineItem);
                     lineItem.Fields.ForEach(field =>

@@ -32,7 +32,7 @@ namespace StorageApp.Workers
 			{
 				Directory.CreateDirectory(path);
 			}
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(Owner))
 			{
 				Id = Guid.NewGuid();
 				string filePath = Path.Combine(ClientPath, day, Id.ToString() + ".file");
@@ -41,7 +41,7 @@ namespace StorageApp.Workers
 					file.Seek(0, SeekOrigin.Begin);
 					file.CopyTo(fs);
 				}
-				ModelsApp.DbModels.File dbFile = new ModelsApp.DbModels.File(Id, filePath, Owner);
+				ModelsApp.DbModels.File dbFile = new ModelsApp.DbModels.File(Id, filePath);
 				db.Files.Add(dbFile);
 				db.SaveChanges();
 			}
@@ -50,9 +50,9 @@ namespace StorageApp.Workers
 
 		public bool DeleteFile(Guid id)
 		{
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(Owner))
 			{
-				ModelsApp.DbModels.File dbFile = db.Files.Where(x => x.Owner == Owner && x.Id == id).SingleOrDefault();
+				ModelsApp.DbModels.File dbFile = db.Files.Where(x => x.Id == id).SingleOrDefault();
 				if (dbFile != null)
 				{
 					string newPath = Path.Combine(ClientPath, "Deleted", Path.GetDirectoryName(dbFile.FilePath).Replace(ClientPath + "\\", ""), Path.GetFileName(dbFile.FilePath));
@@ -75,9 +75,9 @@ namespace StorageApp.Workers
 		public bool GetFile(Guid id, out MemoryStream file)
 		{
 			file = new MemoryStream();
-			using (var db = new TheCompanyDbContext())
+			using (var db = new TheCompanyDbContext(Owner))
 			{
-				ModelsApp.DbModels.File dbFile = db.Files.Where(x => x.Owner == Owner && x.Id == id).SingleOrDefault();
+				ModelsApp.DbModels.File dbFile = db.Files.Where(x => x.Id == id).SingleOrDefault();
 				if (dbFile != null)
 				{
 					using (FileStream physicalFile = new FileStream(dbFile.FilePath, FileMode.Open, FileAccess.Read))

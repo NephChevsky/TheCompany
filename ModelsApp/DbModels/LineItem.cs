@@ -63,16 +63,14 @@ namespace ModelsApp.DbModels
 		{
 		}
 
-		public LineItem(Guid invoiceId, Guid owner)
+		public LineItem(Guid invoiceId)
 		{
 			InvoiceId = invoiceId;
-			Owner = owner;
 		}
 
-		public LineItem(Guid invoiceId, Guid owner, string reference, string description, double quantity, double unitaryprice, double price, DateTime creationDateTime)
+		public LineItem(Guid invoiceId, string reference, string description, double quantity, double unitaryprice, double price, DateTime creationDateTime)
 		{
 			InvoiceId = invoiceId;
-			Owner = owner;
 			Reference = reference;
 			Description = description;
 			Quantity = quantity;

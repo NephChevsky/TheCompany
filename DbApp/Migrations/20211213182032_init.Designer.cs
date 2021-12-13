@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211213134424_more-field-in-line-items")]
-    partial class morefieldinlineitems
+    [Migration("20211213182032_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -185,9 +185,7 @@ namespace DbApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");
@@ -412,10 +410,10 @@ namespace DbApp.Migrations
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("PriceNoVAT")
+                    b.Property<double?>("PriceNoVAT")
                         .HasColumnType("float");
 
-                    b.Property<double>("PriceVAT")
+                    b.Property<double?>("PriceVAT")
                         .HasColumnType("float");
 
                     b.Property<string>("Reference")
@@ -425,7 +423,7 @@ namespace DbApp.Migrations
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("VAT")
+                    b.Property<double?>("VAT")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

@@ -183,9 +183,7 @@ namespace DbApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");

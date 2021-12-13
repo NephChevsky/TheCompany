@@ -40,7 +40,7 @@ namespace WorkerServiceApp
 			
 			while (!stoppingToken.IsCancellationRequested)
 			{
-                using (var db = new TheCompanyDbContext())
+                using (var db = new TheCompanyDbContext(Guid.Empty))
                 {
                     bool stop = false;
                     while (!stop && !stoppingToken.IsCancellationRequested)
@@ -49,6 +49,7 @@ namespace WorkerServiceApp
                         if (invoice != null)
                         {
                             _logger.LogInformation(string.Concat("Start processing invoice " + invoice.Id.ToString()));
+                            db.SetOwner(invoice.Owner);
                             invoice.LockedBy = string.Concat("ExtractDocument-", AppId);
                             db.SaveChanges();
 
@@ -74,7 +75,7 @@ namespace WorkerServiceApp
                             }
 
                             Type type = typeof(Invoice);
-                            List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == false).ToList();
+                            List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false).ToList();
                             extractSettings.ForEach(item =>
                             {
                                 Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
@@ -111,14 +112,13 @@ namespace WorkerServiceApp
 
                             if (!string.IsNullOrEmpty(invoice.CustomerNumber))
                             {
-                                Individual dbIndividual = db.Individuals.Where(x => x.CustomerNumber == invoice.CustomerNumber && x.Owner == invoice.Owner).SingleOrDefault();
+                                Individual dbIndividual = db.Individuals.Where(x => x.CustomerNumber == invoice.CustomerNumber).SingleOrDefault();
                                 if (dbIndividual == null)
                                 {
                                     dbIndividual = new Individual();
                                     Guid customerId = Guid.NewGuid();
                                     dbIndividual.Id = customerId;
                                     dbIndividual.CustomerNumber = invoice.CustomerNumber;
-                                    dbIndividual.Owner = invoice.Owner;
                                     dbIndividual.FirstName = invoice.CustomerFirstName;
                                     dbIndividual.LastName = invoice.CustomerLastName;
                                     if (!string.IsNullOrEmpty(invoice.CustomerAddress))
@@ -133,12 +133,12 @@ namespace WorkerServiceApp
                                 invoice.CustomerId = dbIndividual.Id;
                             }
 
-                            db.LineItems.RemoveRange(db.LineItems.Where(x => x.Owner == invoice.Owner && x.InvoiceId == invoice.Id));
+                            db.LineItems.RemoveRange(db.LineItems.Where(x => x.InvoiceId == invoice.Id));
 
-                            ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
+                            ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
                             if (dbBox != null)
                             {
-                                ExtractionSettings reference = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
+                                ExtractionSettings reference = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
                                 if (reference != null)
                                 {
                                     Rectangle rect = new Rectangle(reference.X, dbBox.Y, reference.Width, dbBox.Height);
@@ -149,11 +149,11 @@ namespace WorkerServiceApp
                                     {
                                         if (references != null)
                                         {
-                                            List<ExtractionSettings> lineItemFields = db.ExtractionSettings.Where(x => x.Owner == invoice.Owner && x.DataSource == "Invoice" && x.IsLineItem == true && x.Field != "LineItem" && x.Field != "Reference").ToList();
+                                            List<ExtractionSettings> lineItemFields = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field != "LineItem" && x.Field != "Reference").ToList();
                                             for (int i = 0; i < references.Count; i++)
                                             {
                                                 ExtractBlock referenceLine = references.ElementAt(i);
-                                                LineItem lineItem = new LineItem(invoice.Id, invoice.Owner);
+                                                LineItem lineItem = new LineItem(invoice.Id);
                                                 lineItem.Reference = referenceLine.Text;
                                                 if (lineItemFields.Count != 0)
                                                 {
@@ -223,6 +223,7 @@ namespace WorkerServiceApp
                             invoice.LockedBy = null;
                             invoice.IsExtracted = true;
                             db.SaveChanges();
+                            db.SetOwner(Guid.Empty);
                             _logger.LogInformation(string.Concat("Invoice " + invoice.Id.ToString() + " has been processed"));
                         }
                         else

@@ -75,7 +75,7 @@ namespace DbApp.Migrations
                     FileId = table.Column<Guid>(nullable: false),
                     Page = table.Column<int>(nullable: false),
                     Owner = table.Column<Guid>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    Deleted = table.Column<bool>(nullable: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),
                     LastModificationDateTime = table.Column<DateTime>(nullable: false)
                 },
@@ -181,12 +181,12 @@ namespace DbApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    InvoiceId = table.Column<Guid>(nullable: false),
-                    Reference = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Quantity = table.Column<double>(nullable: false),
-                    UnitaryPrice = table.Column<double>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
+                    Reference = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Unit = table.Column<string>(nullable: true),
+                    VAT = table.Column<double>(nullable: true),
+                    PriceNoVAT = table.Column<double>(nullable: true),
+                    PriceVAT = table.Column<double>(nullable: true),
                     Owner = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),
