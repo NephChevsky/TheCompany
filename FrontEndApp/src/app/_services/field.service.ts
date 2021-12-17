@@ -14,4 +14,9 @@ export class FieldService
 	{
 		return this.http.get(environment.baseUrl + `Field/GetFile/` + data, { responseType: 'arraybuffer' });
 	}
+
+	getPossibleValues(data: any)
+	{
+		return this.http.post(environment.baseUrl + `Field/GetPossibleValues/`, data);
+	}
 }

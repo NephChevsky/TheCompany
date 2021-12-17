@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Field } from '../../_models/field';
 import { CompanyService } from '../../_services/company.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { CompanyService } from '../../_services/company.service';
 })
 export class CompanyInformationComponent implements OnInit
 {
-	public companyData: any[];
+	public companyData: Field[];
 	public companyForm: FormGroup = new FormGroup({});
 
 	constructor(private companyService: CompanyService,

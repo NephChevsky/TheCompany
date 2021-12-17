@@ -4,7 +4,7 @@
 		<table>
 			<tr *ngFor="let field of companyData">
 				<td class="fieldName">{{field.name}}</td>
-				<td><app-field type="{{field.type}}" [form]="companyForm" key="{{field.name}}" value="{{field.value}}" [editMode]="true"></app-field></td>
+				<td><app-field [field]="field" [form]="companyForm" [editMode]="true"></app-field></td>
 			</tr>
 		</table>
 		<br /><br />

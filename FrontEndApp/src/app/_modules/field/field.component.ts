@@ -1,13 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { Field } from '../../_models/field';
 import { FieldService } from '../../_services/field.service';
 
 @Component({
   selector: 'app-field',
   templateUrl: './field.component.html',
-  styleUrls: ['./field.component.scss']
+	styleUrls: ['./field.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class FieldComponent implements OnInit {
 
@@ -18,7 +21,7 @@ export class FieldComponent implements OnInit {
 	@Input()
 	public index: number = null;
 	@Input()
-	public size: string = "50";
+	public size: string = "400";
 	@Input()
 	public rows: string = "3";
 	@Input()
@@ -27,6 +30,7 @@ export class FieldComponent implements OnInit {
 	public editMode: boolean;
 	public image: any;
 	@Output() focusEvent = new EventEmitter<EventTarget>();
+	public filteredValues: Observable<string[]>;
 
 	constructor(private fieldService: FieldService, private sanitizer: DomSanitizer) { }
 
@@ -50,6 +54,33 @@ export class FieldComponent implements OnInit {
 					// TODO: handle errors
 				});
 		}
+
+		if (this.field.autoCompletable)
+		{
+			this.filteredValues = this.form.get(this.field.name).valueChanges.pipe(
+				startWith(''),
+				map(value => this.filter(value)),
+			);
+
+			var obj = {
+				dataSource: this.field.dataSource,
+				name: this.field.name
+			}
+			this.fieldService.getPossibleValues(obj)
+				.subscribe((data: any) =>
+				{
+					this.field.possibleValues = data;
+				}, error =>
+				{
+					// TODO: handle errors
+				});
+		}
+	}
+
+	filter(value: string): string[]
+	{
+		const filterValue = value.toLowerCase();
+		return this.field.possibleValues.filter(option => option.toLowerCase().includes(filterValue));
 	}
 
 	onFocus(target: EventTarget)

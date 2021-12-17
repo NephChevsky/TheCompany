@@ -1,12 +1,48 @@
 <div [formGroup]="form">
-	<input *ngIf="editMode && field.editable && field.type=='TextField'" type="text" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" [size]="size" [readonly]="!editMode" (focus)="onFocus($event.target)" />
-	<textarea *ngIf="editMode && field.editable && field.type=='MultilineTextField'" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" [rows]="rows" [cols]="cols" [readonly]="!editMode" (focus)="onFocus($event.target)"></textarea>
-	<input *ngIf="editMode && field.editable && field.type=='NumberField'" type="number" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" style="width: 100px;" [readonly]="!editMode" (focus)="onFocus($event.target)" />
+
+	<mat-form-field *ngIf="editMode && field.editable && field.type=='TextField'" appearance="outline" [style.width.px]="size">
+		<input type="text"
+			   matInput
+			   [formControlName]="field.name"
+			   [id]="(index != null ? index + '.' : '') + field.name"
+			   (focus)="onFocus($event.target)"
+			   [matAutocomplete]="field.autoCompletable ? auto : null" />
+		<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+			<mat-option *ngFor="let option of filteredValues | async"
+						[value]="option">
+				{{option}}
+			</mat-option>
+		</mat-autocomplete>
+	</mat-form-field>
+
+	<mat-form-field *ngIf="editMode && field.editable && field.type=='MultilineTextField'" appearance="outline" [style.width.px]="size">
+		<textarea matInput
+				  [id]="(index != null ? index + '.' : '') + field.name"
+				  [formControlName]="field.name"
+				  [rows]="rows"
+				  [cols]="cols"
+				  (focus)="onFocus($event.target)">
+		</textarea>
+	</mat-form-field>
+
+	<mat-form-field *ngIf="editMode && field.editable && field.type=='NumberField'" appearance="outline" [style.width.px]="size">
+		<input type="number"
+			   matInput
+			   [id]="(index != null ? index + '.' : '') + field.name"
+			   [formControlName]="field.name"  (focus)="onFocus($event.target)" />
+	</mat-form-field>
+
 	<img *ngIf="field.type=='FileField'" [id]="(index != null ? index + '.' : '') + field.name" [src]="image" />
 	<input *ngIf="editMode && field.editable && field.type=='FileField'" type="file" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name" (change)="onFileChange($event)" />
-	<select *ngIf="editMode && field.editable && field.type=='ComboField'" [id]="(index != null ? index + '.' : '') + field.name" [formControlName]="field.name">
-		<option value=""></option>
-		<option *ngFor="let value of field.possibleValues" value="{{value}}">{{value}}</option>
-	</select>
+
+	<mat-form-field *ngIf="editMode && field.editable && field.type=='ComboField'" appearance="outline" [style.width.px]="size">
+		<mat-select
+					[id]="(index != null ? index + '.' : '') + field.name"
+					[formControlName]="field.name">
+			<mat-option value=""></mat-option>
+			<mat-option *ngFor="let value of field.possibleValues" value="{{value}}">{{value}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+
 	<div *ngIf="!editMode || !field.editable">{{form.get(field.name).value}}</div>
 </div>

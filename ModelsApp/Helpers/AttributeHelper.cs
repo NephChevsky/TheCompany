@@ -87,6 +87,7 @@ namespace ModelsApp.Helpers
 				field.Value = AttributeHelper.GetFieldValue(element, property);
 				field.Type = AttributeHelper.GetFieldType(property);
 				field.Editable = AttributeHelper.CheckAttribute<Editable>(element.GetType(), property.Name);
+				field.AutoCompletable = AttributeHelper.CheckAttribute<AutoCompletable>(element.GetType(), property.Name);
 				if (field.Type == "ComboField")
 				{
 					ComboField attr = property.GetCustomAttribute<ComboField>(false);

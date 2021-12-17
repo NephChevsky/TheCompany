@@ -42,7 +42,7 @@ namespace BackEndApp.Controllers
                 }
 
                 _logger.LogInformation("End of Get method");
-                return Ok((CompanyGetResponse)dbCompany);
+                return Ok((CompanyGetResponse<Viewable>)dbCompany);
             }
         }
 

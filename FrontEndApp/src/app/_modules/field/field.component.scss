@@ -1,0 +1,38 @@
+.mat-form-field-appearance-outline .mat-form-field-infix
+{
+	padding: 5px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline
+{
+	top: 0em !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex
+{
+	margin-top: 0px !important;
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+
+.mat-form-field-infix
+{
+	border-top: 0px;
+}
+
+.mat-form-field-wrapper
+{
+	background-color: white;
+	border-radius: 5px;
+	padding-bottom: 0px;
+}
+
+input.mat-input-element
+{
+	margin-top: 2px;
+}
+
+.mat-form-field-appearance-outline .mat-select-arrow-wrapper
+{
+	transform: none !important;
+}

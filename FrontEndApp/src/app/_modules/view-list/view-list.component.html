@@ -6,14 +6,14 @@
 		<tbody *ngIf="!editMode" formArrayName="values">
 			<tr *ngFor="let line of data; let index = index" (click)="linkable && !editMode && show(line.linkValue)" [ngClass]="{'linkable' : linkable && !editMode}">
 				<td *ngFor="let field of line.fields">
-					<app-field [field]="field" [form]="getItem(index)" [index]="index" size="15" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
+					<app-field [field]="field" [form]="getItem(index)" [index]="index" size="150" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
 				</td>
 			</tr>
 		</tbody>
 		<tbody *ngIf="editMode" formArrayName="values">
 			<tr *ngFor="let line of values.controls; let index = index" [formGroupName]="index">
 				<td *ngFor="let field of fields; let id = index">
-					<app-field [field]="getField(field)" [form]="getItem(index)" [index]="index" size="15" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
+					<app-field [field]="getField(field)" [form]="getItem(index)" [index]="index" size="150" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>
 
 				</td>
 			</tr>

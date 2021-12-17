@@ -13,37 +13,39 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
-  imports: [MatToolbarModule,
-    MatCardModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatTreeModule,
-    MatProgressBarModule,
-    MatSelectModule,
-	MatExpansionModule,
-	MatProgressSpinnerModule],
-  exports: [MatToolbarModule,
-    MatCardModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatTreeModule,
-    MatProgressBarModule,
-    MatSelectModule,
-	MatExpansionModule,
-	MatProgressSpinnerModule]
+	imports: [MatToolbarModule,
+		MatCardModule,
+		MatIconModule,
+		MatSidenavModule,
+		MatListModule,
+		MatDialogModule,
+		MatButtonModule,
+		MatInputModule,
+		MatFormFieldModule,
+		MatTreeModule,
+		MatProgressBarModule,
+		MatSelectModule,
+		MatExpansionModule,
+		MatProgressSpinnerModule,
+		MatAutocompleteModule],
+	exports: [MatToolbarModule,
+		MatCardModule,
+		MatIconModule,
+		MatSidenavModule,
+		MatListModule,
+		MatDialogModule,
+		MatButtonModule,
+		MatInputModule,
+		MatFormFieldModule,
+		MatTreeModule,
+		MatProgressBarModule,
+		MatSelectModule,
+		MatExpansionModule,
+		MatProgressSpinnerModule,
+		MatAutocompleteModule]
 })
 
 export class AngularMaterialModule { }

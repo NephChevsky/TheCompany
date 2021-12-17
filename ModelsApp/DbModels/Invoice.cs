@@ -24,6 +24,7 @@ namespace ModelsApp.DbModels
         [Viewable]
         [Editable]
         [Extractable]
+        [AutoCompletable("Customer", "CustomerNumber")]
         public string CustomerNumber { get; set; }
 
         [IdentifierField]

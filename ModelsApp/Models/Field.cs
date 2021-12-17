@@ -12,6 +12,7 @@ namespace ModelsApp.Models
 		public string Value { get; set; }
 		public List<string> PossibleValues { get; set; }
 		public bool Editable { get; set; }
+		public bool AutoCompletable { get; set; }
 
 		public Field()
         {

@@ -6,6 +6,7 @@ export class Field
 	public value: string = "";
 	public possibleValues: string[] = [];
 	public editable: boolean = false;
+	public autoCompletable: boolean = false;
 
 	constructor()
 	{
