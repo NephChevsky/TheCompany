@@ -13,10 +13,11 @@ namespace ModelsApp.Models
 		public List<string> PossibleValues { get; set; }
 		public bool Editable { get; set; }
 		public bool AutoCompletable { get; set; }
+		public Bindings Bindings { get; set; }
 
 		public Field()
         {
 			PossibleValues = new List<string>();
-        }
+		}
 	}
 }

@@ -19,4 +19,9 @@ export class FieldService
 	{
 		return this.http.post(environment.baseUrl + `Field/GetPossibleValues/`, data);
 	}
+
+	getBindingValues(data: any)
+	{
+		return this.http.post(environment.baseUrl + `Field/GetBindingValues/`, data);
+	}
 }

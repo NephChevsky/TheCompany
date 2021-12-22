@@ -24,7 +24,10 @@ namespace ModelsApp.DbModels
         [Viewable]
         [Editable]
         [Extractable]
-        [AutoCompletable("Customer", "CustomerNumber")]
+        [AutoCompletable("Individual", "CustomerNumber")]
+        [Bindable("Individual", "CustomerNumber", "FirstName", "CustomerFirstName",
+                                                "LastName", "CustomerLastName",
+                                                "Address", "CustomerAddress")]
         public string CustomerNumber { get; set; }
 
         [IdentifierField]

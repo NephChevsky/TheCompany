@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -31,6 +32,7 @@ export class FieldComponent implements OnInit {
 	public image: any;
 	@Output() focusEvent = new EventEmitter<EventTarget>();
 	public filteredValues: Observable<string[]>;
+	private updateBindingsMethod = function(event : any) { };
 
 	constructor(private fieldService: FieldService, private sanitizer: DomSanitizer) { }
 
@@ -75,6 +77,32 @@ export class FieldComponent implements OnInit {
 					// TODO: handle errors
 				});
 		}
+
+		if (this.field.bindings)
+		{
+			this.updateBindingsMethod = function (event: any)
+			{
+				var obj = {
+					dataSource: this.field.bindings.dataSource,
+					name: this.field.bindings.name,
+					value: this.form.get(this.field.bindings.name).value
+				}
+				this.fieldService.getBindingValues(obj)
+					.subscribe((data: any) =>
+					{
+						if (data.length != 0)
+						{
+							for (let key in this.field.bindings.childs)
+							{
+								this.form.get(this.field.bindings.childs[key]).setValue(data.find((x: any) => x.name == key).value);
+							}
+						}
+					}, error =>
+					{
+						// TODO: handle errors
+					});
+			}
+		}
 	}
 
 	filter(value: string): string[]
@@ -103,5 +131,10 @@ export class FieldComponent implements OnInit {
 			if (fileObj)
 				fileObj.setValue(null);
 		}
+	}
+
+	updateBindings(event: any)
+	{
+		this.updateBindingsMethod(event);
 	}
 }

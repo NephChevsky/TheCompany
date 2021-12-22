@@ -3,14 +3,17 @@ using DbApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ModelsApp;
 using ModelsApp.Attributes;
 using ModelsApp.DbModels;
 using ModelsApp.Helpers;
+using ModelsApp.Models;
 using StorageApp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -100,7 +103,7 @@ namespace BackEndApp.Controllers
             {
                 switch (attr.DataSource)
                 {
-                    case "Customer":
+                    case "Individual":
                         List<Individual> individuals = db.Individuals.OrderBy(x => property.Name).ToList();
                         values = FormatResultValues(individuals, property);
                         break;
@@ -120,6 +123,57 @@ namespace BackEndApp.Controllers
                 result.Add(AttributeHelper.GetFieldValue(x, property));
             });
             return result;
+        }
+
+        [HttpPost("GetBindingValues")]
+        public ActionResult GetBindingValues([FromBody] FieldGetBindingValuesQuery query)
+        {
+            _logger.LogInformation("Start of GetBindingValues method");
+
+            if (query == null || query.DataSource == null || query.Name == null || query.Value == null)
+            {
+                return BadRequest();
+            }
+
+            Type type = Type.GetType("ModelsApp.DbModels." + query.DataSource + ",ModelsApp");
+            if (type == null)
+            {
+                return BadRequest();
+            }
+
+            PropertyInfo property = type.GetProperty(query.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            if (property == null)
+            {
+                return BadRequest();
+            }
+            
+            List<Field> result = new List<Field>();
+            
+            Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+            using (var db = new TheCompanyDbContext(owner))
+            {
+                switch (query.DataSource)
+                {
+                    case "Individual":
+                        var param = Expression.Parameter(type, "e");
+                        var prop = Expression.PropertyOrField(param, property.Name);
+                        Expression left = prop;
+                        Expression right = Expression.Constant(query.Value);
+                        Expression exp = Expression.Equal(left, right);
+                        Expression<Func<Individual, bool>>  predicate = Expression.Lambda<Func<Individual, bool>>(exp, param);
+                        Individual individual = db.Individuals.Where(predicate).FirstOrDefault();
+                        if (individual != null)
+                        {
+                            result = AttributeHelper.GetAuthorizedProperties<Viewable>(individual);
+                        }
+                        break;
+                    default:
+                        return UnprocessableEntity();
+                }
+            }
+
+            _logger.LogInformation("End of GetBindingValues method");
+            return Ok(result);
         }
     }
 }

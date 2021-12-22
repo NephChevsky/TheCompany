@@ -43,18 +43,10 @@ namespace ModelsApp.Helpers
 
 		public static Field GetProperty(object element, string name)
         {
+			Field field = GetProperty(element.GetType(), name);
 			PropertyInfo property = element.GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-			Field field = new Field();
-			field.DataSource = element.GetType().Name;
-			field.Name = property.Name;
 			field.Value = AttributeHelper.GetFieldValue(element, property);
-			field.Type = AttributeHelper.GetFieldType(property);
-			field.Editable = AttributeHelper.CheckAttribute<Editable>(element.GetType(), property.Name);
-			if (field.Type == "ComboField")
-			{
-				ComboField attr = property.GetCustomAttribute<ComboField>(false);
-				field.PossibleValues = attr.Values;
-			}
+
 			return field;
 		}
 
@@ -67,11 +59,20 @@ namespace ModelsApp.Helpers
 			field.Value = "";
 			field.Type = AttributeHelper.GetFieldType(property);
 			field.Editable = AttributeHelper.CheckAttribute<Editable>(type, property.Name);
+			field.AutoCompletable = AttributeHelper.CheckAttribute<AutoCompletable>(type, property.Name);
+
+			if (AttributeHelper.CheckAttribute<Bindable>(type, property.Name))
+			{
+				Bindable bindable = property.GetCustomAttribute<Bindable>(false);
+				field.Bindings = new Bindings(bindable);
+			}
+
 			if (field.Type == "ComboField")
 			{
 				ComboField attr = property.GetCustomAttribute<ComboField>(false);
 				field.PossibleValues = attr.Values;
 			}
+
 			return field;
 		}
 
@@ -81,18 +82,7 @@ namespace ModelsApp.Helpers
 			List<PropertyInfo> properties = GetAuthorizedProperties<T>(element.GetType());
 			foreach (PropertyInfo property in properties)
 			{
-				Field field = new Field();
-				field.DataSource = element.GetType().Name;
-				field.Name = property.Name;
-				field.Value = AttributeHelper.GetFieldValue(element, property);
-				field.Type = AttributeHelper.GetFieldType(property);
-				field.Editable = AttributeHelper.CheckAttribute<Editable>(element.GetType(), property.Name);
-				field.AutoCompletable = AttributeHelper.CheckAttribute<AutoCompletable>(element.GetType(), property.Name);
-				if (field.Type == "ComboField")
-				{
-					ComboField attr = property.GetCustomAttribute<ComboField>(false);
-					field.PossibleValues = attr.Values;
-				}
+				Field field = GetProperty(element, property.Name);
 				result.Add(field);
 			}
 			return result;

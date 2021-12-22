@@ -7,7 +7,7 @@
 			   [id]="(index != null ? index + '.' : '') + field.name"
 			   (focus)="onFocus($event.target)"
 			   [matAutocomplete]="field.autoCompletable ? auto : null" />
-		<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+		<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="updateBindings($event)">
 			<mat-option *ngFor="let option of filteredValues | async"
 						[value]="option">
 				{{option}}
@@ -21,7 +21,8 @@
 				  [formControlName]="field.name"
 				  [rows]="rows"
 				  [cols]="cols"
-				  (focus)="onFocus($event.target)">
+				  (focus)="onFocus($event.target)"
+				  (change)="updateBindings($event)">
 		</textarea>
 	</mat-form-field>
 
@@ -29,7 +30,9 @@
 		<input type="number"
 			   matInput
 			   [id]="(index != null ? index + '.' : '') + field.name"
-			   [formControlName]="field.name"  (focus)="onFocus($event.target)" />
+			   [formControlName]="field.name"
+			   (focus)="onFocus($event.target)"
+			   (change)="updateBindings($event)" />
 	</mat-form-field>
 
 	<img *ngIf="field.type=='FileField'" [id]="(index != null ? index + '.' : '') + field.name" [src]="image" />
@@ -38,7 +41,8 @@
 	<mat-form-field *ngIf="editMode && field.editable && field.type=='ComboField'" appearance="outline" [style.width.px]="size">
 		<mat-select
 					[id]="(index != null ? index + '.' : '') + field.name"
-					[formControlName]="field.name">
+					[formControlName]="field.name"
+					(change)="updateBindings($event)">
 			<mat-option value=""></mat-option>
 			<mat-option *ngFor="let value of field.possibleValues" value="{{value}}">{{value}}</mat-option>
 		</mat-select>
