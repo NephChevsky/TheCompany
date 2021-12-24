@@ -55,8 +55,8 @@ export class InvoiceService
 		return this.http.get(environment.baseUrl + `Invoice/Extraction/` + id, {responseType: 'arraybuffer'});
 	}
 
-	saveInvoice(obj: any)
+	save(obj: any)
 	{
-		return this.http.post<any>(environment.baseUrl + `Invoice/SaveInvoice`, obj);
+		return this.http.post<any>(environment.baseUrl + `Invoice/Save`, obj);
 	}
 }

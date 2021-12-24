@@ -107,7 +107,7 @@ export class ShowInvoiceComponent implements OnInit
 			lineItems: lineItems
 		};
 
-		this.invoiceService.saveInvoice(obj)
+		this.invoiceService.save(obj)
 			.subscribe(data =>
 			{
 				this.editMode = false;

@@ -304,6 +304,7 @@ namespace BackEndApp.Controllers
                     }
                     else
                     {
+                        // TODO: use additional field id instead of name
                         InvoiceShowResponse<Viewable> result = (InvoiceShowResponse<Viewable>)dbInvoice;
                         List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Invoice").ToList();
                         additionalFields.ForEach(field =>
@@ -465,10 +466,10 @@ namespace BackEndApp.Controllers
             }
         }
 
-        [HttpPost("SaveInvoice")]
-        public ActionResult SaveInvoice([FromBody] InvoiceSaveQuery query)
+        [HttpPost("Save")]
+        public ActionResult Save([FromBody] InvoiceSaveQuery query)
         {
-            _logger.LogInformation("Start of SaveInvoice method");
+            _logger.LogInformation("Start of Save method");
             if (query == null || query.Fields == null || query.LineItems == null)
             {
                 return BadRequest();
@@ -496,32 +497,48 @@ namespace BackEndApp.Controllers
                 query.Fields.ForEach(x =>
                 {
                     PropertyInfo property = type.GetProperty(x.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                    if (AttributeHelper.CheckAttribute<Editable>(type, property))
+                    if (property != null)
                     {
-                        if (property.PropertyType == typeof(DateTime))
+                        if (AttributeHelper.CheckAttribute<Editable>(type, property))
                         {
-                            property.SetValue(invoice, DateTime.Parse(x.Value));
-                        }
-                        else if (property.PropertyType == typeof(string))
-                        {
-                            property.SetValue(invoice, x.Value);
-                        }
-                        else if (property.PropertyType == typeof(double))
-                        {
-                            property.SetValue(invoice, Double.Parse(x.Value));
-                        }
-                        else if (property.PropertyType == typeof(Guid))
-                        {
-                            property.SetValue(invoice, Guid.Parse(x.Value));
+                            if (property.PropertyType == typeof(DateTime))
+                            {
+                                property.SetValue(invoice, DateTime.Parse(x.Value));
+                            }
+                            else if (property.PropertyType == typeof(string))
+                            {
+                                property.SetValue(invoice, x.Value);
+                            }
+                            else if (property.PropertyType == typeof(double))
+                            {
+                                property.SetValue(invoice, Double.Parse(x.Value));
+                            }
+                            else if (property.PropertyType == typeof(Guid))
+                            {
+                                property.SetValue(invoice, Guid.Parse(x.Value));
+                            }
+                            else
+                            {
+                                throw new Exception("Unknow property type");
+                            }
                         }
                         else
                         {
-                            throw new Exception("Unknow property type");
+                            notEditableField = true;
                         }
                     }
                     else
                     {
-                        notEditableField = true;
+                        // TODO: use additional field id instead of name
+                        AdditionalFieldDefinition additionalField = db.AdditionalFieldDefinitions.Where(field => field.Name == x.Name).SingleOrDefault();
+                        if (additionalField != null)
+                        {
+                            AdditionalField additionalFieldValue = db.AdditionalFields.Where(field => field.SourceId == invoice.Id && field.FieldId == additionalField.Id).SingleOrDefault();
+                            if (additionalFieldValue != null)
+                            {
+                                additionalFieldValue.Value = x.Value;
+                            }
+                        }
                     }
                 });
                 if (notEditableField)
@@ -559,6 +576,17 @@ namespace BackEndApp.Controllers
                             {
                                 property.SetValue(currentItem, Double.Parse(field.Value));
                             }
+                            else if (property.PropertyType == typeof(double?))
+                            {
+                                if (string.IsNullOrEmpty(field.Value))
+                                {
+                                    property.SetValue(currentItem, null);
+                                }
+                                else
+                                {
+                                    property.SetValue(currentItem, Double.Parse(field.Value));
+                                }
+                            }
                             else if (property.PropertyType == typeof(Guid))
                             {
                                 property.SetValue(currentItem, Guid.Parse(field.Value));
@@ -592,7 +620,7 @@ namespace BackEndApp.Controllers
                 db.SaveChanges();
             }
 
-            _logger.LogInformation("End of SaveInvoice method");
+            _logger.LogInformation("End of Save method");
             return Ok(retValue);
         }
     }
