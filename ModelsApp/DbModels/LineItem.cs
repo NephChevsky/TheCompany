@@ -19,6 +19,8 @@ namespace ModelsApp.DbModels
 		[Viewable]
 		[Editable]
 		[Extractable]
+		[AutoCompletable("LineItemDefinition", "Reference")]
+		[Bindable("LineItemDefinition", "Reference", "Description", "Description", "Quantity", "Quantity", "UnitaryPrice", "UnitaryPrice", "Price", "Price")]
 		public string Reference { get; set; }
 
 		[TextField]
@@ -33,17 +35,35 @@ namespace ModelsApp.DbModels
 		[Extractable]
 		public double Quantity { get; set; }
 
-		[NumberField]
+		[ComboField("kg", "m2", "m3", "L", "U", "m", "mL")]
 		[Viewable]
 		[Editable]
 		[Extractable]
-		public double UnitaryPrice { get; set; }
+		public string Unit { get; set; }
 
 		[NumberField]
 		[Viewable]
 		[Editable]
 		[Extractable]
-		public double Price { get; set; }
+		public double? VAT { get; set; }
+
+		[NumberField]
+		[Viewable]
+		[Editable]
+		[Extractable]
+		public double? PriceNoVAT { get; set; }
+
+		[NumberField]
+		[Viewable]
+		[Editable]
+		[Extractable]
+		public double? PriceVAT { get; set; }
+
+		[NumberField]
+		[Viewable]
+		[Editable]
+		[Extractable]
+		public double TotalPrice { get; set; }
 
 		// IOwnable
 		[IdentifierField]
@@ -68,14 +88,17 @@ namespace ModelsApp.DbModels
 			InvoiceId = invoiceId;
 		}
 
-		public LineItem(Guid invoiceId, string reference, string description, double quantity, double unitaryprice, double price, DateTime creationDateTime)
+		public LineItem(Guid invoiceId, string reference, string description, double quantity, string unit, double vat, double pricevat, double pricenovat, double totalprice, DateTime creationDateTime)
 		{
 			InvoiceId = invoiceId;
 			Reference = reference;
 			Description = description;
 			Quantity = quantity;
-			UnitaryPrice = unitaryprice;
-			Price = price;
+			Unit = unit;
+			VAT = vat;
+			PriceVAT = pricevat;
+			PriceNoVAT = pricenovat;
+			TotalPrice = totalprice;
 			CreationDateTime = creationDateTime;
 		}
 	}

@@ -107,6 +107,10 @@ namespace BackEndApp.Controllers
                         List<Individual> individuals = db.Individuals.OrderBy(x => property.Name).ToList();
                         values = FormatResultValues(individuals, property);
                         break;
+                    case "LineItemDefinition":
+                        List<LineItemDefinition> items = db.LineItemsDefinitions.OrderBy(x => property.Name).ToList();
+                        values = FormatResultValues(items, property);
+                        break;
                     default:
                         return UnprocessableEntity();
                 }
@@ -164,7 +168,7 @@ namespace BackEndApp.Controllers
                         Individual individual = db.Individuals.Where(predicate).FirstOrDefault();
                         if (individual != null)
                         {
-                            result = AttributeHelper.GetAuthorizedProperties<Viewable>(individual);
+                            result = AttributeHelper.GetAuthorizedPropertiesAsField<Viewable>(individual);
                         }
                         break;
                     default:

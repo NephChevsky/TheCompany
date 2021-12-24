@@ -15,10 +15,7 @@ namespace ModelsApp.DbModels
 		public string DataSource { get; set; }
 
 		[BooleanField]
-		public bool IsLineItem { get; set; }
-
-		[BooleanField]
-		public string Field { get; set; }
+		public string Name { get; set; }
 
 		[NumberField]
 		public int X { get; set; }
@@ -51,11 +48,10 @@ namespace ModelsApp.DbModels
 		{
 		}
 		
-		public ExtractionSettings(string dataSource, bool isLineItem, string field, int x, int y, int width, int height)
+		public ExtractionSettings(string dataSource, string name, int x, int y, int width, int height)
 		{
 			DataSource = dataSource;
-			IsLineItem = isLineItem;
-			Field = field;
+			Name = name;
 			X = x;
 			Y = y;
 			Width = width;

@@ -115,10 +115,12 @@ namespace WorkerServiceApp
                                 pdfEngine.AddText(item.Reference, 20, y );
                                 pdfEngine.AddText(item.Description, 100, y);
                                 pdfEngine.AddText(string.Format("{0:N2}", item.Quantity), 350, y);
-                                pdfEngine.AddText(string.Format("{0:N2}", item.UnitaryPrice), 420, y);
-                                pdfEngine.AddText(string.Format("{0:N2}", item.Price), 510, y);
+                                pdfEngine.AddText(string.Format("{0:N2}", item.Unit), 390, y);
+                                pdfEngine.AddText(string.Format("{0:N2}", item.PriceNoVAT), 420, y);
+                                pdfEngine.AddText(string.Format("{0:N2}", item.VAT), 450, y);
+                                pdfEngine.AddText(string.Format("{0:N2}", item.TotalPrice), 510, y);
                                 y+=20;
-                                total += item.Price;
+                                total += item.TotalPrice;
                             });
 
                             y+=100;

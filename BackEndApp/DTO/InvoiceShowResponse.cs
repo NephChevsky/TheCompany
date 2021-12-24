@@ -14,7 +14,7 @@ namespace BackEndApp.DTO
 		public static implicit operator InvoiceShowResponse<T>(Invoice invoice)
 		{
 			InvoiceShowResponse<T> result = new InvoiceShowResponse<T>();
-			result.Fields = AttributeHelper.GetAuthorizedProperties<T>(invoice);
+			result.Fields = AttributeHelper.GetAuthorizedPropertiesAsField<T>(invoice);
 			return result;
 		}
 	}

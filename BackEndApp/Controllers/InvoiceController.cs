@@ -120,15 +120,16 @@ namespace BackEndApp.Controllers
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
             using (var db = new TheCompanyDbContext(owner))
             {
-                query.InvoiceSettings.Fields.ForEach(field =>
+                query.InvoiceSettings.ForEach(field =>
                 {
+                    Guid id;
+                    if (Guid.TryParse(field.Id, out id) && id != Guid.Empty)
+                        field.Name = field.Id.ToString();
+
                     if (field.X != -1 && field.Y != -1 && field.Width != -1 && field.Height != -1)
                     {
-                        Guid id;
-                        if (Guid.TryParse(field.Id, out id) && id != Guid.Empty)
-                            field.Name = field.Id.ToString();
-                        ExtractionSettings extSet = new ExtractionSettings("Invoice", false, field.Name, field.X, field.Y, field.Width, field.Height);
-                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name).SingleOrDefault();
+                        ExtractionSettings extSet = new ExtractionSettings("Invoice", field.Name, field.X, field.Y, field.Width, field.Height);
+                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Name == field.Name).SingleOrDefault();
                         if (dbExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbExtSet);
@@ -137,7 +138,7 @@ namespace BackEndApp.Controllers
                     }
                     else if (field.X == -1 && field.Y == -1 && field.Width == -1 && field.Height == -1)
                     {
-                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false && x.Field == field.Name).SingleOrDefault();
+                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.Name == field.Name).SingleOrDefault();
                         if (dbExtSet != null)
                         {
                             db.ExtractionSettings.Remove(dbExtSet);
@@ -145,66 +146,40 @@ namespace BackEndApp.Controllers
                     }
                 });
 
-                if (query.LineItemSettings.BoxYMin !=-1 && query.LineItemSettings.BoxYMax != -1)
+                int boxY = -1;
+                int boxHeight = -1;
+                query.LineItemSettings.ForEach(field =>
                 {
-                    ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
-                    if (dbExtSet != null)
+                    if ((field.X != -1 && field.Width != -1) || (field.Y != -1  && field.Height != -1))
                     {
-                        db.ExtractionSettings.Remove(dbExtSet);
-                    }
-                    ExtractionSettings extSet = new ExtractionSettings("Invoice", true, "LineItem", 0, query.LineItemSettings.BoxYMin, 0, query.LineItemSettings.BoxYMax - query.LineItemSettings.BoxYMin);
-                    db.ExtractionSettings.Add(extSet);
-                    if (query.LineItemSettings.ReferenceXMin != -1 && query.LineItemSettings.ReferenceXMax != -1)
-                    {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
-                        if (dbFieldExtSet != null)
+                        if (field.Name == "Box")
                         {
-                            db.ExtractionSettings.Remove(dbFieldExtSet);
+                            boxY = field.Y;
+                            boxHeight = field.Height;
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Reference", query.LineItemSettings.ReferenceXMin, 0, query.LineItemSettings.ReferenceXMax - query.LineItemSettings.ReferenceXMin, 0);
-                        db.ExtractionSettings.Add(fieldExtSet);
-                    }
-                    if (query.LineItemSettings.DescriptionXMin != -1 && query.LineItemSettings.DescriptionXMax != -1)
-                    {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Description").SingleOrDefault();
-                        if (dbFieldExtSet != null)
+                        else
                         {
-                            db.ExtractionSettings.Remove(dbFieldExtSet);
+                            Guid id;
+                            if (Guid.TryParse(field.Id, out id) && id != Guid.Empty)
+                                field.Name = field.Id.ToString();
+                            ExtractionSettings extSet = new ExtractionSettings("LineItem", field.Name, field.X, boxY, field.Width, boxHeight);
+                            ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && x.Name == field.Name).SingleOrDefault();
+                            if (dbExtSet != null)
+                            {
+                                db.ExtractionSettings.Remove(dbExtSet);
+                            }
+                            db.Add(extSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Description", query.LineItemSettings.DescriptionXMin, 0, query.LineItemSettings.DescriptionXMax - query.LineItemSettings.DescriptionXMin, 0);
-                        db.ExtractionSettings.Add(fieldExtSet);
                     }
-                    if (query.LineItemSettings.QuantityXMin != -1 && query.LineItemSettings.QuantityXMax != -1)
+                    else if (field.X == -1 && field.Y == -1 && field.Width == -1 && field.Height == -1)
                     {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Quantity").SingleOrDefault();
-                        if (dbFieldExtSet != null)
+                        ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && x.Name == field.Name).SingleOrDefault();
+                        if (dbExtSet != null)
                         {
-                            db.ExtractionSettings.Remove(dbFieldExtSet);
+                            db.ExtractionSettings.Remove(dbExtSet);
                         }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Quantity", query.LineItemSettings.QuantityXMin, 0, query.LineItemSettings.QuantityXMax - query.LineItemSettings.QuantityXMin, 0);
-                        db.ExtractionSettings.Add(fieldExtSet);
                     }
-                    if (query.LineItemSettings.UnitaryPriceXMin != -1 && query.LineItemSettings.UnitaryPriceXMax != -1)
-                    {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "UnitaryPrice").SingleOrDefault();
-                        if (dbFieldExtSet != null)
-                        {
-                            db.ExtractionSettings.Remove(dbFieldExtSet);
-                        }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "UnitaryPrice", query.LineItemSettings.UnitaryPriceXMin, 0, query.LineItemSettings.UnitaryPriceXMax - query.LineItemSettings.UnitaryPriceXMin, 0);
-                        db.ExtractionSettings.Add(fieldExtSet);
-                    }
-                    if (query.LineItemSettings.PriceXMin != -1 && query.LineItemSettings.PriceXMax != -1)
-                    {
-                        ExtractionSettings dbFieldExtSet = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Price").SingleOrDefault();
-                        if (dbFieldExtSet != null)
-                        {
-                            db.ExtractionSettings.Remove(dbFieldExtSet);
-                        }
-                        ExtractionSettings fieldExtSet = new ExtractionSettings("Invoice", true, "Price", query.LineItemSettings.PriceXMin, 0, query.LineItemSettings.PriceXMax - query.LineItemSettings.PriceXMin, 0);
-                        db.ExtractionSettings.Add(fieldExtSet);
-                    }
-                }
+                });
 
                 db.SaveChanges();
             }
@@ -213,42 +188,96 @@ namespace BackEndApp.Controllers
         }
 
         [HttpPost("GetExtractionSettings")]
-        public ActionResult GetExtractionSettings([FromBody] List<string> query)
+        public ActionResult GetExtractionSettings()
         {
             _logger.LogInformation("Start of GetExtractionSettings method");
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-
-            if (query.Count == 0)
-            {
-                query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(Invoice)));
-                query.Add("LineItem");
-                query.AddRange(AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(LineItem)));
-            }
-
+            List<string> invoiceFields;
+            List<string> lineItemFields;
+            Dictionary<string, string> invoiceAdditionalFields = new Dictionary<string, string>();
             List<ExtractionSettings> results = new List<ExtractionSettings>();
             using (var db = new TheCompanyDbContext(owner))
             {
-                results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && query.Contains(x.Field)).ToList();
+                invoiceFields = AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(Invoice));
+                results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && invoiceFields.Contains(x.Name)).ToList();
+
+                db.AdditionalFields.Where(x => x.DataSource == "Invoice").ToList().ForEach(field =>
+                {
+                    invoiceAdditionalFields.Add(field.Id.ToString(), field.Name);
+                });
+                List<string> keys = invoiceAdditionalFields.Keys.ToList();
+                results.AddRange(db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && keys.Contains(x.Name)).ToList());
+
+                lineItemFields = AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(LineItem));
+                results.AddRange(db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && lineItemFields.Contains(x.Name)).ToList());
+                
             }
+
             List<InvoiceGetExtractionSettingsResponse> returnValues = new List<InvoiceGetExtractionSettingsResponse>();
-            bool lineItem = false;
-            query.ForEach(x =>
+            invoiceFields.ForEach(field =>
             {
-                if (x == "LineItem")
-                    lineItem = true;
-                ExtractionSettings dbField = results.Find(y => y.Field == x);
+                ExtractionSettings dbField = results.Find(y => y.DataSource == "Invoice" && y.Name == field);
                 if (dbField != null)
                 {
                     returnValues.Add((InvoiceGetExtractionSettingsResponse)dbField);
                 }
                 else
                 {
+
                     InvoiceGetExtractionSettingsResponse item = new InvoiceGetExtractionSettingsResponse();
-                    item.Field = x;
-                    item.IsLineItem = lineItem;
+                    item.DataSource = "Invoice";
+                    item.Name = field;
                     returnValues.Add(item);
                 }
             });
+
+            foreach (KeyValuePair<string, string> field in invoiceAdditionalFields)
+            {
+                ExtractionSettings dbField = results.Find(y => y.DataSource == "Invoice" && y.Name == field.Key);
+                if (dbField != null)
+                {
+                    InvoiceGetExtractionSettingsResponse item = (InvoiceGetExtractionSettingsResponse)dbField;
+                    item.Id = dbField.Name;
+                    item.Name = field.Value;
+                    returnValues.Add(item);
+                }
+                else
+                {
+                    InvoiceGetExtractionSettingsResponse item = new InvoiceGetExtractionSettingsResponse();
+                    item.DataSource = "Invoice";
+                    item.Id = field.Key;
+                    item.Name = field.Value;
+                    returnValues.Add(item);
+                }
+            }
+
+            InvoiceGetExtractionSettingsResponse box = new InvoiceGetExtractionSettingsResponse();
+            box.DataSource = "LineItem";
+            box.Name = "Box";
+            returnValues.Add(box);
+            lineItemFields.ForEach(field =>
+            {
+                ExtractionSettings dbField = results.Find(y => y.DataSource == "LineItem" && y.Name == field);
+                if (dbField != null)
+                {
+                    if (box.Y == null)
+                    {
+                        box.Y = dbField.Y;
+                        box.Height = dbField.Height;
+                    }
+                    returnValues.Add((InvoiceGetExtractionSettingsResponse)dbField);
+                }
+                else
+                {
+                    InvoiceGetExtractionSettingsResponse item = new InvoiceGetExtractionSettingsResponse();
+                    item.DataSource = "LineItem";
+                    item.Name = field;
+                    returnValues.Add(item);
+                }
+            });
+
+            // TODO: add additional fields
+
             _logger.LogInformation("End of GetExtractionSettings method");
             return Ok(returnValues);
         }

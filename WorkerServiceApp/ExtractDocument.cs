@@ -75,14 +75,14 @@ namespace WorkerServiceApp
                             }
 
                             Type type = typeof(Invoice);
-                            List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == false).ToList();
+                            List<ExtractionSettings> extractSettings = db.ExtractionSettings.Where(x => x.DataSource == "Invoice").ToList();
                             extractSettings.ForEach(item =>
                             {
                                 Rectangle rect = new Rectangle(item.X, item.Y, item.Width, item.Height);
                                 string txt;
                                 if (ocr.ExtractTextInArea(rect, out txt))
                                 {
-                                    PropertyInfo property = type.GetProperty(item.Field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                                    PropertyInfo property = type.GetProperty(item.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                                     if (property == null)
                                     {
                                         throw new Exception("Unknown property");
@@ -135,10 +135,10 @@ namespace WorkerServiceApp
 
                             db.LineItems.RemoveRange(db.LineItems.Where(x => x.InvoiceId == invoice.Id));
 
-                            ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "LineItem").SingleOrDefault();
+                            ExtractionSettings dbBox = db.ExtractionSettings.Where(x => x.DataSource == "LineItem").SingleOrDefault();
                             if (dbBox != null)
                             {
-                                ExtractionSettings reference = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field == "Reference").SingleOrDefault();
+                                ExtractionSettings reference = db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && x.Name == "Reference").SingleOrDefault();
                                 if (reference != null)
                                 {
                                     Rectangle rect = new Rectangle(reference.X, dbBox.Y, reference.Width, dbBox.Height);
@@ -149,7 +149,7 @@ namespace WorkerServiceApp
                                     {
                                         if (references != null)
                                         {
-                                            List<ExtractionSettings> lineItemFields = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && x.IsLineItem == true && x.Field != "LineItem" && x.Field != "Reference").ToList();
+                                            List<ExtractionSettings> lineItemFields = db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && x.Name != "Reference").ToList();
                                             for (int i = 0; i < references.Count; i++)
                                             {
                                                 ExtractBlock referenceLine = references.ElementAt(i);
@@ -171,7 +171,7 @@ namespace WorkerServiceApp
                                                         if (ocr.ExtractTextInArea(areaToExtract, out txt))
                                                         {
                                                             double tmp;
-                                                            switch (field.Field)
+                                                            switch (field.Name)
                                                             {
                                                                 case "Description":
                                                                     lineItem.Description = txt;
@@ -180,23 +180,31 @@ namespace WorkerServiceApp
                                                                     if (Double.TryParse(txt, out tmp))
                                                                         lineItem.Quantity = tmp;
                                                                     break;
-                                                                case "UnitaryPrice":
-                                                                    if (Double.TryParse(txt, out tmp))
-                                                                        lineItem.UnitaryPrice = tmp;
+                                                                case "Unit":
+                                                                    lineItem.Unit = txt;
                                                                     break;
-                                                                case "Price":
+                                                                case "VAT":
                                                                     if (Double.TryParse(txt, out tmp))
-                                                                        lineItem.Price = tmp;
+                                                                        lineItem.VAT = tmp;
+                                                                    break;
+                                                                case "PriceVAT":
+                                                                    if (Double.TryParse(txt, out tmp))
+                                                                        lineItem.PriceVAT = tmp;
+                                                                    break;
+                                                                case "PriceNoVAT":
+                                                                    if (Double.TryParse(txt, out tmp))
+                                                                        lineItem.PriceNoVAT = tmp;
+                                                                    break;
+                                                                case "TotalPrice":
+                                                                    if (Double.TryParse(txt, out tmp))
+                                                                        lineItem.TotalPrice = tmp;
                                                                     break;
                                                             }
                                                         }
                                                     });
                                                 }
-                                                if (!(lineItem.Quantity == 0 && lineItem.UnitaryPrice == 0 && lineItem.Price == 0))
-                                                {
-                                                    lineItem.CreationDateTime = DateTime.Now;
-                                                    db.LineItems.Add(lineItem);
-                                                }
+                                                lineItem.CreationDateTime = DateTime.Now;
+                                                db.LineItems.Add(lineItem);
                                             }
                                         }
                                     }

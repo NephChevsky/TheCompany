@@ -13,7 +13,7 @@ namespace BackEndApp.DTO
 		public static implicit operator LineItemShowResponse<T>(LineItemDefinition lineItem)
 		{
 			LineItemShowResponse<T> result = new LineItemShowResponse<T>();
-			result.Fields = AttributeHelper.GetAuthorizedProperties<T>(lineItem);
+			result.Fields = AttributeHelper.GetAuthorizedPropertiesAsField<T>(lineItem);
 			return result;
 		}
 	}

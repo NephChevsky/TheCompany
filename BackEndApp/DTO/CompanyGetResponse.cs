@@ -14,7 +14,7 @@ namespace BackEndApp.DTO
 		public static implicit operator CompanyGetResponse<T>(Company company)
 		{
 			CompanyGetResponse<T> result = new CompanyGetResponse<T>();
-			result.Fields = AttributeHelper.GetAuthorizedProperties<T>(company);
+			result.Fields = AttributeHelper.GetAuthorizedPropertiesAsField<T>(company);
 			return result;
 		}
 	}

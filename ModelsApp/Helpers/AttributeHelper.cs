@@ -76,7 +76,19 @@ namespace ModelsApp.Helpers
 			return field;
 		}
 
-		public static List<Field> GetAuthorizedProperties<T>(object element)
+		public static List<PropertyInfo> GetAuthorizedProperties<T>(Type type)
+		{
+			List<PropertyInfo> result = new List<PropertyInfo>();
+			PropertyInfo[] properties = type.GetProperties();
+			foreach (PropertyInfo property in properties)
+			{
+				if (AttributeHelper.CheckAttribute<T>(type, property))
+					result.Add(property);
+			}
+			return result;
+		}
+
+		public static List<Field> GetAuthorizedPropertiesAsField<T>(object element)
 		{
 			List<Field> result = new List<Field>();
 			List<PropertyInfo> properties = GetAuthorizedProperties<T>(element.GetType());
@@ -88,14 +100,14 @@ namespace ModelsApp.Helpers
 			return result;
 		}
 
-		public static List<PropertyInfo> GetAuthorizedProperties<T>(Type type)
+		public static List<Field> GetAuthorizedPropertiesAsField<T>(Type type)
 		{
-			List<PropertyInfo> result = new List<PropertyInfo>();
-			PropertyInfo[] properties = type.GetProperties();
+			List<Field> result = new List<Field>();
+			List<PropertyInfo> properties = GetAuthorizedProperties<T>(type);
 			foreach (PropertyInfo property in properties)
 			{
-				if (AttributeHelper.CheckAttribute<T>(type, property))
-					result.Add(property);
+				Field field = GetProperty(type, property.Name);
+				result.Add(field);
 			}
 			return result;
 		}

@@ -126,10 +126,7 @@ namespace DbApp.Models
                 entity.Property(e => e.DataSource)
                     .IsRequired();
 
-                entity.Property(e => e.IsLineItem)
-                    .IsRequired();
-
-                entity.Property(e => e.Field)
+                entity.Property(e => e.Name)
                     .IsRequired();
 
                 entity.Property(e => e.X);
@@ -154,9 +151,15 @@ namespace DbApp.Models
 
                 entity.Property(e => e.Quantity);
 
-                entity.Property(e => e.UnitaryPrice);
+                entity.Property(e => e.Unit);
 
-                entity.Property(e => e.Price);
+                entity.Property(e => e.VAT);
+
+                entity.Property(e => e.PriceVAT);
+
+                entity.Property(e => e.PriceNoVAT);
+
+                entity.Property(e => e.TotalPrice);
 
                 AddGenericFields<LineItem>(entity);
             });

@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222193148_rename-extraction-field")]
+    partial class renameextractionfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,6 +118,9 @@ namespace DbApp.Migrations
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsLineItem")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModificationDateTime")
                         .HasColumnType("datetime2");

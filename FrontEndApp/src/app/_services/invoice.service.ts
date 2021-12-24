@@ -24,15 +24,15 @@ export class InvoiceService
 	saveExtractionSettings(invoiceSettings: any, lineItemSettings: any)
 	{
 		var data = {
-			invoiceSettings: invoiceSettings,
-			lineItemSettings: lineItemSettings
+			invoiceSettings: invoiceSettings.fields,
+			lineItemSettings: lineItemSettings.fields
 		}
 		return this.http.post(environment.baseUrl + `Invoice/SaveExtractionSettings`, data);
 	}
 
 	getExtractionSettings(ids: string[] = [])
 	{
-		return this.http.post<any>(environment.baseUrl + `Invoice/GetExtractionSettings`, ids);
+		return this.http.post(environment.baseUrl + `Invoice/GetExtractionSettings`, ids);
 	}
 
 	getInvoice(id: string)

@@ -14,7 +14,6 @@ import { InvoiceService } from '../../_services/invoice.service';
 })
 export class InvoiceExtractionComponent implements OnInit
 {
-	lineItemsName: string[] = ["LineItem", "Reference", "Description", "Quantity", "UnitaryPrice", "Price"];
 	invoiceSettingsForm: FormGroup = new FormGroup({});
 	lineItemSettingsForm: FormGroup = new FormGroup({});
 	error: string = "";
@@ -27,7 +26,10 @@ export class InvoiceExtractionComponent implements OnInit
 	constructor(private formBuilder: FormBuilder,
 		private router: Router,
 		private invoiceService: InvoiceService,
-		private additionalFieldService: AdditionalFieldService) { }
+		private additionalFieldService: AdditionalFieldService)
+	{
+
+	}
 
 	ngOnInit(): void
 	{
@@ -36,69 +38,27 @@ export class InvoiceExtractionComponent implements OnInit
 		});
 
 		this.lineItemSettingsForm = this.formBuilder.group({
-			boxymin: ['', []],
-			boxymax: ['', []],
-			referencexmin: ['', []],
-			referencexmax: ['', []],
-			descriptionxmin: ['', []],
-			descriptionxmax: ['', []],
-			quantityxmin: ['', []],
-			quantityxmax: ['', []],
-			unitarypricexmin: ['', []],
-			unitarypricexmax: ['', []],
-			pricexmin: ['', []],
-			pricexmax: ['', []]
+			"fields": new FormArray([])
 		});
 
-		this.invoiceService.getExtractionSettings().subscribe((data: any[]) =>
+		this.invoiceService.getExtractionSettings().subscribe((data: any) =>
 		{
 			for (var i = 0; i < data.length; i++)
 			{
-				if (data[i].isLineItem)
-				{
-					if (data[i].field == "LineItem")
-					{
-						if (data[i].y != null)
-						{
-							this.lineItemSettingsForm.get("boxymin").setValue(data[i].y);
-							if (data[i].height != null)
-							{
-								this.lineItemSettingsForm.get("boxymax").setValue(data[i].y + data[i].height);
-							}
-						}
-
-					}
-					else
-					{
-						if (data[i].x != null)
-						{
-							this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmin").setValue(data[i].x);
-							if (data[i].width != null)
-							{
-								this.lineItemSettingsForm.get(data[i].field.toLowerCase() + "xmax").setValue(data[i].x + data[i].width);
-							}
-						}
-					}
-				}
-				else
-				{
-					this.addField(data[i].field);
-					this.updateField(data[i].field, '', data[i].x, data[i].y, data[i].height, data[i].width);
-				}
-
+				this.addField(data[i]);
 			}
 		}, error =>
 		{
 			// TODO
 		});
 
-		this.additionalFieldService.getFields("Invoice").subscribe((result: any) =>
+		/*this.additionalFieldService.getFields("Invoice").subscribe((result: any) =>
 		{
-			var ids = []
+			var ids = [];
 			for (let item of result)
 			{
 				ids.push(item.id);
-				this.addField(item.name, item.id);
+				this.addField(item);
 			}
 			this.invoiceService.getExtractionSettings(ids).subscribe((data: any) =>
 			{
@@ -110,25 +70,34 @@ export class InvoiceExtractionComponent implements OnInit
 		}, error =>
 		{
 			// TODO
-		});
+		});*/
 	}
 
-	addField(name: string, id: string = "")
+	addField(field: any)
 	{
 		const tmpForm = this.formBuilder.group({
-			name: [name, []],
-			id: [id, []],
-			x: ['', []],
-			y: ['', []],
-			height: ['', []],
-			width: ['', []]
+			dataSource: [field.dataSource],
+			name: [field.name],
+			id: [field.id],
+			x: [field.x],
+			y: [field.y],
+			height: [field.height],
+			width: [field.width]
 		});
-		this.fields.push(tmpForm);
+
+		if (field.dataSource == "Invoice")
+		{
+			(this.invoiceSettingsForm.controls["fields"] as FormArray).push(tmpForm);
+		}
+		else if (field.dataSource == "LineItem")
+		{
+			(this.lineItemSettingsForm.controls["fields"] as FormArray).push(tmpForm);
+		}
 	}
 
 	updateField(name: string, id = "", x = "", y = "", height = "", width = "")
 	{
-		for (let item of this.fields.controls)
+		for (let item of this.invoiceFields.controls)
 		{
 			if (item.get("name").value == name || item.get("id").value == name)
 			{
@@ -141,9 +110,14 @@ export class InvoiceExtractionComponent implements OnInit
 		}
 	}
 
-	get fields()
+	get invoiceFields()
 	{
 		return this.invoiceSettingsForm.controls["fields"] as FormArray;
+	}
+
+	get lineItemFields()
+	{
+		return this.lineItemSettingsForm.controls["fields"] as FormArray;
 	}
 
 	onSubmit()
@@ -155,13 +129,26 @@ export class InvoiceExtractionComponent implements OnInit
 
 		for (let control of (this.invoiceSettingsForm.get("fields") as FormArray).controls)
 		{
-			if (control.get("x").value == "" && control.get("y").value == "" && control.get("width").value == "" && control.get("height").value == "")
-			{
+			if (control.get("x").value == "" || control.get("x").value == null)
 				control.get("x").setValue(-1);
+			if (control.get("y").value == "" || control.get("y").value == null)
 				control.get("y").setValue(-1);
+			if (control.get("width").value == "" || control.get("width").value == null)
 				control.get("width").setValue(-1);
+			if (control.get("height").value == "" || control.get("height").value == null)
 				control.get("height").setValue(-1);
-			}
+		}
+
+		for (let control of (this.lineItemSettingsForm.get("fields") as FormArray).controls)
+		{
+			if (control.get("x").value == "" || control.get("x").value == null)
+				control.get("x").setValue(-1);
+			if (control.get("y").value == "" || control.get("y").value == null)
+				control.get("y").setValue(-1);
+			if (control.get("width").value == "" || control.get("width").value == null)
+				control.get("width").setValue(-1);
+			if (control.get("height").value == "" || control.get("height").value == null)
+				control.get("height").setValue(-1);
 		}
 
 		this.invoiceService.saveExtractionSettings(this.invoiceSettingsForm.value, this.lineItemSettingsForm.value)

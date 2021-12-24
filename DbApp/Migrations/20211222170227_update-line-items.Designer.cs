@@ -4,14 +4,16 @@ using DbApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    partial class TheCompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222170227_update-line-items")]
+    partial class updatelineitems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,15 +116,18 @@ namespace DbApp.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsLineItem")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModificationDateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
