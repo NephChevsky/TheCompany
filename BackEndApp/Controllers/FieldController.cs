@@ -108,7 +108,7 @@ namespace BackEndApp.Controllers
                         values = FormatResultValues(individuals, property);
                         break;
                     case "LineItemDefinition":
-                        List<LineItemDefinition> items = db.LineItemsDefinitions.OrderBy(x => property.Name).ToList();
+                        List<LineItemDefinition> items = db.LineItemDefinitions.OrderBy(x => property.Name).ToList();
                         values = FormatResultValues(items, property);
                         break;
                     default:

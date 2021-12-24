@@ -33,11 +33,11 @@ namespace BackEndApp.Controllers
 				return BadRequest();
 
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			AdditionalField field = new AdditionalField(query.DataSource, query.Name);
+			AdditionalFieldDefinition field = new AdditionalFieldDefinition(query.DataSource, query.Name);
 
 			using (var db = new TheCompanyDbContext(owner))
 			{
-				db.AdditionalFields.Add(field);
+				db.AdditionalFieldDefinitions.Add(field);
 				try
 				{
 					db.SaveChanges();
@@ -66,7 +66,7 @@ namespace BackEndApp.Controllers
 			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 			using (var db = new TheCompanyDbContext(owner))
 			{
-				List<AdditionalField> dbAdditionalFields = db.AdditionalFields.Where(x => x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
+				List<AdditionalFieldDefinition> dbAdditionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
 				dbAdditionalFields.ForEach(additionalField =>
 				{
 					result.Add((AdditionalFieldGetResponse)additionalField);

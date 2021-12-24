@@ -201,7 +201,7 @@ namespace BackEndApp.Controllers
                 invoiceFields = AttributeHelper.GetAuthorizedPropertiesAsString<Extractable>(typeof(Invoice));
                 results = db.ExtractionSettings.Where(x => x.DataSource == "Invoice" && invoiceFields.Contains(x.Name)).ToList();
 
-                db.AdditionalFields.Where(x => x.DataSource == "Invoice").ToList().ForEach(field =>
+                db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Invoice").ToList().ForEach(field =>
                 {
                     invoiceAdditionalFields.Add(field.Id.ToString(), field.Name);
                 });

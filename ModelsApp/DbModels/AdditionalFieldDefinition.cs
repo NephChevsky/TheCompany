@@ -6,19 +6,18 @@ using System.Text;
 
 namespace ModelsApp.DbModels
 {
-    public class AdditionalField : IOwnable, ISoftDeleteable, IDateTimeTrackable
-    {
+	[Viewable]
+	public class AdditionalFieldDefinition : IOwnable, ISoftDeleteable, IDateTimeTrackable
+	{
 		[IdentifierField]
 		public Guid Id { get; set; }
 
-		[IdentifierField]
-		public Guid SourceId { get; set; }
-
-		[IdentifierField]
-		public Guid FieldId { get; set; }
+		[TextField]
+		public string DataSource { get; set; }
 
 		[TextField]
-		public string Value { get; set; }
+		[Viewable]
+		public string Name { get; set; }
 
 		// IOwnable
 		[IdentifierField]
@@ -34,5 +33,16 @@ namespace ModelsApp.DbModels
 
 		[DateTimeField]
 		public DateTime LastModificationDateTime { get; set; }
+
+		public AdditionalFieldDefinition()
+		{
+
+		}
+
+		public AdditionalFieldDefinition(string dataSource, string name)
+		{
+			DataSource = dataSource;
+			Name = name;
+		}
 	}
 }

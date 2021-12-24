@@ -40,7 +40,7 @@ namespace BackEndApp.Controllers
                 Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
                 using (var db = new TheCompanyDbContext(owner))
                 {
-                    LineItemDefinition dbLineItem = db.LineItemsDefinitions.Where(x => x.Id.ToString() == id).SingleOrDefault();
+                    LineItemDefinition dbLineItem = db.LineItemDefinitions.Where(x => x.Id.ToString() == id).SingleOrDefault();
                     if (dbLineItem == null)
                     {
                         return UnprocessableEntity("NotFound");
@@ -77,7 +77,7 @@ namespace BackEndApp.Controllers
                 else
                 {
                     Guid lineItemId = Guid.Parse(query.Id);
-                    lineItemDefinition = db.LineItemsDefinitions.Where(x => x.Id == lineItemId).SingleOrDefault();
+                    lineItemDefinition = db.LineItemDefinitions.Where(x => x.Id == lineItemId).SingleOrDefault();
                 }
 
                 Type type = typeof(LineItemDefinition);

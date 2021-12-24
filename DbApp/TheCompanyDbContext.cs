@@ -35,9 +35,10 @@ namespace DbApp.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
+        public virtual DbSet<AdditionalFieldDefinition> AdditionalFieldDefinitions { get; set; }
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
-        public virtual DbSet<LineItemDefinition> LineItemsDefinitions { get; set; }
+        public virtual DbSet<LineItemDefinition> LineItemDefinitions { get; set; }
         public virtual DbSet<LineItem> LineItems { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FilePreview> FilePreviews { get; set; }
@@ -110,13 +111,26 @@ namespace DbApp.Models
                 AddGenericFields<Invoice>(entity);
             });
 
-            modelBuilder.Entity<AdditionalField>(entity =>
+            modelBuilder.Entity<AdditionalFieldDefinition>(entity =>
             {
                 entity.Property(e => e.DataSource)
                     .IsRequired();
 
                 entity.Property(e => e.Name)
                     .IsRequired();
+
+                AddGenericFields<AdditionalField>(entity);
+            });
+
+            modelBuilder.Entity<AdditionalField>(entity =>
+            {
+                entity.Property(e => e.SourceId)
+                    .IsRequired();
+
+                entity.Property(e => e.FieldId)
+                    .IsRequired();
+
+                entity.Property(e => e.Value);
 
                 AddGenericFields<AdditionalField>(entity);
             });

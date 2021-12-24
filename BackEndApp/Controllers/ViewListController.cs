@@ -67,7 +67,7 @@ namespace BackEndApp.Controllers
                         values = FormatResultValues(invoices, query.Fields);
                         break;
                     case "AdditionalField":
-                        List<AdditionalField> additionalFields = db.AdditionalFields.OrderBy(obj => obj.Name)
+                        List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.OrderBy(obj => obj.Name)
                                                                                     .FilterDynamic(query.Filters)
                                                                                     .ToList();
                         values = FormatResultValues(additionalFields, query.Fields);
@@ -79,7 +79,7 @@ namespace BackEndApp.Controllers
                         values = FormatResultValues(lineItems, query.Fields);
                         break;
                     case "LineItemDefinition":
-                        List<LineItemDefinition> lineItemDefinitions = db.LineItemsDefinitions.OrderBy(obj => obj.CreationDateTime)
+                        List<LineItemDefinition> lineItemDefinitions = db.LineItemDefinitions.OrderBy(obj => obj.CreationDateTime)
                                                                                               .FilterDynamic(query.Filters)
                                                                                               .ToList();
                         values = FormatResultValues(lineItemDefinitions, query.Fields);
