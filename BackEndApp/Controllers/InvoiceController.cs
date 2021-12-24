@@ -150,7 +150,7 @@ namespace BackEndApp.Controllers
                 int boxHeight = -1;
                 query.LineItemSettings.ForEach(field =>
                 {
-                    if ((field.X != -1 && field.Width != -1) || (field.Y != -1  && field.Height != -1))
+                    if ((field.Name != "Box" && field.X != -1 && field.Width != -1) || (field.Name == "Box" && field.Y != -1  && field.Height != -1))
                     {
                         if (field.Name == "Box")
                         {
@@ -171,7 +171,7 @@ namespace BackEndApp.Controllers
                             db.Add(extSet);
                         }
                     }
-                    else if (field.X == -1 && field.Y == -1 && field.Width == -1 && field.Height == -1)
+                    else if ((field.Name != "Box" && field.X == -1 && field.Width == -1) || (field.Name == "Box" && field.Y == -1  && field.Height == -1))
                     {
                         ExtractionSettings dbExtSet = db.ExtractionSettings.Where(x => x.DataSource == "LineItem" && x.Name == field.Name).SingleOrDefault();
                         if (dbExtSet != null)
