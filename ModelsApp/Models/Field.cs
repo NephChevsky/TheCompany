@@ -6,8 +6,8 @@ namespace ModelsApp.Models
 {
 	public class Field
 	{
-		public string Name { get; set; }
 		public string DataSource { get; set; }
+		public string Name { get; set; }
 		public string Type { get; set; }
 		public string Value { get; set; }
 		public List<string> PossibleValues { get; set; }
@@ -19,5 +19,14 @@ namespace ModelsApp.Models
         {
 			PossibleValues = new List<string>();
 		}
+
+		public Field(string dataSource, string name, string type, string value)
+        {
+			DataSource = dataSource;
+			Name = name;
+			Type = type;
+			Value = value;
+			Editable = true;
+        }
 	}
 }

@@ -20,6 +20,7 @@ using ModelsApp.Helpers;
 using OcrApp;
 using OcrApp.Models;
 using System.Text.Json;
+using ModelsApp.Models;
 
 namespace BackEndApp.Controllers
 {
@@ -303,8 +304,21 @@ namespace BackEndApp.Controllers
                     }
                     else
                     {
+                        InvoiceShowResponse<Viewable> result = (InvoiceShowResponse<Viewable>)dbInvoice;
+                        List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Invoice").ToList();
+                        additionalFields.ForEach(field =>
+                        {
+                            AdditionalField value = db.AdditionalFields.Where(x => x.SourceId == dbInvoice.Id && x.FieldId == field.Id).SingleOrDefault();
+                            Field newField = new Field("Invoice", field.Name, "TextField", "");
+                            if (value != null)
+                            {
+                                newField.Value = value.Value;
+                            }
+                            result.Fields.Add(newField);
+                        });
+                        
                         _logger.LogInformation("End of Show method");
-                        return Ok((InvoiceShowResponse<Viewable>)dbInvoice);
+                        return Ok(result);
                     }
                 }
             }
