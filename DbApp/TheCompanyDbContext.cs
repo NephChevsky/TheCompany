@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 using ModelsApp;
 using ModelsApp.DbInterfaces;
 using ModelsApp.DbModels;
@@ -234,15 +236,42 @@ namespace DbApp.Models
                 AddGenericFields<Company>(entity);
             });
 
+            Expression<Func<ISoftDeleteable, bool>> filterSoftDeleteable = bm => !bm.Deleted;
+            Expression<Func<IOwnable, bool>> filterOwnable = bm => bm.Owner == Owner;
             foreach (var type in modelBuilder.Model.GetEntityTypes())
             {
+                Expression filter = null;
+                var param = Expression.Parameter(type.ClrType, "entity");
                 if (typeof(ISoftDeleteable).IsAssignableFrom(type.ClrType))
-                    modelBuilder.SetSoftDeleteFilter(type.ClrType);
+                {
+                    filter = AddFilter(filter, ReplacingExpressionVisitor.Replace(filterSoftDeleteable.Parameters.First(), param, filterSoftDeleteable.Body));
+                }
+
                 if (typeof(IOwnable).IsAssignableFrom(type.ClrType))
-                    modelBuilder.SetSoftDeleteFilter(type.ClrType);
+                {
+                    filter = AddFilter(filter, ReplacingExpressionVisitor.Replace(filterOwnable.Parameters.First(), param, filterOwnable.Body));
+                }
+
+                if (filter != null)
+                {
+                    type.SetQueryFilter(Expression.Lambda(filter, param));
+                }
             }
 
             OnModelCreatingPartial(modelBuilder);
+        }
+
+        private Expression AddFilter(Expression filter, Expression newFilter)
+        {
+            if (filter == null)
+            {
+                filter = newFilter;
+            }
+            else
+            {
+                filter = Expression.And(filter, newFilter);
+            }
+            return filter;
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
@@ -382,41 +411,6 @@ namespace DbApp.Models
                     }
                 }
             }
-        }
-    }
-
-    public static class EFFilterExtensions
-    {
-        public static void SetSoftDeleteFilter(this ModelBuilder modelBuilder, Type entityType)
-        {
-            SetSoftDeleteFilterMethod.MakeGenericMethod(entityType)
-                .Invoke(null, new object[] { modelBuilder });
-        }
-
-        static readonly MethodInfo SetSoftDeleteFilterMethod = typeof(EFFilterExtensions)
-                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                   .Single(t => t.IsGenericMethod && t.Name == "SetSoftDeleteFilter");
-
-        public static void SetSoftDeleteFilter<TEntity>(this ModelBuilder modelBuilder)
-            where TEntity : class, ISoftDeleteable
-        {
-            modelBuilder.Entity<TEntity>().HasQueryFilter(x => !x.Deleted);
-        }
-
-        public static void SetOwnerFilter(this ModelBuilder modelBuilder, Type entityType)
-        {
-            SetOwnerFilterMethod.MakeGenericMethod(entityType)
-                .Invoke(null, new object[] { modelBuilder });
-        }
-
-        static readonly MethodInfo SetOwnerFilterMethod = typeof(EFFilterExtensions)
-                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                   .Single(t => t.IsGenericMethod && t.Name == "SetSoftDeleteFilter");
-
-        public static void SetOwnerFilter<TEntity>(this ModelBuilder modelBuilder, Guid owner)
-            where TEntity : class, IOwnable
-        {
-            modelBuilder.Entity<TEntity>().HasQueryFilter(x => x.Owner == owner);
         }
     }
 
