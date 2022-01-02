@@ -290,7 +290,18 @@ namespace BackEndApp.Controllers
             if (id == null || id == "null")
             {
                 Invoice invoice = new Invoice();
-                return Ok((InvoiceShowResponse<Editable>)invoice);
+                InvoiceShowResponse<Editable> result = (InvoiceShowResponse<Editable>)invoice;
+                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+                using (var db = new TheCompanyDbContext(owner))
+                {
+                    List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Invoice").ToList();
+                    additionalFields.ForEach(field =>
+                    {
+                        Field newField = new Field("Invoice", field.Name, "TextField", "");
+                        result.Fields.Add(newField);
+                    });
+                }
+                return Ok((InvoiceShowResponse<Editable>)result);
             }
             else
             {
@@ -531,7 +542,7 @@ namespace BackEndApp.Controllers
                     else
                     {
                         // TODO: use additional field id instead of name
-                        AdditionalFieldDefinition additionalField = db.AdditionalFieldDefinitions.Where(field => field.Name == x.Name).SingleOrDefault();
+                        AdditionalFieldDefinition additionalField = db.AdditionalFieldDefinitions.Where(field => field.DataSource == "Invoice" && field.Name == x.Name).SingleOrDefault();
                         if (additionalField != null)
                         {
                             AdditionalField additionalFieldValue = db.AdditionalFields.Where(field => field.SourceId == invoice.Id && field.FieldId == additionalField.Id).SingleOrDefault();

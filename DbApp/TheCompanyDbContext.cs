@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
-using ModelsApp;
 using ModelsApp.DbInterfaces;
 using ModelsApp.DbModels;
 using ModelsApp.Models;

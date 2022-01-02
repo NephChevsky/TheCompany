@@ -90,7 +90,7 @@ namespace BackEndApp.Controllers
                     else
                     {
                         // TODO: use additional field id instead of name
-                        AdditionalFieldDefinition additionalField = db.AdditionalFieldDefinitions.Where(field => field.Name == x.Name).SingleOrDefault();
+                        AdditionalFieldDefinition additionalField = db.AdditionalFieldDefinitions.Where(field => field.DataSource=="Customer" && field.Name == x.Name).SingleOrDefault();
                         if (additionalField != null)
                         {
                             AdditionalField additionalFieldValue = db.AdditionalFields.Where(field => field.SourceId == individual.Id && field.FieldId == additionalField.Id).SingleOrDefault();
@@ -125,7 +125,19 @@ namespace BackEndApp.Controllers
 			if (id == null || id == "null")
 			{
 				Individual customer = new Individual();
-				return Ok((CustomerShowResponse<Editable>)customer);
+                CustomerShowResponse<Editable> result = (CustomerShowResponse<Editable>)customer;
+                Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+                using (var db = new TheCompanyDbContext(owner))
+                {
+                    List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Customer").ToList();
+                    additionalFields.ForEach(field =>
+                    {
+                        Field newField = new Field("Customer", field.Name, "TextField", "");
+                        result.Fields.Add(newField);
+                    });
+                }
+
+                return Ok((CustomerShowResponse<Editable>)result);
 			}
 			else
 			{
