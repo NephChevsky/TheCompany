@@ -156,19 +156,35 @@ namespace BackEndApp.Controllers
             Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
             using (var db = new TheCompanyDbContext(owner))
             {
+                ParameterExpression param;
+                MemberExpression prop;
+                Expression left, right, exp;
                 switch (query.DataSource)
                 {
                     case "Individual":
-                        var param = Expression.Parameter(type, "e");
-                        var prop = Expression.PropertyOrField(param, property.Name);
-                        Expression left = prop;
-                        Expression right = Expression.Constant(query.Value);
-                        Expression exp = Expression.Equal(left, right);
-                        Expression<Func<Individual, bool>>  predicate = Expression.Lambda<Func<Individual, bool>>(exp, param);
-                        Individual individual = db.Individuals.Where(predicate).FirstOrDefault();
+                        param = Expression.Parameter(type, "e");
+                        prop = Expression.PropertyOrField(param, property.Name);
+                        left = prop;
+                        right = Expression.Constant(query.Value);
+                        exp = Expression.Equal(left, right);
+                        Expression<Func<Individual, bool>> individualPredicate = Expression.Lambda<Func<Individual, bool>>(exp, param);
+                        Individual individual = db.Individuals.Where(individualPredicate).FirstOrDefault();
                         if (individual != null)
                         {
                             result = AttributeHelper.GetAuthorizedPropertiesAsField<Viewable>(individual);
+                        }
+                        break;
+                    case "LineItemDefinition":
+                        param = Expression.Parameter(type, "e");
+                        prop = Expression.PropertyOrField(param, property.Name);
+                        left = prop;
+                        right = Expression.Constant(query.Value);
+                        exp = Expression.Equal(left, right);
+                        Expression<Func<LineItemDefinition, bool>> lineItemPredicate = Expression.Lambda<Func<LineItemDefinition, bool>>(exp, param);
+                        LineItemDefinition lineItem = db.LineItemDefinitions.Where(lineItemPredicate).FirstOrDefault();
+                        if (lineItem != null)
+                        {
+                            result = AttributeHelper.GetAuthorizedPropertiesAsField<Viewable>(lineItem);
                         }
                         break;
                     default:

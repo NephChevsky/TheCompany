@@ -1,0 +1,19 @@
+.content {
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+td {
+	border: 1px black solid;
+	padding: 5px;
+}
+
+.fieldName {
+	font-weight: bold;
+}
+
+.buttons button {
+	margin: 10px;
+}

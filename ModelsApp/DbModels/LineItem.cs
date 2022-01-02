@@ -20,7 +20,7 @@ namespace ModelsApp.DbModels
 		[Editable]
 		[Extractable]
 		[AutoCompletable("LineItemDefinition", "Reference")]
-		[Bindable("LineItemDefinition", "Reference", "Description", "Description", "Quantity", "Quantity", "UnitaryPrice", "UnitaryPrice", "Price", "Price")]
+		[Bindable("LineItemDefinition", "Reference", "Description", "Description", "Unit", "Unit", "VAT", "VAT", "PriceNoVAT", "PriceNoVAT", "PriceVAT", "PriceVAT")]
 		public string Reference { get; set; }
 
 		[TextField]

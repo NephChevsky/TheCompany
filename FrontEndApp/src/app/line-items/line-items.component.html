@@ -1,6 +1,6 @@
 <div class="content">
 	<div class="buttons">
-		<button class="btn btn-primary" [routerLink]="['Create']">Create</button>
+		<button id="create" class="btn btn-primary" [routerLink]="['Create']">Create</button>
 	</div>
 	<app-view-list [dataSource]="dataSource" [fields]="['Reference','Description','Unit', 'PriceNoVAT', 'VAT', 'PriceVAT']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>
 </div>

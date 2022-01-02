@@ -1,4 +1,4 @@
 <div class="buttons">
-	<button class="btn btn-primary" [routerLink]="['Create']">Create customer</button>
+	<button id="create" class="btn btn-primary" [routerLink]="['Create']">Create customer</button>
 </div>
-<app-view-list [dataSource]="dataSource" [fields]="['CustomerNumber','LastName','FirstName','Address']"></app-view-list>
+<app-view-list [dataSource]="dataSource" [fields]="['CustomerNumber','LastName','FirstName','Address']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>

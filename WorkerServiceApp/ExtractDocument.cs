@@ -235,6 +235,9 @@ namespace WorkerServiceApp
                             {
                                 throw new Exception("Couldn't create extraction file " + id.ToString());
                             }
+
+                            Directory.Delete(tempFileName);
+
                             invoice.ExtractId = id;
                             invoice.ExtractDateTime = DateTime.Now;
                             invoice.LockedBy = null;

@@ -1,0 +1,19 @@
+<div class="content">
+	<div class="customerFields">
+		<h4>Customer details</h4>
+		<form [formGroup]="customerForm">
+			<table>
+				<tr *ngFor="let field of customerData">
+					<td class="fieldName">{{field.name}}</td>
+					<td><app-field [field]="field" [form]="customerForm" key="{{field.name}}" [editMode]="editMode"></app-field></td>
+				</tr>
+			</table>
+		</form>
+		<br /><br />
+		<div class="buttons">
+			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
+			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">Cancel</button>
+			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
+		</div>
+	</div>
+</div>

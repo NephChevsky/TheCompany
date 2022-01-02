@@ -3,7 +3,7 @@
 	<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 	<section class="form-group">
 		<label for="email">Email</label>
-		<input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" autocomplete="email" required />
+		<input type="email" id="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" autocomplete="email" required />
 		<div *ngIf="submitted && f.email.errors" class="invalid-feedback">
 			<div *ngIf="f.email.errors.required">Email is required</div>
 			<div *ngIf="f.email.errors.email">Not an email address</div>
@@ -12,7 +12,7 @@
 	</section>
 	<section class="form-group">
 		<label for="password">Password</label>
-		<input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" autocomplete="new-password" required />
+		<input type="password" id="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" autocomplete="new-password" required />
 		<div *ngIf="submitted && f.password.errors" class="invalid-feedback">
 			<div *ngIf="f.password.errors.required">Password is required</div>
 			<div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
@@ -20,7 +20,7 @@
 	</section>
 	<section class="form-group">
 		<label for="confirmPassword">Confirm password</label>
-		<input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" autocomplete="new-password" required />
+		<input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" autocomplete="new-password" required />
 		<div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
 			<div *ngIf="f.confirmPassword.errors.required">Password is required</div>
 			<div *ngIf="f.confirmPassword.errors.minlength">Password must be at least 6 characters</div>
@@ -28,7 +28,7 @@
 		</div>
 	</section>
 	<div class="form-group signup-buttons">
-		<button [disabled]="loading" class="btn btn-primary">
+		<button id="register" [disabled]="loading" class="btn btn-primary">
 		<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
 		Register
 		</button>

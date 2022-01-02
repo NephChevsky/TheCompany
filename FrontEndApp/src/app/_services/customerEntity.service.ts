@@ -11,8 +11,13 @@ export class CustomerEntityService
 	{
 	}
 
-	createCustomer(customer: CustomerEntity)
+	save(customer: any)
 	{
-		return this.http.post<CustomerEntity>(environment.baseUrl + `Customer/Create`, customer);
+		return this.http.post(environment.baseUrl + `Customer/Save`, customer);
+	}
+
+	get(id: string)
+	{
+		return this.http.get(environment.baseUrl + `Customer/Show/` + id);
 	}
 }

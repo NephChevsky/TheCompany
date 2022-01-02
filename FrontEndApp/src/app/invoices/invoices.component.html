@@ -1,5 +1,5 @@
 <div class="buttons">
-	<button class="btn btn-primary" [routerLink]="['Create']">Create invoice</button>
-	<button class="btn btn-primary" [routerLink]="['Import']">Import invoice</button>
+	<button class="btn btn-primary" [routerLink]="['Create']" id="create-invoice">Create invoice</button>
+	<button class="btn btn-primary" [routerLink]="['Import']" id="import-invoice">Import invoice</button>
 </div>
 <app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerFirstName','CustomerLastName','CustomerAddress', 'FileName']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>

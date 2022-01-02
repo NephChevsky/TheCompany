@@ -66,7 +66,7 @@ namespace BackEndApp.Controllers
                                                             .ToList();
                         values = FormatResultValues(invoices, query.Fields);
                         break;
-                    case "AdditionalField":
+                    case "AdditionalFieldDefinition":
                         List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.OrderBy(obj => obj.Name)
                                                                                     .FilterDynamic(query.Filters)
                                                                                     .ToList();

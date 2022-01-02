@@ -8,9 +8,9 @@
 			</tr>
 		</table>
 		<div class="buttons">
-			<button class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
+			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
 			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">Cancel</button>
-			<button class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
+			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
 		</div>
 	</form>
 </div>

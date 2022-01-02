@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
 import { CustomersComponent } from './customers/customers.component';
-import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
+import { ShowCustomerComponent } from './customers/show-customer/show-customer.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ShowInvoiceComponent } from './invoices/show-invoice/show-invoice.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
@@ -26,7 +26,8 @@ const routes: Routes = [
 	{ path: 'Login', component: LoginComponent },
 	{ path: 'SignUp', component: SignUpComponent },
 	{ path: 'Customers', component: CustomersComponent, canActivate: [AuthGuard] },
-	{ path: 'Customers/Create', component: CreateCustomerComponent, canActivate: [AuthGuard] },
+	{ path: 'Customers/Show/:id', component: ShowCustomerComponent, canActivate: [AuthGuard] },
+	{ path: 'Customers/Create', component: ShowCustomerComponent, canActivate: [AuthGuard] },
 	{ path: 'Invoices', component: InvoicesComponent, canActivate: [AuthGuard] },
 	{ path: 'Invoices/Import', component: ImportInvoiceComponent, canActivate: [AuthGuard] },
 	{ path: 'Invoices/Show/:id', component: ShowInvoiceComponent, canActivate: [AuthGuard] },

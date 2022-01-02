@@ -13,7 +13,6 @@ import { LoginComponent } from './login/login.component';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { JwtInterceptor } from './_services/jwt.interceptor';
 import { CustomersComponent } from './customers/customers.component';
-import { CreateCustomerComponent } from './customers/create-customer/create-customer.component';
 import { ViewListComponent } from './_modules/view-list/view-list.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ImportInvoiceComponent } from './invoices/import-invoice/import-invoice.component';
@@ -30,6 +29,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CompanyInformationComponent } from './settings/company-information/company-information.component';
 import { LineItemsComponent } from './line-items/line-items.component';
 import { ShowLineItemComponent } from './line-items/show-line-item/show-line-item.component';
+import { ShowCustomerComponent } from './customers/show-customer/show-customer.component';
 
 @NgModule({
 	declarations: [
@@ -38,7 +38,6 @@ import { ShowLineItemComponent } from './line-items/show-line-item/show-line-ite
 		SignUpComponent,
 		LoginComponent,
 		CustomersComponent,
-		CreateCustomerComponent,
 		ViewListComponent,
 		InvoicesComponent,
 		ImportInvoiceComponent,
@@ -53,7 +52,8 @@ import { ShowLineItemComponent } from './line-items/show-line-item/show-line-ite
 		FieldComponent,
 		CompanyInformationComponent,
 		LineItemsComponent,
-		ShowLineItemComponent
+		ShowLineItemComponent,
+		ShowCustomerComponent
 	],
 	imports: [
 		BrowserModule,

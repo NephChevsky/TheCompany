@@ -17,6 +17,7 @@ namespace ModelsApp.DbModels
 
 		[TextField]
 		[Viewable]
+		[Editable]
 		public string CustomerNumber { get; set; }
 
 		// IOwnable

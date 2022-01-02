@@ -137,7 +137,7 @@ export class ShowInvoiceComponent implements OnInit
 		if (this.editMode)
 		{
 			var input = document.getElementById(this.focusedFieldId) as HTMLInputElement;
-			var tmp = this.focusedFieldId.split(".");
+			var tmp = this.focusedFieldId.split("-");
 			if (tmp.length == 2)
 				this.lineItemsForm.controls["values"].get([tmp[0]]).patchValue({ [tmp[1]]: text });
 			else

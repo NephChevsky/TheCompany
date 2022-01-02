@@ -10,19 +10,19 @@
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
 								<td>X:</td>
-								<td><input id="{{item.get('name').value + '.x'}}" type="number" formControlName="x"></td>
+								<td><input id="{{item.get('name').value + '-x'}}" type="number" formControlName="x"></td>
 							</tr>
 							<tr>
 								<td>Y:</td>
-								<td><input id="{{item.get('name').value + '.y'}}" type="number" formControlName="y"></td>
+								<td><input id="{{item.get('name').value + '-y'}}" type="number" formControlName="y"></td>
 							</tr>
 							<tr>
 								<td>Height:</td>
-								<td><input id="{{item.get('name').value + '.height'}}" type="number" formControlName="height"></td>
+								<td><input id="{{item.get('name').value + '-height'}}" type="number" formControlName="height"></td>
 							</tr>
 							<tr>
 								<td>Width:</td>
-								<td><input id="{{item.get('name').value + '.width'}}" type="number" formControlName="width"></td>
+								<td><input id="{{item.get('name').value + '-width'}}" type="number" formControlName="width"></td>
 							</tr>
 						</table>
 					</td>
@@ -40,11 +40,11 @@
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
 								<td>Y:</td>
-								<td><input id="{{item.get('name').value + '.y'}}" type="number" formControlName="y"></td>
+								<td><input id="{{item.get('name').value + '-y'}}" type="number" formControlName="y"></td>
 							</tr>
 							<tr>
 								<td>Height:</td>
-								<td><input id="{{item.get('name').value + '.height'}}" type="number" formControlName="height"></td>
+								<td><input id="{{item.get('name').value + '-height'}}" type="number" formControlName="height"></td>
 							</tr>
 						</table>
 					</td>
@@ -52,117 +52,20 @@
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
 								<td>X:</td>
-								<td><input id="{{item.get('name').value + '.x'}}" type="number" formControlName="x"></td>
+								<td><input id="{{item.get('name').value + '-x'}}" type="number" formControlName="x"></td>
 							</tr>
 							<tr>
 								<td>Width:</td>
-								<td><input id="{{item.get('name').value + '.width'}}" type="number" formControlName="width"></td>
+								<td><input id="{{item.get('name').value + '-width'}}" type="number" formControlName="width"></td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
 		</form>
-		<!--<form [formGroup]="lineItemSettingsForm">
-		<br /><br /><br />
-		<h3>Line items</h3>
-		<br />
-		<table class="main">
-			<tr>
-				<td>Full box size</td>
-				<td>
-					<table (click)="showBoundingBox('LineItemBox')">
-						<tr>
-							<td>Y min:</td>
-							<td><input type="number" id="boxymin" formControlName="boxymin"></td>
-						</tr>
-						<tr>
-							<td>Y max:</td>
-							<td><input type="number" id="boxymax" formControlName="boxymax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Reference</td>
-				<td>
-					<table (click)="showBoundingBox('reference')">
-						<tr>
-							<td>X min:</td>
-							<td><input type="number" id="referencexmin" formControlName="referencexmin"></td>
-						</tr>
-						<tr>
-							<td>X max:</td>
-							<td><input type="number" id="referencexmax" formControlName="referencexmax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Description</td>
-				<td>
-					<table (click)="showBoundingBox('description')">
-						<tr>
-							<td>X min:</td>
-							<td><input type="number" id="descriptionxmin" formControlName="descriptionxmin"></td>
-						</tr>
-						<tr>
-							<td>X max:</td>
-							<td><input type="number" id="descriptionxmax" formControlName="descriptionxmax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Quantity</td>
-				<td>
-					<table (click)="showBoundingBox('quantity')">
-						<tr>
-							<td>X min:</td>
-							<td><input type="number" id="quantityxmin" formControlName="quantityxmin"></td>
-						</tr>
-						<tr>
-							<td>X max:</td>
-							<td><input type="number" id="quantityxmax" formControlName="quantityxmax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Unitary price</td>
-				<td>
-					<table (click)="showBoundingBox('unitaryprice')">
-						<tr>
-							<td>X min:</td>
-							<td><input type="number" id="unitarypricexmin" formControlName="unitarypricexmin"></td>
-						</tr>
-						<tr>
-							<td>X max:</td>
-							<td><input type="number" id="unitarypricexmax" formControlName="unitarypricexmax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Price</td>
-				<td>
-					<table (click)="showBoundingBox('price')">
-						<tr>
-							<td>X min:</td>
-							<td><input type="number" id="pricexmin" formControlName="pricexmin"></td>
-						</tr>
-						<tr>
-							<td>X max:</td>
-							<td><input type="number" id="pricexmax" formControlName="pricexmax"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</form>-->
 		<br />
 		<br />
-		<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+		<button id="save" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
 		<button class="btn btn-primary" (click)="onSubmit()">Save</button>
 	</div>
 	<div class="invoicePreview">

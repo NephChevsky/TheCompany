@@ -9,7 +9,7 @@ import { Filter } from 'src/app/_models/filter';
 })
 export class InvoiceComponent implements OnInit {
 
-	public dataSource: string = "AdditionalField";
+	public dataSource: string = "AdditionalFieldDefinition";
 	public filters: Filter[] = [new Filter("DataSource", "=", "Invoice")];
 
 	constructor(private router: Router) { }

@@ -304,8 +304,8 @@ namespace BackEndApp.Controllers
                     }
                     else
                     {
-                        // TODO: use additional field id instead of name
                         InvoiceShowResponse<Viewable> result = (InvoiceShowResponse<Viewable>)dbInvoice;
+                        // TODO: use additional field id instead of name
                         List<AdditionalFieldDefinition> additionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == "Invoice").ToList();
                         additionalFields.ForEach(field =>
                         {
@@ -424,6 +424,7 @@ namespace BackEndApp.Controllers
             ;
 
             result.Extraction = Convert.ToBase64String(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ocr.GetExtractedBlocks(true))));
+            Directory.Delete(tempFileName);
 
             _logger.LogInformation("End of GetPreviewOnTheFly method");
             return Ok(result);
@@ -574,7 +575,14 @@ namespace BackEndApp.Controllers
                             }
                             else if (property.PropertyType == typeof(double))
                             {
-                                property.SetValue(currentItem, Double.Parse(field.Value));
+                                if (string.IsNullOrEmpty(field.Value))
+                                {
+                                    property.SetValue(currentItem, null);
+                                }
+                                else
+                                {
+                                    property.SetValue(currentItem, Double.Parse(field.Value));
+                                }
                             }
                             else if (property.PropertyType == typeof(double?))
                             {
