@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace WorkerServiceApp
 {
-    public class ExtractDocument : BackgroundService
+    public class ExtractDocument : BackgroundService // TODO: switch to timer service
     {
         private readonly ILogger<ExtractDocument> _logger;
         private IConfiguration Configuration { get; }
@@ -41,20 +41,29 @@ namespace WorkerServiceApp
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                using (var db = new TheCompanyDbContext(Guid.Empty))
+                bool stop = false;
+                while (!stop && !stoppingToken.IsCancellationRequested)
                 {
-                    bool stop = false;
-                    while (!stop && !stoppingToken.IsCancellationRequested)
+                    Guid owner = Guid.Empty;
+                    Guid invoiceId = Guid.Empty;
+                    using (var db = new TheCompanyDbContext(Guid.Empty))
                     {
                         Invoice invoice = db.Invoices.Where(x => x.ShouldBeExtracted == true && x.IsExtracted == false && string.IsNullOrEmpty(x.LockedBy)).FirstOrDefault();
                         if (invoice != null)
                         {
                             _logger.LogInformation(string.Concat("Start processing invoice " + invoice.Id.ToString()));
-                            db.SetOwner(invoice.Owner);
+                            owner = invoice.Owner;
+                            invoiceId = invoice.Id;
                             invoice.LockedBy = string.Concat("ExtractDocument-", AppId);
                             db.SaveChanges();
+                        }
+                    }
 
-                            // TODO: run in a task (not sure if it's worth it in azure function since it will be parallelized by kubernets
+                    if (owner != Guid.Empty && invoiceId != Guid.Empty)
+                    {
+                        using (var db = new TheCompanyDbContext(owner))
+                        {
+                            Invoice invoice = db.Invoices.Where(x => x.Id == invoiceId).SingleOrDefault();
                             Storage storage = new Storage(Configuration.GetSection("Storage"), invoice.Owner);
                             MemoryStream inputStream;
                             if (!storage.GetFile(invoice.FileId, out inputStream))
@@ -236,20 +245,19 @@ namespace WorkerServiceApp
                                 throw new Exception("Couldn't create extraction file " + id.ToString());
                             }
 
-                            Directory.Delete(tempFileName);
+                            System.IO.File.Delete(tempFileName);
 
                             invoice.ExtractId = id;
                             invoice.ExtractDateTime = DateTime.Now;
                             invoice.LockedBy = null;
                             invoice.IsExtracted = true;
                             db.SaveChanges();
-                            db.SetOwner(Guid.Empty);
                             _logger.LogInformation(string.Concat("Invoice " + invoice.Id.ToString() + " has been processed"));
                         }
-                        else
-                        {
-                            stop = true;
-                        }
+                    }
+                    else
+                    {
+                        stop = true;
                     }
                 }
                 await Task.Delay(1000, stoppingToken);

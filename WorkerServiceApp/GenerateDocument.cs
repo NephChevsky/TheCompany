@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace WorkerServiceApp
 {
-    public class GenerateDocument : BackgroundService
+    public class GenerateDocument : BackgroundService // TODO: switch to timer service
     {
         private readonly ILogger<GenerateDocument> _logger;
         private IConfiguration Configuration { get; }
@@ -46,19 +46,29 @@ namespace WorkerServiceApp
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                using (var db = new TheCompanyDbContext(Guid.Empty))
+                bool stop = false;
+                while (!stop && !stoppingToken.IsCancellationRequested)
                 {
-                    bool stop = false;
-                    while (!stop && !stoppingToken.IsCancellationRequested)
+                    Guid owner = Guid.Empty;
+                    Guid invoiceId = Guid.Empty;
+                    using (var db = new TheCompanyDbContext(Guid.Empty))
                     {
                         Invoice dbInvoice = db.Invoices.Where(x => x.ShouldBeGenerated == true && x.IsGenerated == false && string.IsNullOrEmpty(x.LockedBy)).FirstOrDefault();
                         if (dbInvoice != null)
                         {
                             _logger.LogInformation(string.Concat("Start processing invoice " + dbInvoice.Id.ToString()));
-                            db.SetOwner(dbInvoice.Owner);
+                            owner = dbInvoice.Owner;
+                            invoiceId = dbInvoice.Id;
                             dbInvoice.LockedBy = string.Concat("GenerateDocument-", AppId);
                             db.SaveChanges();
+                        }
+                    }
 
+                    if (owner != Guid.Empty && invoiceId != Guid.Empty)
+                    {
+                        using (var db = new TheCompanyDbContext(owner))
+                        {
+                            Invoice dbInvoice = db.Invoices.Where(x => x.Id == invoiceId).SingleOrDefault();
                             Storage storage = new Storage(Configuration.GetSection("Storage"), dbInvoice.Owner);
 
                             PdfEngine pdfEngine = new PdfEngine();
@@ -90,7 +100,7 @@ namespace WorkerServiceApp
                                 pdfEngine.AddText(line, 20, y);
                                 y+=20;
                             });
-                            
+
                             pdfEngine.AddText("Phone: " + dbCompany.PhoneNumber, 20, y);
                             pdfEngine.AddText("Mobile: " + dbCompany.MobilePhoneNumber, 20, y+20);
                             pdfEngine.AddText("SIRET: " + dbCompany.Siret, 20, y+40);
@@ -112,7 +122,7 @@ namespace WorkerServiceApp
                             List<LineItem> lineItems = db.LineItems.Where(x => x.InvoiceId == dbInvoice.Id).ToList();
                             lineItems.ForEach(item =>
                             {
-                                pdfEngine.AddText(item.Reference, 20, y );
+                                pdfEngine.AddText(item.Reference, 20, y);
                                 pdfEngine.AddText(item.Description, 100, y);
                                 pdfEngine.AddText(string.Format("{0:N2}", item.Quantity), 350, y);
                                 pdfEngine.AddText(string.Format("{0:N2}", item.Unit), 390, y);
@@ -148,13 +158,12 @@ namespace WorkerServiceApp
                             dbInvoice.IsGenerated = true;
                             dbInvoice.GenerationDateTime = DateTime.Now;
                             db.SaveChanges();
-                            db.SetOwner(Guid.Empty);
                             _logger.LogInformation(string.Concat("Invoice " + dbInvoice.Id.ToString() + " has been processed"));
                         }
-                        else
-                        {
-                            stop = true;
-                        }
+                    }
+                    else
+                    {
+                        stop = true;
                     }
                 }
                 await Task.Delay(1000, stoppingToken);
