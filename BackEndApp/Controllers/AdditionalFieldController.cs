@@ -57,23 +57,5 @@ namespace BackEndApp.Controllers
 			_logger.LogInformation("End of Add method");
 			return Ok();
 		}
-
-		[HttpGet("Get/{dataSource}")]
-		public ActionResult Get(string dataSource)
-		{
-			_logger.LogInformation("Start of Get method");
-			List<AdditionalFieldGetResponse> result = new List<AdditionalFieldGetResponse>();
-			Guid owner = Guid.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-			using (var db = new TheCompanyDbContext(owner))
-			{
-				List<AdditionalFieldDefinition> dbAdditionalFields = db.AdditionalFieldDefinitions.Where(x => x.DataSource == dataSource).OrderBy(x => x.Name).ToList();
-				dbAdditionalFields.ForEach(additionalField =>
-				{
-					result.Add((AdditionalFieldGetResponse)additionalField);
-				});
-				_logger.LogInformation("End of Get method");
-				return Ok(result);
-			}
-		}
 	}
 }
