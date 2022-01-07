@@ -1,6 +1,6 @@
 <div class="content">
 	<div class="invoiceFields">
-		<h4>Invoice details</h4>
+		<h4>{{ "Modules.Invoices.InvoiceDetails" | translate }}</h4>
 		<form [formGroup]="invoiceForm">
 			<table id="invoiceFields">
 				<tr *ngFor="let field of invoiceData">
@@ -10,15 +10,15 @@
 			</table>
 		</form>
 		<br /><br />
-		<h4>Line items</h4>
+			  <h4>{{ "Modules.Invoices.LineItems" | translate }}</h4>
 		<form [formGroup]="lineItemsForm">
 			<app-view-list dataSource="LineItem" [filters]="filters" [fields]="['Reference','Description','Quantity','Unit','VAT','PriceNoVAT','PriceVAT','TotalPrice']" [editMode]="editMode" [linesForm]="lineItemsForm" (focusEvent)="onFocus($event)"></app-view-list>
 		</form>
 		<br /><br />
 		<div class="buttons">
-			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
-			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">Cancel</button>
-			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
+			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">{{ "Modules.Invoices.Edit" | translate }}</button>
+			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">{{ "Modules.Invoices.Cancel" | translate }}</button>
+			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">{{ "Modules.Invoices.Save" | translate }}</button>
 		</div>
 	</div>
 	<div class="invoicePreview">

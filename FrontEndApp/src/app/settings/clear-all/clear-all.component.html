@@ -3,22 +3,22 @@
 		<div>
 			<table>
 				<tr>
-					<td>Customers:</td>
+					<td>{{ "Modules.ClearAll.Customers" | translate }}:</td>
 					<td><input type="checkbox" id="customers" formControlName="customers" /></td>
 				</tr>
 				<tr>
-					<td>Invoices:</td>
+					<td>{{ "Modules.ClearAll.Invoices" | translate }}:</td>
 					<td><input type="checkbox" id="invoices" formControlName="invoices" /></td>
 				</tr>
 				<tr>
-					<td>Extraction settings:</td>
+					<td>{{ "Modules.ClearAll.ExtractionSettings" | translate }}:</td>
 					<td><input type="checkbox" id="extractionSettings" formControlName="extractionSettings" /></td>
 				</tr>
 			</table>
 		</div>
 		<div class="buttons">
-			<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-			<button class="btn btn-primary">Clear</button>
+			<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.ClearAll.Cancel" | translate }}</button>
+			<button class="btn btn-primary">{{ "Modules.ClearAll.Clear" | translate }}</button>
 		</div>
 	</form>
 </div>

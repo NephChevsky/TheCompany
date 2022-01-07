@@ -1,7 +1,7 @@
 <div class="content">
-	<h4>Additional fields</h4>
+	<h4>{{ "Modules.AdditionalFields.AdditionalFields" | translate }}</h4>
 	<div class="buttons">
-		<button id="add" class="btn btn-primary" (click)="addAdditionalField()">Add</button>
+		<button id="add" class="btn btn-primary" (click)="addAdditionalField()">{{ "Modules.AdditionalFields.Create" | translate }}</button>
 	</div>
 	<app-view-list [dataSource]="dataSource" [filters]="filters" [fields]="['Name']"></app-view-list>
 </div>

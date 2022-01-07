@@ -1,0 +1,92 @@
+{
+	"Menu":
+	{
+		"Home": "Home",
+		"Customers": "Customers",
+		"Invoices": "Invoices",
+		"LineItems": "Line items",
+		"Settings" :
+		{
+			"Main": "Settings",
+			"CompanyInformation": "Company information",
+			"Customer": "Customer",
+			"Invoice": "Invoice",
+			"InvoiceExtraction": "Invoice extraction",
+			"ClearAll": "Clear All"
+		}
+	},
+	"User":
+	{
+		"Login": "Log in",
+		"Signup": "Sign up",
+		"Email": "Email",
+		"Password": "Password",
+		"ConfirmPassword": "Confirm password",
+		"Register": "Register",
+		"Cancel": "Cancel",
+		"EmailRequired": "Email is required",
+		"EmailIncorrect": "Not an email address",
+		"EmailAlreadyExists": "This email already exists",
+		"PasswordRequired": "Password is required",
+		"PasswordLength": "Password must be at least 6 characters",
+		"PasswordMatch": "Passwords must match",
+		"AuthenticationFailed": "No user referring to these credentials."
+	},
+	"Modules": {
+		"Customers": {
+			"Create": "Create",
+			"CustomerDetails": "Customer details",
+			"Edit": "Edit",
+			"Cancel": "Cancel",
+			"Save": "Save"
+		},
+		"Invoices": {
+			"Create": "Create",
+			"Import": "Import",
+			"InvoiceDetails": "Invoice details",
+			"LineItems": "Line items",
+			"Edit": "Edit",
+			"Save": "Save",
+			"Cancel": "Cancel",
+			"FileRequired": "You need to select a file\r\n",
+			"FileAlreadyExists": "The file name already exists\r\n",
+			"FileInvalidCharacters": "Some characters are not allowed\r\n",
+			"FileUnknownError": "Unknown error\r\n"
+		},
+		"LineItems": {
+			"Create": "Create",
+			"LineItemDetails": "Line item details",
+			"Edit": "Edit",
+			"Save": "Save",
+			"Cancel": "Cancel"
+		},
+		"CompanyInformation": {
+			"CompanyDetails": "Company details",
+			"Save": "Save",
+			"Cancel": "Cancel"
+		},
+		"AdditionalFields": {
+			"AdditionalFields": "Additional fields",
+			"Create": "Create",
+			"Cancel": "Cancel",
+			"Name": "Name"
+		},
+		"InvoiceExtraction": {
+			"FieldExtraction": "Field extraction",
+			"X": "X",
+			"Y": "Y",
+			"Width": "Width",
+			"Height": "Height",
+			"LineItemExtraction": "Line item extraction",
+			"Cancel": "Cancel",
+			"Save": "Save"
+		},
+		"ClearAll": {
+			"Customers": "Customers",
+			"Invoices": "Invoices",
+			"ExtractionSettings": "Extraction settings",
+			"Cancel": "Cancel",
+			"Clear": "Clear"
+		}
+	}
+}

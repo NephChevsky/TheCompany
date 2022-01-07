@@ -1,0 +1,92 @@
+{
+	"Menu":
+	{
+		"Home": "Acceuil",
+		"Customers": "Clients",
+		"Invoices": "Factures",
+		"LineItems": "Ligne de détails",
+		"Settings" :
+		{
+			"Main": "Configuration",
+			"CompanyInformation": "Company",
+			"Customer": "Client",
+			"Invoice": "Facture",
+			"InvoiceExtraction": "Extraction",
+			"ClearAll": "Nettoyage"
+		}
+	},
+	"User":
+	{
+		"Login": "Se connecter",
+		"Signup": "Créer un compte",
+		"Email": "Email",
+		"Password": "Mot de passe",
+		"ConfirmPassword": "Confirmation du mot de passe",
+		"Register": "Créer un compte",
+		"Cancel": "Annuler",
+		"EmailRequired": "L'email est requis",
+		"EmailIncorrect": "Cet email n'est pas conforme",
+		"EmailAlreadyExists": "Cet email existe déjà",
+		"PasswordRequired": "Le mot de passe est requis",
+		"PasswordLength": "Le mot de passe doit contenir plus de 6 caractères",
+		"PasswordMatch": "Les mots de passe doivent être équivalent",
+		"AuthenticationFailed": "Pas d'utilisateur correspondant à ces identifiants"
+	},
+	"Modules": {
+		"Customers": {
+			"Create": "Créer",
+			"CustomerDetails": "Detail du client",
+			"Edit": "Modifier",
+			"Cancel": "Annuler",
+			"Save": "Enregistrer"
+		},
+		"Invoices": {
+			"Create": "Créer",
+			"Import": "Importer",
+			"InvoiceDetails": "Detail de la facture",
+			"LineItems": "Ligne de détails",
+			"Edit": "Modifier",
+			"Save": "Enregistrer",
+			"Cancel": "Annuler",
+			"FileRequired": "Il faut selectionner un fichier\r\n",
+			"FileAlreadyExists": "Le nom du fichier existe déjà\r\n",
+			"FileInvalidCharacters": "Certains caractères ne sont pas autorisés\r\n",
+			"FileUnknownError": "Erreur inconnu\r\n"
+		},
+		"LineItems": {
+			"Create": "Créer",
+			"LineItemDetails": "Détails des lignes de détails",
+			"Edit": "Modifier",
+			"Save": "Enregistrer",
+			"Cancel": "Annuler"
+		},
+		"CompanyInformation": {
+			"CompanyDetails": "Details de la company",
+			"Save": "Enregistrer",
+			"Cancel": "Annuler"
+		},
+		"AdditionalFields": {
+			"AdditionalFields": "Champs additionels",
+			"Create": "Créer",
+			"Cancel": "Annuler",
+			"Name": "Nom"
+		},
+		"InvoiceExtraction": {
+			"FieldExtraction": "Extraction des champs",
+			"X": "X",
+			"Y": "Y",
+			"Width": "Largeur",
+			"Height": "Hauteur",
+			"LineItemExtraction": "Extraction des lignes de details",
+			"Cancel": "Annuler",
+			"Save": "Enregistrer"
+		},
+		"ClearAll": {
+			"Customers": "Clients",
+			"Invoices": "Factures",
+			"ExtractionSettings": "Configuration de l'extraction",
+			"Cancel": "Annuler",
+			"Clear": "Nettoyer"
+		}
+	}
+}

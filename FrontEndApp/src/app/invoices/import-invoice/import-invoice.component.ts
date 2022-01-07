@@ -95,23 +95,19 @@ export class ImportInvoiceComponent implements OnInit {
 		let message = "";
 		if (this.error === "Required")
 		{
-			message = "You have to select a file\r\n";
+			message = "Modules.Invoices.FileRequired";
 		}
 		else if (this.error === "AlreadyExists")
 		{
-			message = "The file name already exists\r\n";
+			message = "Modules.Invoices.FileAlreadyExists";
 		}
 		else if (this.error === "InvalidCharacters")
 		{
-			message = "Some characters are not allowed\r\n";
+			message = "Modules.Invoices.FileInvalidCharacters";
 		}
 		else if (this.error === "UnknownError")
 		{
-			message = "Unknown error\r\n";
-		}
-		else if (this.error === 'UnknownParentFolder')
-		{
-			message = "The parent folder doesn't exists\r\n";
+			message = "Modules.Invoices.FileUnknownError";
 		}
 		return message;
 	}

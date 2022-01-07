@@ -1,5 +1,5 @@
 <div class="content">
-	<h4>Company details</h4>
+	<h4>{{ "Modules.CompanyInformation.CompanyDetails" | translate }}</h4>
 	<form [formGroup]="companyForm">
 		<table>
 			<tr *ngFor="let field of companyData">
@@ -9,8 +9,8 @@
 		</table>
 		<br /><br />
 		<div class="buttons">
-			<button id="save" class="btn btn-primary" (click)="save()">Save</button>
-			<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+			<button id="save" class="btn btn-primary" (click)="save()">{{ "Modules.CompanyInformation.Save" | translate }}</button>
+			<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.CompanyInformation.Cancel" | translate }}</button>
 		</div>
 	</form>
 </div>

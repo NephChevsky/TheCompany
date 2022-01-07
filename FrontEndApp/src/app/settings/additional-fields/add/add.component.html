@@ -1,7 +1,7 @@
 <div class="content">
 	<form [formGroup]="addFieldForm" (ngSubmit)="onSubmit()">
-		Name: <input type="text" id="name" formControlName="name" /><br />
-		<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-		<button id="create" class="btn btn-primary">Create</button>
+		{{ "Modules.AdditionalFields.Name" | translate }}: <input type="text" id="name" formControlName="name" /><br />
+		<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.AdditionalFields.Cancel" | translate }}</button>
+		<button id="create" class="btn btn-primary">{{ "Modules.AdditionalFields.Create" | translate }}</button>
 	</form>
 </div>

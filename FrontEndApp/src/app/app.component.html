@@ -1,8 +1,8 @@
 <mat-toolbar>
 	<span [routerLink]="['/']" class="item">TheCompany</span>
 	<span class="filler"></span>
-	<span *ngIf="guest" [routerLink]="['/Login']" class="item" id="signin">Log in</span>
-	<span *ngIf="guest" [routerLink]="['/SignUp']" class="item" id="signup">Sign up</span>
+	<span *ngIf="guest" [routerLink]="['/Login']" class="item" id="signin">{{ "User.Login" | translate }}</span>
+	<span *ngIf="guest" [routerLink]="['/SignUp']" class="item" id="signup">{{ "User.Signup" | translate }}</span>
 	<span *ngIf="!guest" (click)="logout()" class="item material-icons exit" id="logout">logout</span>
 </mat-toolbar>
 <mat-sidenav-container>
@@ -14,12 +14,12 @@
 						<mat-expansion-panel id="expansionPanel" class="mat-elevation-z0">
 							<mat-expansion-panel-header>
 								<mat-panel-title id="{{item.name}}">
-									<div>{{item.name}}</div>
+									<div>{{item.name | translate}}</div>
 								</mat-panel-title>
 							</mat-expansion-panel-header>
 							<span *ngFor="let child of item.childrens">
 								<mat-list-item [routerLink]="child.route" id="{{child.name}}">
-									<div>{{child.name}}</div>
+									<div>{{child.name | translate}}</div>
 								</mat-list-item>
 							</span>
 						</mat-expansion-panel>
@@ -27,7 +27,7 @@
 				</span>
 				<span *ngIf="!item.childrens || item.childrens.length === 0">
 					<mat-list-item [routerLink]="item.route" id="{{item.name}}">
-						<div>{{item.name}}</div>
+						<div>{{item.name | translate}}</div>
 					</mat-list-item>
 				</span>
 			</span>

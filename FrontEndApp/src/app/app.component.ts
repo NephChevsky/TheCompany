@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from './_services/user.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-root',
@@ -12,30 +13,30 @@ export class AppComponent
 	title: string = 'TheCompany';
 	guest: boolean = true;
 	menu: any[] = [
-		{ name: "Home", route: "" },
-		{ name: "Customers", route: "Customers" },
-		{ name: "Invoices", route: "Invoices" },
-		{ name: "Line items", route: "LineItems" },
+		{ name: "Menu.Home", route: "" },
+		{ name: "Menu.Customers", route: "Customers" },
+		{ name: "Menu.Invoices", route: "Invoices" },
+		{ name: "Menu.LineItems", route: "LineItems" },
 		{
-			name: "Settings", route: "Settings", childrens: [
+			name: "Menu.Settings.Main", route: "Settings", childrens: [
 				{
-					name: "Company information",
+					name: "Menu.Settings.CompanyInformation",
 					route: "Settings/Company"
 				},
 				{
-					name: "Customer",
+					name: "Menu.Settings.Customer",
 					route: "Settings/Customer"
 				},
 				{
-					name: "Invoice",
+					name: "Menu.Settings.Invoice",
 					route: "Settings/Invoice"
 				},
 				{
-					name: "Invoice Extraction",
+					name: "Menu.Settings.InvoiceExtraction",
 					route: "Settings/InvoiceExtraction"
 				},
 				{
-					name: "Clear All",
+					name: "Menu.Settings.ClearAll",
 					route: "Settings/ClearAll"
 				}]
 		}
@@ -43,9 +44,15 @@ export class AppComponent
 
 	constructor(
 		private userService: UserService,
-		private router: Router
+		private router: Router,
+		public translate: TranslateService
 	)
 	{
+		translate.addLangs(['en', 'fr']);
+		translate.setDefaultLang('en');
+		const browserLang = translate.getBrowserLang();
+		translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+
 		userService.currentUser.subscribe(value =>
 		{
 			this.guest = (value.id === undefined || value.id === '');

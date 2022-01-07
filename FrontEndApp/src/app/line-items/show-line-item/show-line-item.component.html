@@ -1,5 +1,5 @@
 <div class="content">
-	<h4>Line item</h4>
+	<h4>{{ "Modules.LineItems.LineItemDetails" | translate }}</h4>
 	<form [formGroup]="lineItemForm">
 		<table>
 			<tr *ngFor="let field of lineItemData">
@@ -8,9 +8,9 @@
 			</tr>
 		</table>
 		<div class="buttons">
-			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">Edit</button>
-			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">Cancel</button>
-			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">Save</button>
+			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">{{ "Modules.LineItems.Edit" | translate }}</button>
+			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">{{ "Modules.LineItems.Cancel" | translate }}</button>
+			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">{{ "Modules.LineItems.Save" | translate }}</button>
 		</div>
 	</form>
 </div>

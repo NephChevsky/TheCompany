@@ -1,6 +1,6 @@
 <div class="content">
 	<div class="fields">
-		<h3>Invoice details</h3>
+		<h3>{{ "Modules.InvoiceExtraction.FieldExtraction" | translate }}</h3>
 		<br />
 		<form [formGroup]="invoiceSettingsForm">
 			<table class="main">
@@ -9,19 +9,19 @@
 					<td>
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
-								<td>X:</td>
+								<td>{{ "Modules.InvoiceExtraction.X" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-x'}}" type="number" formControlName="x"></td>
 							</tr>
 							<tr>
-								<td>Y:</td>
+								<td>{{ "Modules.InvoiceExtraction.Y" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-y'}}" type="number" formControlName="y"></td>
 							</tr>
 							<tr>
-								<td>Height:</td>
+								<td>{{ "Modules.InvoiceExtraction.Height" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-height'}}" type="number" formControlName="height"></td>
 							</tr>
 							<tr>
-								<td>Width:</td>
+								<td>{{ "Modules.InvoiceExtraction.Width" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-width'}}" type="number" formControlName="width"></td>
 							</tr>
 						</table>
@@ -30,7 +30,7 @@
 			</table>
 		</form>
 		<br /><br /><br />
-		<h3>Line items</h3>
+		<h3>{{ "Modules.InvoiceExtraction.LineItemExtraction" | translate }}</h3>
 		<br />
 		<form [formGroup]="lineItemSettingsForm">
 			<table class="main">
@@ -39,11 +39,11 @@
 					<td *ngIf="item.get('name').value == 'Box'">
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
-								<td>Y:</td>
+								<td>{{ "Modules.InvoiceExtraction.Y" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-y'}}" type="number" formControlName="y"></td>
 							</tr>
 							<tr>
-								<td>Height:</td>
+								<td>{{ "Modules.InvoiceExtraction.Height" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-height'}}" type="number" formControlName="height"></td>
 							</tr>
 						</table>
@@ -51,11 +51,11 @@
 					<td *ngIf="item.get('name').value != 'Box'">
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
-								<td>X:</td>
+								<td>{{ "Modules.InvoiceExtraction.X" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-x'}}" type="number" formControlName="x"></td>
 							</tr>
 							<tr>
-								<td>Width:</td>
+								<td>{{ "Modules.InvoiceExtraction.Width" | translate }}:</td>
 								<td><input id="{{item.get('name').value + '-width'}}" type="number" formControlName="width"></td>
 							</tr>
 						</table>
@@ -65,8 +65,8 @@
 		</form>
 		<br />
 		<br />
-		<button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-		<button id="save" class="btn btn-primary" (click)="onSubmit()">Save</button>
+		<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.InvoiceExtraction.Cancel" | translate }}</button>
+		<button id="save" class="btn btn-primary" (click)="onSubmit()">{{ "Modules.InvoiceExtraction.Save" | translate }}</button>
 	</div>
 	<div class="invoicePreview">
 		<div mat-dialog-content>

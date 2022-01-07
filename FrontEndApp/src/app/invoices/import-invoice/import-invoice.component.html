@@ -4,14 +4,14 @@
 			<div>
 			<input type="file" id="file" name="file" (change)="onFileChange($event)" />
 			<div *ngIf="error != ''" style="color:red">
-				{{ errorMessage }}
+				{{ errorMessage | translate }}
 			</div>
 			<mat-progress-bar *ngIf="inProgress" mode="determinate" [value]="progress"></mat-progress-bar>
 			</div>
 		</div>
 		<div class="buttons">
-			<button class="btn btn-secondary" (click)="onCancel()">Close</button>
-			<button id="import" class="btn btn-primary">Ok</button>
+			<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.Invoices.Cancel" | translate }}</button>
+			<button id="import" class="btn btn-primary">{{ "Modules.Invoices.Import" | translate }}</button>
 		</div>
 	</form>
 </div>
