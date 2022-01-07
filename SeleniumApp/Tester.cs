@@ -13,8 +13,8 @@ namespace SeleniumApp
     public static class Tester
     {
         public static IWebDriver _driver;
-        //public static string _rootUrl = "https://localhost/";
-        public static string _rootUrl = "http://localhost:4200";
+        public static string _rootUrl = "https://localhost/";
+        //public static string _rootUrl = "http://localhost:4200";
         public static TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
         public static TimeSpan DefaultPollingInterval = TimeSpan.FromMilliseconds(250);
 
@@ -41,6 +41,7 @@ namespace SeleniumApp
         public static void ClickAndWaitForElement(IWebElement element, By expectedElement)
         {
             element.Click();
+            Thread.Sleep(250);
             var wait = new WebDriverWait(_driver, DefaultTimeout);
             wait.PollingInterval = DefaultPollingInterval;
             wait.Until(drv => IsVisible(expectedElement));

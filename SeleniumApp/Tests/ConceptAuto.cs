@@ -31,7 +31,7 @@ namespace SeleniumApp
 
             Helpers.User.LogIn();
 
-            Tester.ClickAndWaitForElement(By.Id("Settings"), By.XPath("//div[contains(concat(\" \", normalize-space(@class), \" \"), \" mat-expansion-panel-content \")]"));
+            Helpers.Settings.Open();
             Tester.ClickAndWaitForElement(By.Id("Invoice"), By.Id("add"));
             Tester.ClickAndWaitForElement(By.Id("add"), By.Id("name"));
             Tester._driver.FindElement(By.Id("name")).SendKeys("NumberPlate");

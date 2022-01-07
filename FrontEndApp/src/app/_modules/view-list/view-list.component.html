@@ -4,6 +4,7 @@
 			<th *ngFor="let field of fields">{{field}}</th>
 		</tr>
 		<tbody *ngIf="!editMode" formArrayName="values">
+			<tr *ngIf="data.length == 0"><td colspan="100%" class="centered">No records</td></tr>
 			<tr *ngFor="let line of data; let index = index" (click)="linkable && !editMode && show(line.linkValue)" [ngClass]="{'linkable' : linkable && !editMode}">
 				<td *ngFor="let field of line.fields">
 					<app-field [field]="field" [form]="getItem(index)" [index]="index" size="150" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field>

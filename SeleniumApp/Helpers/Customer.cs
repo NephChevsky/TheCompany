@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SeleniumApp.Helpers
 {
@@ -30,7 +31,9 @@ namespace SeleniumApp.Helpers
             IReadOnlyCollection<IWebElement> elements = Tester._driver.FindElements(By.XPath("//tr"));
             foreach (var element in elements)
             {
-                result.Add(element.FindElement(By.XPath("td[@class=\"fieldName\"]")).Text, element.FindElement(By.XPath("td[not(@class=\"fieldName\")]")).Text);
+                string text = element.FindElement(By.XPath("td[not(@class=\"fieldName\")]")).Text;
+                text = Regex.Replace(text, "[0-9]{2}\\/[0-9]{2}\\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}", "DD/MM/YYYY HH:MM:SS");
+                result.Add(element.FindElement(By.XPath("td[@class=\"fieldName\"]")).Text, text);
             }
             return result;
         }
