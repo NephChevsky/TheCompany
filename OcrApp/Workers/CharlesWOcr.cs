@@ -29,6 +29,7 @@ namespace OcrApp.Workers
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             MemoryStream ms = new MemoryStream();
             fs.CopyTo(ms);
+            fs.Close();
             MagickEngine magickEngine = new MagickEngine();
             magickEngine.GrayScale = true;
             magickEngine.Erode = true;
