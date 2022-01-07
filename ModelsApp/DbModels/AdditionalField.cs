@@ -34,5 +34,17 @@ namespace ModelsApp.DbModels
 
 		[DateTimeField]
 		public DateTime LastModificationDateTime { get; set; }
+
+		public AdditionalField()
+        {
+
+        }
+
+		public AdditionalField(Guid sourceId, Guid fieldId, string value)
+        {
+			SourceId = sourceId;
+			FieldId = fieldId;
+			Value = value;
+        }
 	}
 }
