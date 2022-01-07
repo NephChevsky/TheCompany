@@ -98,6 +98,11 @@ namespace BackEndApp.Controllers
                             {
                                 additionalFieldValue.Value = x.Value;
                             }
+                            else
+                            {
+                                additionalFieldValue = new AdditionalField(individual.Id, additionalField.Id, x.Value);
+                                db.Add(additionalFieldValue);
+                            }
                         }
                     }
                 });

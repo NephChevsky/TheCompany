@@ -550,6 +550,11 @@ namespace BackEndApp.Controllers
                             {
                                 additionalFieldValue.Value = x.Value;
                             }
+                            else
+                            {
+                                additionalFieldValue = new AdditionalField(invoice.Id, additionalField.Id, x.Value);
+                                db.Add(additionalFieldValue);
+                            }
                         }
                     }
                 });
