@@ -48,5 +48,5 @@
 		</mat-select>
 	</mat-form-field>
 
-	<div *ngIf="!editMode || !field.editable">{{form.get(field.name).value}}</div>
+	<div *ngIf="!editMode || !field.editable" [id]="(index != null ? index + '-' : '') + field.name">{{form.get(field.name).value}}</div>
 </div>

@@ -59,14 +59,21 @@ export class CompanyInformationComponent implements OnInit
 		this.companyService.save(obj)
 			.subscribe(data =>
 			{
-				this.companyService.saveLogo(logo)
-					.subscribe(data =>
-					{
-						this.router.navigate(['/Home']);
-					}, error =>
-					{
-						// TODO: handle errors
-					});
+				if (typeof (this.companyForm.get("Logo").value) != "string")
+				{
+					this.companyService.saveLogo(logo)
+						.subscribe(data =>
+						{
+							this.router.navigate(['/Home']);
+						}, error =>
+						{
+							// TODO: handle errors
+						});
+				}
+				else
+				{
+					this.router.navigate(['/Home']);
+				}
 			}, error =>
 			{
 				// TODO: handle errors

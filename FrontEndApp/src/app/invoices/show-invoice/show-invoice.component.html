@@ -2,7 +2,7 @@
 	<div class="invoiceFields">
 		<h4>Invoice details</h4>
 		<form [formGroup]="invoiceForm">
-			<table>
+			<table id="invoiceFields">
 				<tr *ngFor="let field of invoiceData">
 					<td class="fieldName">{{field.name}}</td>
 					<td><app-field [field]="field" [form]="invoiceForm" key="{{field.name}}" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field></td>
