@@ -27,11 +27,6 @@ namespace DbApp.Models
             Owner = owner;
         }
 
-        public void SetOwner(Guid owner)
-        {
-            Owner = owner;
-        }
-
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
@@ -235,7 +230,7 @@ namespace DbApp.Models
             });
 
             Expression<Func<ISoftDeleteable, bool>> filterSoftDeleteable = bm => !bm.Deleted;
-            Expression<Func<IOwnable, bool>> filterOwnable = bm => bm.Owner == Owner;
+            Expression<Func<IOwnable, bool>> filterOwnable = bm => Owner == Guid.Empty || bm.Owner == Owner;
             foreach (var type in modelBuilder.Model.GetEntityTypes())
             {
                 Expression filter = null;
@@ -401,9 +396,16 @@ namespace DbApp.Models
                 {
                     if (item.State == EntityState.Added)
                     {
-                        entity.Owner = Owner;
+                        if (Owner != Guid.Empty)
+                        {
+                            entity.Owner = Owner;
+                        }
+                        else
+                        {
+                            throw new Exception("Unauthorized database insert detected");
+                        }
                     }
-                    if (entity.Owner != Owner)
+                    if (entity.Owner != Owner && Owner != Guid.Empty)
                     {
                         throw new Exception("Unauthorized database request detected");
                     }
