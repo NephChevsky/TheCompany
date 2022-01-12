@@ -1,16 +1,9 @@
 <div class="content">
 	<h4>{{ "Modules.LineItems.LineItemDetails" | translate }}</h4>
-	<form [formGroup]="lineItemForm">
-		<table>
-			<tr *ngFor="let field of lineItemData">
-				<td class="fieldName">{{field.name}}</td>
-				<td><app-field [field]="field" [form]="lineItemForm" key="{{field.name}}" [editMode]="editMode"></app-field></td>
-			</tr>
-		</table>
-		<div class="buttons">
-			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">{{ "Modules.LineItems.Edit" | translate }}</button>
-			<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">{{ "Modules.LineItems.Cancel" | translate }}</button>
-			<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">{{ "Modules.LineItems.Save" | translate }}</button>
-		</div>
-	</form>
+	<app-layout [form]="lineItemForm" [fieldsData]="lineItemData" [editMode]="true"></app-layout>
+	<div class="buttons">
+		<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">{{ "Modules.LineItems.Edit" | translate }}</button>
+		<button class="btn btn-secondary" (click)="cancel()" *ngIf="editMode">{{ "Modules.LineItems.Cancel" | translate }}</button>
+		<button id="save" class="btn btn-primary" (click)="save()" *ngIf="editMode">{{ "Modules.LineItems.Save" | translate }}</button>
+	</div>
 </div>

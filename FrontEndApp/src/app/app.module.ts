@@ -33,6 +33,7 @@ import { LineItemsComponent } from './line-items/line-items.component';
 import { ShowLineItemComponent } from './line-items/show-line-item/show-line-item.component';
 import { ShowCustomerComponent } from './customers/show-customer/show-customer.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+import { LayoutComponent } from './_modules/layout/layout.component';
 
 @NgModule({
 	declarations: [
@@ -57,7 +58,8 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
 		LineItemsComponent,
 		ShowLineItemComponent,
 		ShowCustomerComponent,
-  LanguageSelectorComponent
+  LanguageSelectorComponent,
+  LayoutComponent
 	],
 	imports: [
 		BrowserModule,

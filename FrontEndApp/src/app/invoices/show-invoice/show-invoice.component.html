@@ -1,14 +1,7 @@
 <div class="content">
 	<div class="invoiceFields">
 		<h4>{{ "Modules.Invoices.InvoiceDetails" | translate }}</h4>
-		<form [formGroup]="invoiceForm">
-			<table id="invoiceFields">
-				<tr *ngFor="let field of invoiceData">
-					<td class="fieldName">{{ "Fields." + field.dataSource + "." + field.name | translate }}</td>
-					<td><app-field [field]="field" [form]="invoiceForm" key="{{field.name}}" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field></td>
-				</tr>
-			</table>
-		</form>
+		<app-layout [form]="invoiceForm" [fieldsData]="invoiceData" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-layout>
 		<br /><br />
 			  <h4>{{ "Modules.Invoices.LineItems" | translate }}</h4>
 		<form [formGroup]="lineItemsForm">

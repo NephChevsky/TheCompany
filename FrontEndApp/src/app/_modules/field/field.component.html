@@ -6,7 +6,7 @@
 			   [formControlName]="field.name"
 			   [id]="(index != null ? index + '-' : '') + field.name"
 			   (focus)="onFocus($event.target)"
-			   [matAutocomplete]="field.autoCompletable ? auto : null" />
+			   [matAutocomplete]="auto" />
 		<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="updateBindings($event)">
 			<mat-option *ngFor="let option of filteredValues | async"
 						[value]="option">

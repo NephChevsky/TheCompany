@@ -1,14 +1,7 @@
 <div class="content">
 	<div class="customerFields">
 		<h4>{{ "Modules.Customers.CustomerDetails" | translate }}</h4>
-		<form [formGroup]="customerForm">
-			<table>
-				<tr *ngFor="let field of customerData">
-					<td class="fieldName">{{ "Fields." + field.dataSource + "." + field.name | translate }}</td>
-					<td><app-field [field]="field" [form]="customerForm" key="{{field.name}}" [editMode]="editMode"></app-field></td>
-				</tr>
-			</table>
-		</form>
+		<app-layout [form]="customerForm" [fieldsData]="customerData" [editMode]="editMode"></app-layout>
 		<br /><br />
 		<div class="buttons">
 			<button id="edit" class="btn btn-primary" (click)="setEditMode()" *ngIf="!editMode">{{ "Modules.Customers.Edit" | translate }}</button>

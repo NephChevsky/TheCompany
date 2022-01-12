@@ -1,16 +1,9 @@
 <div class="content">
 	<h4>{{ "Modules.CompanyInformation.CompanyDetails" | translate }}</h4>
-	<form [formGroup]="companyForm">
-		<table>
-			<tr *ngFor="let field of companyData">
-				<td class="fieldName">{{ "Fields." + field.dataSource + "." + field.name | translate }}</td>
-				<td><app-field [field]="field" [form]="companyForm" [editMode]="true"></app-field></td>
-			</tr>
-		</table>
-		<br /><br />
-		<div class="buttons">
-			<button id="save" class="btn btn-primary" (click)="save()">{{ "Modules.CompanyInformation.Save" | translate }}</button>
-			<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.CompanyInformation.Cancel" | translate }}</button>
-		</div>
-	</form>
+	<app-layout [form]="companyForm" [fieldsData]="companyData" [editMode]="true"></app-layout>
+	<br /><br />
+	<div class="buttons">
+		<button id="save" class="btn btn-primary" (click)="save()">{{ "Modules.CompanyInformation.Save" | translate }}</button>
+		<button class="btn btn-secondary" (click)="onCancel()">{{ "Modules.CompanyInformation.Cancel" | translate }}</button>
+	</div>
 </div>
