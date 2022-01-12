@@ -131,7 +131,7 @@
 			"Unit": "Unit",
 			"PriceNoVAT": "Price (No VAT)",
 			"VAT": "VAT",
-			"PriveVAT": "Price (VAT included)"
+			"PriceVAT": "Price (VAT included)"
 		},
 		"AdditionalFieldDefinition": {
 			"Name": "Name"

@@ -131,7 +131,7 @@
 			"Unit": "Unité",
 			"PriceNoVAT": "Prix (HT)",
 			"VAT": "Taxe",
-			"PriveVAT": "Prix (TTC)"
+			"PriceVAT": "Prix (TTC)"
 		},
 		"AdditionalFieldDefinition": {
 			"Name": "Nom"
