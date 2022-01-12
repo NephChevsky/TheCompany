@@ -1,6 +1,7 @@
 <mat-toolbar>
 	<span [routerLink]="['/']" class="item">TheCompany</span>
 	<span class="filler"></span>
+	<span id="languageSelector"><app-language-selector [value]="language"></app-language-selector></span>
 	<span *ngIf="guest" [routerLink]="['/Login']" class="item" id="signin">{{ "User.Login" | translate }}</span>
 	<span *ngIf="guest" [routerLink]="['/SignUp']" class="item" id="signup">{{ "User.Signup" | translate }}</span>
 	<span *ngIf="!guest" (click)="logout()" class="item material-icons exit" id="logout">logout</span>

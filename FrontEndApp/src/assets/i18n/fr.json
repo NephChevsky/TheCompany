@@ -1,12 +1,10 @@
 {
-	"Menu":
-	{
+	"Menu": {
 		"Home": "Acceuil",
 		"Customers": "Clients",
 		"Invoices": "Factures",
 		"LineItems": "Ligne de détails",
-		"Settings" :
-		{
+		"Settings": {
 			"Main": "Configuration",
 			"CompanyInformation": "Company",
 			"Customer": "Client",
@@ -15,8 +13,7 @@
 			"ClearAll": "Nettoyage"
 		}
 	},
-	"User":
-	{
+	"User": {
 		"Login": "Se connecter",
 		"Signup": "Créer un compte",
 		"Email": "Email",
@@ -88,5 +85,9 @@
 			"Cancel": "Annuler",
 			"Clear": "Nettoyer"
 		}
+	},
+	"Languages": {
+		"FR": "Français",
+		"EN": "Anglais"
 	}
 }

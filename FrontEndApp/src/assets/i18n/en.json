@@ -1,12 +1,10 @@
 {
-	"Menu":
-	{
+	"Menu": {
 		"Home": "Home",
 		"Customers": "Customers",
 		"Invoices": "Invoices",
 		"LineItems": "Line items",
-		"Settings" :
-		{
+		"Settings": {
 			"Main": "Settings",
 			"CompanyInformation": "Company information",
 			"Customer": "Customer",
@@ -15,8 +13,7 @@
 			"ClearAll": "Clear All"
 		}
 	},
-	"User":
-	{
+	"User": {
 		"Login": "Log in",
 		"Signup": "Sign up",
 		"Email": "Email",
@@ -88,5 +85,9 @@
 			"Cancel": "Cancel",
 			"Clear": "Clear"
 		}
+	},
+	"Languages": {
+		"FR": "French",
+		"EN": "English"
 	}
 }

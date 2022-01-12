@@ -1,23 +1,23 @@
 .mat-toolbar {
 	background-color: #e0e0e0;
-	height:60px;
+	height: 60px;
 }
-  
+
 .item {
 	margin-left: 20px;
 	margin-right: 20px;
 	cursor: pointer;
 }
-  
+
 .filler {
 	flex: 1 1 auto;
 }
-  
+
 .exit {
-	font-size:30px;
+	font-size: 30px;
 	cursor: pointer;
 }
-  
+
 mat-sidenav-container {
 	position: absolute;
 	top: 60px;
@@ -26,35 +26,34 @@ mat-sidenav-container {
 	right: 0px;
 	background-color: transparent;
 }
-  
+
 mat-sidenav {
 	background-color: transparent;
 }
 
-::ng-deep .mat-expansion-panel{
+::ng-deep .mat-expansion-panel {
 	background: transparent;
 	color: rgba(0,0,0,0);
 }
 
-.mat-expansion-panel-header
-{
+.mat-expansion-panel-header {
 	padding: 0px 15px;
 	font-size: 16px;
 }
-  
+
 .mat-drawer-side {
 	border-right: none;
 	background-color: #d0d0d0;
 	width: 200px;
 }
-  
+
 .mat-list-item {
 	&:hover {
 		background-color: #c0c0c0;
 		cursor: pointer;
 	}
 }
-  
+
 .active-tab {
 	background-color: #b0b0b0;
 }

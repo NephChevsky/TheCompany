@@ -41,6 +41,7 @@ export class AppComponent
 				}]
 		}
 	];
+	language: string;
 
 	constructor(
 		private userService: UserService,
@@ -50,8 +51,17 @@ export class AppComponent
 	{
 		translate.addLangs(['en', 'fr']);
 		translate.setDefaultLang('en');
-		const browserLang = translate.getBrowserLang();
-		translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+		var tmp = localStorage.getItem('selectedLanguage');
+		if (tmp)
+		{
+			this.language = tmp;
+		}
+		else
+		{
+			const browserLang = translate.getBrowserLang();
+			this.language = browserLang.match(/en|fr/) ? browserLang : 'en'
+		}
+		translate.use(this.language);
 
 		userService.currentUser.subscribe(value =>
 		{
