@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" class="language-selector">
 	<mat-select id="language-selector" [(value)]="value" (selectionChange)="onChange($event.value)">
 		<mat-option *ngFor="let country of countries" [value]="country.value">
 			<img with="20" height="20" [src]="country.image">
