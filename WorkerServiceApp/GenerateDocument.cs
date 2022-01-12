@@ -53,7 +53,8 @@ namespace WorkerServiceApp
                     Guid invoiceId = Guid.Empty;
                     using (var db = new TheCompanyDbContext(Guid.Empty))
                     {
-                        Invoice dbInvoice = db.Invoices.Where(x => x.ShouldBeGenerated == true && x.IsGenerated == false && string.IsNullOrEmpty(x.LockedBy)).FirstOrDefault();
+                        // TODO automatic ILockeable
+                        Invoice dbInvoice = db.Invoices.Where(x => x.ShouldBeGenerated == true && x.IsGenerated == false && string.IsNullOrEmpty(x.LockedBy)).OrderBy(x => x.CreationDateTime).FirstOrDefault();
                         if (dbInvoice != null)
                         {
                             _logger.LogInformation(string.Concat("Start processing invoice " + dbInvoice.Id.ToString()));
