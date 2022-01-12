@@ -1,22 +1,22 @@
-.content
-{
+.content {
 	padding: 10px;
-	width:100%;
-	height:100%;
+	width: 100%;
+	height: 100%;
 	display: flex;
 }
 
-.main
-{
+.main {
 	width: 600px;
 }
 
-td
-{
+td {
 	vertical-align: top;
 }
 
-button
-{
+button {
 	margin: 10px;
+}
+
+.fieldName {
+	font-weight: bold;
 }

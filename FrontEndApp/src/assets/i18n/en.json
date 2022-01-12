@@ -84,10 +84,65 @@
 			"ExtractionSettings": "Extraction settings",
 			"Cancel": "Cancel",
 			"Clear": "Clear"
+		},
+		"ViewList": {
+			"NoRecords": "No records",
+			"AddLine": "Add line"
 		}
 	},
 	"Languages": {
 		"FR": "French",
 		"EN": "English"
+	},
+	"Fields": {
+		"Invoice": {
+			"InvoiceNumber": "Invoice number",
+			"CustomerNumber": "Customer number",
+			"CustomerFirstName": "Customer first name",
+			"CustomerLastName": "Customer last name",
+			"CustomerAddress": "Customer address",
+			"FileName": "Filename"
+		},
+		"Individual": {
+			"CustomerNumber": "Customer number",
+			"LastName": "Last name",
+			"FirstName": "First name",
+			"Address": "Address",
+			"Email": "Email",
+			"PhoneNumber": "Phone number",
+			"MobilePhoneNumber": "Mobile phone number",
+			"CreationDateTime": "Creation date/time",
+			"LastModificationDateTime": "Last modification date/time"
+		},
+		"LineItem": {
+			"Box": "Box",
+			"Reference": "Reference",
+			"Description": "Description",
+			"Quantity": "Quantity",
+			"Unit": "Unit",
+			"PriceNoVAT": "Price (No VAT)",
+			"VAT": "VAT",
+			"PriceVAT": "Price (VAT included)",
+			"TotalPrice": "Total"
+		},
+		"LineItemDefinition": {
+			"Reference": "Reference",
+			"Description": "Description",
+			"Unit": "Unit",
+			"PriceNoVAT": "Price (No VAT)",
+			"VAT": "VAT",
+			"PriveVAT": "Price (VAT included)"
+		},
+		"AdditionalFieldDefinition": {
+			"Name": "Name"
+		},
+		"Company": {
+			"Name": "Name",
+			"Address": "Address",
+			"PhoneNumber": "Phone number",
+			"MobilePhoneNumber": "Mobile phone number",
+			"Siret": "Siret",
+			"Logo": "Logo"
+		}
 	}
 }

@@ -3,7 +3,7 @@
 	<form [formGroup]="companyForm">
 		<table>
 			<tr *ngFor="let field of companyData">
-				<td class="fieldName">{{field.name}}</td>
+				<td class="fieldName">{{ "Fields." + field.dataSource + "." + field.name | translate }}</td>
 				<td><app-field [field]="field" [form]="companyForm" [editMode]="true"></app-field></td>
 			</tr>
 		</table>

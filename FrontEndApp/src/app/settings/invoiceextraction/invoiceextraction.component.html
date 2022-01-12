@@ -5,7 +5,7 @@
 		<form [formGroup]="invoiceSettingsForm">
 			<table class="main">
 				<tr formArrayName="fields" *ngFor="let item of invoiceFields.controls; let i = index">
-					<td>{{item.get('name').value}}</td>
+					<td class="fieldName">{{ "Fields.Invoice." + item.get('name').value | translate}}</td>
 					<td>
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>
@@ -35,7 +35,7 @@
 		<form [formGroup]="lineItemSettingsForm">
 			<table class="main">
 				<tr formArrayName="fields" *ngFor="let item of lineItemFields.controls; let i = index">
-					<td>{{item.get('name').value}}</td>
+					<td class="fieldName">{{ "Fields.LineItem." + item.get('name').value | translate}}</td>
 					<td *ngIf="item.get('name').value == 'Box'">
 						<table [formGroupName]="i" (click)="showBoundingBox(i)">
 							<tr>

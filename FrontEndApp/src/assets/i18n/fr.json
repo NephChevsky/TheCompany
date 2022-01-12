@@ -84,10 +84,65 @@
 			"ExtractionSettings": "Configuration de l'extraction",
 			"Cancel": "Annuler",
 			"Clear": "Nettoyer"
+		},
+		"ViewList": {
+			"NoRecords": "Aucun éléments",
+			"AddLine": "Ajouter une ligne"
 		}
 	},
 	"Languages": {
 		"FR": "Français",
 		"EN": "Anglais"
+	},
+	"Fields": {
+		"Invoice": {
+			"InvoiceNumber": "Numéro de la facture",
+			"CustomerNumber": "Numéro du client",
+			"CustomerFirstName": "Prénom du client",
+			"CustomerLastName": "Nom de famille du client",
+			"CustomerAddress": "Adresse du client",
+			"FileName": "Nom du fichier"
+		},
+		"Individual": {
+			"CustomerNumber": "Numero du client",
+			"LastName": "Nom de famille",
+			"FirstName": "Prénom",
+			"Address": "Adresse",
+			"Email": "Email",
+			"PhoneNumber": "Numéro de téléphone",
+			"MobilePhoneNumber": "Numéro de téléphone mobile",
+			"CreationDateTime": "Date de création",
+			"LastModificationDateTime": "Date de dernière modification"
+		},
+		"LineItem": {
+			"Box": "Boite",
+			"Reference": "Référence",
+			"Description": "Description",
+			"Quantity": "Quantité",
+			"Unit": "Unité",
+			"PriceNoVAT": "Prix (HT)",
+			"VAT": "Taxe",
+			"PriceVAT": "Prix (TTC)",
+			"TotalPrice": "Total"
+		},
+		"LineItemDefinition": {
+			"Reference": "Référence",
+			"Description": "Description",
+			"Unit": "Unité",
+			"PriceNoVAT": "Prix (HT)",
+			"VAT": "Taxe",
+			"PriveVAT": "Prix (TTC)"
+		},
+		"AdditionalFieldDefinition": {
+			"Name": "Nom"
+		},
+		"Company": {
+			"Name": "Nom",
+			"Address": "Adresse",
+			"PhoneNumber": "Numero de téléphone",
+			"MobilePhoneNumber": "Numero de téléphone mobile",
+			"Siret": "Siret",
+			"Logo": "Logo"
+		}
 	}
 }
