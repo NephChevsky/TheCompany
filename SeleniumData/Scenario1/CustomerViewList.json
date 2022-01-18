@@ -1,1 +1,26 @@
-[{"CustomerNumber":"20 013","LastName":"CESSION INTERNE","FirstName":"","Address":"CESSION INTERNE"},{"CustomerNumber":"20 262","LastName":"Mr MONCEL GERARD","FirstName":"","Address":"Mr MONCEL GERARD FRONCELG 32 RUE DE LA GLACI\u00C8RE ; 69600 OULLINS"},{"CustomerNumber":"20 332","LastName":"Mr TEYSSIER MARC YVAN","FirstName":"","Address":"Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL"},{"CustomerNumber":"CN0001","LastName":"Balleydier","FirstName":"Philippe","Address":"77 cours Charlemagne 69002 Lyon"}]
+[
+	{
+		"Customer number": "20 013",
+		"Last name": "CESSION INTERNE",
+		"First name": "",
+		"Address": "CESSION INTERNE"
+	},
+	{
+		"Customer number": "20 262",
+		"Last name": "Mr MONCEL GERARD",
+		"First name": "",
+		"Address": "Mr MONCEL GERARD FRONCELG 32 RUE DE LA GLACI\u00C8RE ; 69600 OULLINS"
+	},
+	{
+		"Customer number": "20 332",
+		"Last name": "Mr TEYSSIER MARC YVAN",
+		"First name": "",
+		"Address": "Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL"
+	},
+	{
+		"Customer number": "CN0001",
+		"Last name": "Balleydier",
+		"First name": "Philippe",
+		"Address": "77 cours Charlemagne 69002 Lyon"
+	}
+]

@@ -10,7 +10,7 @@ namespace SeleniumApp.Helpers
     {
         public static void Open()
         {
-            Tester.ClickAndWaitForElement(By.Id("Settings"), By.XPath("//div[contains(concat(\" \", normalize-space(@class), \" \"), \" mat-expansion-panel-content \")]"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-Main"), By.XPath("//div[contains(concat(\" \", normalize-space(@class), \" \"), \" mat-expansion-panel-content \")]"));
             Thread.Sleep(200);
         }
     }

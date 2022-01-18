@@ -1,1 +1,9 @@
-{"InvoiceNumber":"3000005","CustomerNumber":"20 013","CustomerFirstName":"","CustomerLastName":"CESSION INTERNE","CustomerAddress":"CESSION INTERNE","FileName":"fact entretien 2.PDF","NumberPlate":"DL-734-PC"}
+{
+	"Invoice number": "3000005",
+	"Customer number": "20 013",
+	"Customer first name": "",
+	"Customer last name": "CESSION INTERNE",
+	"Customer address": "CESSION INTERNE",
+	"Filename": "fact entretien 2.PDF",
+	"Fields.Invoice.NumberPlate": "DL-734-PC"
+}

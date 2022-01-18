@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace SeleniumApp.Helpers
 {
@@ -8,7 +9,8 @@ namespace SeleniumApp.Helpers
     {
         public static void Open()
         {
-            Tester.ClickAndWaitForElement(By.Id("Customers"), By.Id("create"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Customers"), By.Id("create"));
+            Thread.Sleep(500);
         }
 
         public static void Create()

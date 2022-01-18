@@ -32,17 +32,17 @@ namespace SeleniumApp
             Helpers.User.LogIn();
 
             Helpers.Settings.Open();
-            Tester.ClickAndWaitForElement(By.Id("Invoice"), By.Id("add"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-Invoice"), By.Id("add"));
             Tester.ClickAndWaitForElement(By.Id("add"), By.Id("name"));
             Tester._driver.FindElement(By.Id("name")).SendKeys("NumberPlate");
             Tester.ClickAndWaitForElement(By.Id("create"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Customer"), By.Id("add"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-Customer"), By.Id("add"));
             Tester.ClickAndWaitForElement(By.Id("add"), By.Id("name"));
             Tester._driver.FindElement(By.Id("name")).SendKeys("NumberPlate");
             Tester.ClickAndWaitForElement(By.Id("create"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Company information"), By.Id("Name"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-CompanyInformation"), By.Id("Name"));
             Tester._driver.FindElement(By.Id("Name")).SendKeys("Concept Auto Rhone Services");
             Tester._driver.FindElement(By.Id("Address")).SendKeys("66 Avenue Georges Clemenceau\n69230 St Genis Laval");
             Tester._driver.FindElement(By.Id("PhoneNumber")).SendKeys("0472670909");
@@ -50,12 +50,12 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("Logo")).SendKeys("D:\\Dev\\TheCompany\\Samples\\company-logo.png");
             Tester.ClickAndWaitForElement(By.Id("save"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Company information"), By.Id("Name"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-CompanyInformation"), By.Id("Name"));
             Tester._driver.FindElement(By.Id("Siret")).Clear();
             Tester._driver.FindElement(By.Id("Siret")).SendKeys("37987775600021");
             Tester.ClickAndWaitForElement(By.Id("save"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Invoice Extraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
             Tester._driver.FindElement(By.Id("InvoiceNumber-x")).SendKeys("373");
             Tester._driver.FindElement(By.Id("InvoiceNumber-y")).SendKeys("944");
             Tester._driver.FindElement(By.Id("InvoiceNumber-height")).SendKeys("42");
@@ -90,7 +90,7 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("TotalPrice-width")).SendKeys("1");
             Tester.ClickAndWaitForElement(By.Id("save"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Invoice Extraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
             Tester._driver.FindElement(By.Id("CustomerNumber-width")).Clear();
             Tester._driver.FindElement(By.Id("CustomerNumber-width")).SendKeys("134");
             Tester._driver.FindElement(By.Id("NumberPlate-width")).Clear();
@@ -109,7 +109,7 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("file")).SendKeys("D:\\Dev\\TheCompany\\Samples\\fact mecanique 2.PDF");
             Tester.ClickAndWaitForElement(By.Id("import"), By.Id("import-invoice"));
 
-            Tester.ClickAndWaitForElement(By.Id("Line items"), By.Id("create"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-LineItems"), By.Id("create"));
             Tester.ClickAndWaitForElement(By.Id("create"), By.Id("Reference"));
             Tester._driver.FindElement(By.Id("Reference")).SendKeys("R0001");
             Tester._driver.FindElement(By.Id("Description")).SendKeys("Stylo");
@@ -125,7 +125,7 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("PriceVAT")).SendKeys("6");
             Tester.ClickAndWaitForElement(By.Id("save"), By.Id("edit"));
 
-            Tester.ClickAndWaitForElement(By.Id("Line items"), By.Id("create"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-LineItems"), By.Id("create"));
             Tester.ClickAndWaitForElement(By.Id("create"), By.Id("Reference"));
             Tester._driver.FindElement(By.Id("Reference")).SendKeys("R0002");
             Tester._driver.FindElement(By.Id("Description")).SendKeys("Cahier");
@@ -211,8 +211,6 @@ namespace SeleniumApp
                     }
                 });
             }
-
-            sc.Stop();
 
             Helpers.Customer.Open();
             Comparator.Equal("Scenario1", "CustomerViewList", Helpers.ViewList.GetViewList());

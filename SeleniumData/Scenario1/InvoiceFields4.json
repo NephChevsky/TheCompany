@@ -1,1 +1,9 @@
-{"InvoiceNumber":"1000249","CustomerNumber":"20 332","CustomerFirstName":"","CustomerLastName":"Mr TEYSSIER MARC YVAN","CustomerAddress":"Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL","FileName":"fact mecanique 2.PDF","NumberPlate":"EV-375-YN"}
+{
+  "Invoice number": "1000249",
+  "Customer number": "20 332",
+  "Customer first name": "",
+  "Customer last name": "Mr TEYSSIER MARC YVAN",
+  "Customer address": "Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL",
+  "Filename": "fact mecanique 2.PDF",
+  "Fields.Invoice.NumberPlate": "EV-375-YN"
+}

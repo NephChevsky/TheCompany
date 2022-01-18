@@ -1,1 +1,12 @@
-{"FirstName":"","LastName":"Mr TEYSSIER MARC YVAN","Email":"","PhoneNumber":"","MobilePhoneNumber":"","Address":"Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL","CustomerNumber":"20 332","CreationDateTime":"DD/MM/YYYY HH:MM:SS","LastModificationDateTime":"DD/MM/YYYY HH:MM:SS","NumberPlate":""}
+{
+	"First name": "",
+	"Last name": "Mr TEYSSIER MARC YVAN",
+	"Email": "",
+	"Phone number": "",
+	"Mobile phone number": "",
+	"Address": "Mr TEYSSIER MARC YVAN 2 RUE DE LA CROIX ROUTE 69230 ST GENIS LAVAL",
+	"Customer number": "20 332",
+	"Creation date/time": "DD/MM/YYYY HH:MM:SS",
+	"Last modification date/time": "DD/MM/YYYY HH:MM:SS",
+	"Fields.Customer.NumberPlate": ""
+}

@@ -1,1 +1,9 @@
-{"InvoiceNumber":"1000221","CustomerNumber":"20 262","CustomerFirstName":"","CustomerLastName":"Mr MONCEL GERARD","CustomerAddress":"Mr MONCEL GERARD FRONCELG 32 RUE DE LA GLACI\u00C8RE ; 69600 OULLINS","FileName":"fact entretien.PDF","NumberPlate":"FT-227-SH"}
+{
+	"Invoice number": "1000221",
+	"Customer number": "20 262",
+	"Customer first name": "",
+	"Customer last name": "Mr MONCEL GERARD",
+	"Customer address": "Mr MONCEL GERARD FRONCELG 32 RUE DE LA GLACI\u00C8RE ; 69600 OULLINS",
+	"Filename": "fact entretien.PDF",
+	"Fields.Invoice.NumberPlate": "FT-227-SH"
+}

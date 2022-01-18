@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-	<table>
+	<table id="fields">
 		<tr *ngFor="let field of fieldsData">
 			<td class="fieldName">{{ "Fields." + field.dataSource + "." + field.name | translate }}</td>
 			<td><app-field [field]="field" [form]="form" key="{{field.name}}" [editMode]="editMode" (focusEvent)="onFocus($event)"></app-field></td>

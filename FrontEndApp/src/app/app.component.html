@@ -14,12 +14,12 @@
 					<mat-accordion>
 						<mat-expansion-panel id="expansionPanel" class="mat-elevation-z0">
 							<mat-expansion-panel-header>
-								<mat-panel-title id="{{item.name}}">
+								<mat-panel-title id="{{item.name.replaceAll('.', '-')}}">
 									<div>{{item.name | translate}}</div>
 								</mat-panel-title>
 							</mat-expansion-panel-header>
 							<span *ngFor="let child of item.childrens">
-								<mat-list-item [routerLink]="child.route" id="{{child.name}}">
+								<mat-list-item [routerLink]="child.route" id="{{child.name.replaceAll('.', '-')}}">
 									<div>{{child.name | translate}}</div>
 								</mat-list-item>
 							</span>
@@ -27,7 +27,7 @@
 					</mat-accordion>
 				</span>
 				<span *ngIf="!item.childrens || item.childrens.length === 0">
-					<mat-list-item [routerLink]="item.route" id="{{item.name}}">
+					<mat-list-item [routerLink]="item.route" id="{{item.name.replaceAll('.', '-')}}">
 						<div>{{item.name | translate}}</div>
 					</mat-list-item>
 				</span>

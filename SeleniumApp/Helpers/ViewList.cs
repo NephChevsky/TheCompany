@@ -20,7 +20,7 @@ namespace SeleniumApp.Helpers
             foreach (IWebElement element in elements)
             {
                 Dictionary<string, string> entry = new Dictionary<string, string>();
-                IReadOnlyCollection<IWebElement> fields = element.FindElements(By.XPath("td/app-field/div/div"));
+                IReadOnlyCollection<IWebElement> fields = element.FindElements(By.XPath(".//td/app-field/div/div"));
                 int count = 0;
                 foreach (IWebElement field in fields)
                 {

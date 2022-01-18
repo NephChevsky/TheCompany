@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Xunit;
+using Newtonsoft.Json;
 
 namespace SeleniumApp.Helpers
 {
@@ -22,12 +23,12 @@ namespace SeleniumApp.Helpers
         public static T Load<T>(string folder, string name)
         {
             string content = File.ReadAllText(Path.Combine(DataFolder, folder, name + ".json"));
-            return JsonSerializer.Deserialize<T>(content);
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         public static void Dump<T>(string name, T content)
         {
-            string text = JsonSerializer.Serialize<T>(content);
+            string text = JsonConvert.SerializeObject(content, Formatting.Indented);
             if (!Directory.Exists(Path.Combine(DataFolder, "Current")))
             {
                 Directory.CreateDirectory(Path.Combine(DataFolder, "Current"));

@@ -1,1 +1,62 @@
-[{"Reference":"00009712E1","Description":"(MKT) BLISTER DE PILES","Quantity":"2","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"3.71","TotalPrice":"7.42"},{"Reference":"** Main d\u0027oeuvre","Description":"M\u00E9canique T1 : Temps 0,30 h, montant HT, 22,50 EUR","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"MOM1*","Description":"CONTROLE DEFAUT CALCULATEUR","Quantity":"0.3","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"75","TotalPrice":"22.5"},{"Reference":"** Main d\u0027oeuvre","Description":"M\u00E9canique T3 : Temps 0,20 h, montant HT. 19,17 EUR","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"12027011","Description":"APPRENTISSAGE CLES ET CALCULATEUR Nos travaux sont factur\u00E9s au temps constructeur et aux op\u00E9rations","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"19.17"},{"Reference":"Pour","Description":"Pour les op\u00E9rations mentionn\u00E9es par une * nos travaux sont chtero","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"}]
+[
+	{
+		"Reference": "00009712E1",
+		"Description": "(MKT) BLISTER DE PILES",
+		"Quantity": "2",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "3.71",
+		"Total": "7.42"
+	},
+	{
+		"Reference": "** Main d\u0027oeuvre",
+		"Description": "M\u00E9canique T1 : Temps 0,30 h, montant HT, 22,50 EUR",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "MOM1*",
+		"Description": "CONTROLE DEFAUT CALCULATEUR",
+		"Quantity": "0.3",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "75",
+		"Total": "22.5"
+	},
+	{
+		"Reference": "** Main d\u0027oeuvre",
+		"Description": "M\u00E9canique T3 : Temps 0,20 h, montant HT. 19,17 EUR",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "12027011",
+		"Description": "APPRENTISSAGE CLES ET CALCULATEUR Nos travaux sont factur\u00E9s au temps constructeur et aux op\u00E9rations",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "19.17"
+	},
+	{
+		"Reference": "Pour",
+		"Description": "Pour les op\u00E9rations mentionn\u00E9es par une * nos travaux sont chtero",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	}
+]

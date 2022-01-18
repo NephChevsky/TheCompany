@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace SeleniumApp.Helpers
 {
@@ -9,13 +10,14 @@ namespace SeleniumApp.Helpers
     {
         public static void Open()
         {
-            Tester.ClickAndWaitForElement(By.Id("Invoices"), By.Id("import-invoice"));
+            Tester.ClickAndWaitForElement(By.Id("Menu-Invoices"), By.Id("import-invoice"));
+            Thread.Sleep(500);
         }
 
         public static Dictionary<string, string> GetInvoiceFields()
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
-            IReadOnlyCollection<IWebElement> elements = Tester._driver.FindElements(By.XPath("//table[@id=\"invoiceFields\"]/tr"));
+            IReadOnlyCollection<IWebElement> elements = Tester._driver.FindElements(By.XPath("//table[@id=\"fields\"]/tr"));
             foreach (var element in elements)
             {
                 result.Add(element.FindElement(By.XPath("td[@class=\"fieldName\"]")).Text, element.FindElement(By.XPath("td[not(@class=\"fieldName\")]")).Text);

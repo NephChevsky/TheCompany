@@ -1,1 +1,22 @@
-[{"Reference":"R0001","Description":"Stylo","Quantity":"5","Unit":"U","VAT":"20","PriceNoVAT":"5","PriceVAT":"6","TotalPrice":"30"},{"Reference":"R0002","Description":"Cahier","Quantity":"1","Unit":"U","VAT":"10","PriceNoVAT":"10","PriceVAT":"11","TotalPrice":"11"}]
+[
+	{
+		"Reference": "R0001",
+		"Description": "Stylo",
+		"Quantity": "5",
+		"Unit": "U",
+		"VAT": "20",
+		"Price (No VAT)": "5",
+		"Price (VAT included)": "6",
+		"Total": "30"
+	},
+	{
+		"Reference": "R0002",
+		"Description": "Cahier",
+		"Quantity": "1",
+		"Unit": "U",
+		"VAT": "10",
+		"Price (No VAT)": "10",
+		"Price (VAT included)": "11",
+		"Total": "11"
+	}
+]

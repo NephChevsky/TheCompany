@@ -1,1 +1,292 @@
-[{"Reference":"Sinistre 2123359430301","Description":"Sinistre 2123359430301 2123359430301 du 12/07/2021","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Ordre de mission","Description":"Ordre de mission mission 2103063545 ALLIANCE EXPERTS RHONE-PREME","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Nom de l\u0027expert:","Description":"ALLIANCE EXPERTS RHONE-PREME","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Propri\u00E9taire: COROT","Description":"Propri\u00E9taire: COROT COROT PATRICK - N\u00B0: 20281","Quantity":"185.78","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"185.78"},{"Reference":"957202S000","Description":"","Quantity":"185.78","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"185.78"},{"Reference":"CAPTEUR","Description":"CAPTEUR RADAR RECUL 1.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"DIVERS","Description":"","Quantity":"196.08","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"196.08"},{"Reference":"partie","Description":"partie inf bouclier ar 1.00 2.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"MOC1*","Description":"D\u0027Oeuvre Tolerie Taux 2.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"85.28"},{"Reference":"Main","Description":"Main D\u0027Oeuvre Tolerie Taux 1 2.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"85.28"},{"Reference":"MOC2*","Description":"6.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"262.68"},{"Reference":"Main","Description":"Main D\u0027Oeuvre Tolerie Taux 2 6.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"MOP MAIN","Description":"MOP MAIN MAIN D OEUVRE PEINTURE 5.00 5.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"IPMOP INGREDIENTS","Description":"IPMOP INGREDIENTS INGREDIENTS PEINTURE 5.00 CONSOMMABLE","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"CONSO","Description":"","Quantity":"5","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"5"},{"Reference":"CONSOMMABLE","Description":"CONSOMMABLE 1.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"TRAITEMENT TRAITEMENT","Description":"TRAITEMENT TRAITEMENT TRAITEMENT 1.00","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Remise facture","Description":"de 2 % soit:","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"-22.07","TotalPrice":"-22.07"},{"Reference":"sur","Description":"de 2 % soit: V\u00E9tust\u00E9","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"-22.07","TotalPrice":"-22.07"},{"Reference":"Montant","Description":"","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"V\u00E9tust\u00E9","Description":"V\u00E9tust\u00E9 TTC 0.00 Franchise TTC","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Montant","Description":"TTC","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Franchise","Description":"Franchise TTC 0.00 du Client","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Total la charge","Description":"Client","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"\u00E0","Description":"Total la charge charge du Client 0.00 de l\u0027Assurance 1297.26","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Total la charge","Description":"","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"\u00E0","Description":"Total la charge charge de l\u0027Assurance 1297.26 factur\u00E9s","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Nos","Description":"Nos travaux sont factur\u00E9s au temps constructeur et aux taux op\u00E9rations mentionn\u00E9es * factur\u00E9s","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"},{"Reference":"Pour les","Description":"Pour les les op\u00E9rations mentionn\u00E9es par une * nos travaux sont factur\u00E9s","Quantity":"0","Unit":"","VAT":"","PriceNoVAT":"","PriceVAT":"","TotalPrice":"0"}]
+[
+	{
+		"Reference": "Sinistre 2123359430301",
+		"Description": "Sinistre 2123359430301 2123359430301 du 12/07/2021",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Ordre de mission",
+		"Description": "Ordre de mission mission 2103063545 ALLIANCE EXPERTS RHONE-PREME",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Nom de l\u0027expert:",
+		"Description": "ALLIANCE EXPERTS RHONE-PREME",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Propri\u00E9taire: COROT",
+		"Description": "Propri\u00E9taire: COROT COROT PATRICK - N\u00B0: 20281",
+		"Quantity": "185.78",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "185.78"
+	},
+	{
+		"Reference": "957202S000",
+		"Description": "",
+		"Quantity": "185.78",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "185.78"
+	},
+	{
+		"Reference": "CAPTEUR",
+		"Description": "CAPTEUR RADAR RECUL 1.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "DIVERS",
+		"Description": "",
+		"Quantity": "196.08",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "196.08"
+	},
+	{
+		"Reference": "partie",
+		"Description": "partie inf bouclier ar 1.00 2.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "MOC1*",
+		"Description": "D\u0027Oeuvre Tolerie Taux 2.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "85.28"
+	},
+	{
+		"Reference": "Main",
+		"Description": "Main D\u0027Oeuvre Tolerie Taux 1 2.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "85.28"
+	},
+	{
+		"Reference": "MOC2*",
+		"Description": "6.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "262.68"
+	},
+	{
+		"Reference": "Main",
+		"Description": "Main D\u0027Oeuvre Tolerie Taux 2 6.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "MOP MAIN",
+		"Description": "MOP MAIN MAIN D OEUVRE PEINTURE 5.00 5.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "IPMOP INGREDIENTS",
+		"Description": "IPMOP INGREDIENTS INGREDIENTS PEINTURE 5.00 CONSOMMABLE",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "CONSO",
+		"Description": "",
+		"Quantity": "5",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "5"
+	},
+	{
+		"Reference": "CONSOMMABLE",
+		"Description": "CONSOMMABLE 1.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "TRAITEMENT TRAITEMENT",
+		"Description": "TRAITEMENT TRAITEMENT TRAITEMENT 1.00",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Remise facture",
+		"Description": "de 2 % soit:",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "-22.07",
+		"Total": "-22.07"
+	},
+	{
+		"Reference": "sur",
+		"Description": "de 2 % soit: V\u00E9tust\u00E9",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "-22.07",
+		"Total": "-22.07"
+	},
+	{
+		"Reference": "Montant",
+		"Description": "",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "V\u00E9tust\u00E9",
+		"Description": "V\u00E9tust\u00E9 TTC 0.00 Franchise TTC",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Montant",
+		"Description": "TTC",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Franchise",
+		"Description": "Franchise TTC 0.00 du Client",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Total la charge",
+		"Description": "Client",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "\u00E0",
+		"Description": "Total la charge charge du Client 0.00 de l\u0027Assurance 1297.26",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Total la charge",
+		"Description": "",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "\u00E0",
+		"Description": "Total la charge charge de l\u0027Assurance 1297.26 factur\u00E9s",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Nos",
+		"Description": "Nos travaux sont factur\u00E9s au temps constructeur et aux taux op\u00E9rations mentionn\u00E9es * factur\u00E9s",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	},
+	{
+		"Reference": "Pour les",
+		"Description": "Pour les les op\u00E9rations mentionn\u00E9es par une * nos travaux sont factur\u00E9s",
+		"Quantity": "0",
+		"Unit": "",
+		"VAT": "",
+		"Price (No VAT)": "",
+		"Price (VAT included)": "",
+		"Total": "0"
+	}
+]

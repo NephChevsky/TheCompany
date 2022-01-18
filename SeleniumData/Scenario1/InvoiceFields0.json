@@ -1,1 +1,9 @@
-{"InvoiceNumber":"","CustomerNumber":"","CustomerFirstName":"","CustomerLastName":"MACIF RHONE ALPES","CustomerAddress":"Soc MACIF RHONE ALPES Mr COROT PATRICK 116 AVENUE G CLEMENCEAU 69230 ST GENIS LAVAL","FileName":"fact carrosserie.PDF","NumberPlate":"U5YZU81VDBL010611 01/04/2010"}
+{
+	"Invoice number": "",
+	"Customer number": "",
+	"Customer first name": "",
+	"Customer last name": "MACIF RHONE ALPES",
+	"Customer address": "Soc MACIF RHONE ALPES Mr COROT PATRICK 116 AVENUE G CLEMENCEAU 69230 ST GENIS LAVAL",
+	"Filename": "fact carrosserie.PDF",
+	"Fields.Invoice.NumberPlate": "U5YZU81VDBL010611 01/04/2010"
+}
