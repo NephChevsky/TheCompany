@@ -1,9 +1,9 @@
 {
-	"Invoice number": "IN0001",
-	"Customer number": "CN0001",
-	"Customer first name": "Philippe",
-	"Customer last name": "Balleydier",
-	"Customer address": "77 cours Charlemagne 69002 Lyon",
-	"Filename": "InvoiceIN0001.pdf",
-	"Fields.Invoice.NumberPlate": "DP-886-LW"
+  "Invoice number": "IN0001",
+  "Customer number": "CN0001",
+  "Customer first name": "Philippe",
+  "Customer last name": "Balleydier",
+  "Customer address": "77 cours Charlemagne 69002 Lyon",
+  "Filename": "Invoice CN0001.pdf",
+  "Fields.Invoice.NumberPlate": "DP-886-LW"
 }

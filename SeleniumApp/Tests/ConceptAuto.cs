@@ -55,23 +55,23 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("Siret")).SendKeys("37987775600021");
             Tester.ClickAndWaitForElement(By.Id("save"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
-            Tester._driver.FindElement(By.Id("InvoiceNumber-x")).SendKeys("373");
-            Tester._driver.FindElement(By.Id("InvoiceNumber-y")).SendKeys("944");
-            Tester._driver.FindElement(By.Id("InvoiceNumber-height")).SendKeys("42");
-            Tester._driver.FindElement(By.Id("InvoiceNumber-width")).SendKeys("166");
-            Tester._driver.FindElement(By.Id("CustomerNumber-x")).SendKeys("1081");
-            Tester._driver.FindElement(By.Id("CustomerNumber-y")).SendKeys("911");
-            Tester._driver.FindElement(By.Id("CustomerNumber-height")).SendKeys("37");
-            Tester._driver.FindElement(By.Id("CustomerNumber-width")).SendKeys("1");
-            Tester._driver.FindElement(By.Id("CustomerLastName-x")).SendKeys("1371");
-            Tester._driver.FindElement(By.Id("CustomerLastName-y")).SendKeys("463");
-            Tester._driver.FindElement(By.Id("CustomerLastName-height")).SendKeys("37");
-            Tester._driver.FindElement(By.Id("CustomerLastName-width")).SendKeys("629");
-            Tester._driver.FindElement(By.Id("CustomerAddress-x")).SendKeys("1371");
-            Tester._driver.FindElement(By.Id("CustomerAddress-y")).SendKeys("463");
-            Tester._driver.FindElement(By.Id("CustomerAddress-height")).SendKeys("260");
-            Tester._driver.FindElement(By.Id("CustomerAddress-width")).SendKeys("629");
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='Number-x']"));
+            Tester._driver.FindElement(By.Id("Number-x")).SendKeys("373");
+            Tester._driver.FindElement(By.Id("Number-y")).SendKeys("944");
+            Tester._driver.FindElement(By.Id("Number-height")).SendKeys("42");
+            Tester._driver.FindElement(By.Id("Number-width")).SendKeys("166");
+            Tester._driver.FindElement(By.Id("RecipientNumber-x")).SendKeys("1081");
+            Tester._driver.FindElement(By.Id("RecipientNumber-y")).SendKeys("911");
+            Tester._driver.FindElement(By.Id("RecipientNumber-height")).SendKeys("37");
+            Tester._driver.FindElement(By.Id("RecipientNumber-width")).SendKeys("1");
+            Tester._driver.FindElement(By.Id("RecipientLastName-x")).SendKeys("1371");
+            Tester._driver.FindElement(By.Id("RecipientLastName-y")).SendKeys("463");
+            Tester._driver.FindElement(By.Id("RecipientLastName-height")).SendKeys("37");
+            Tester._driver.FindElement(By.Id("RecipientLastName-width")).SendKeys("629");
+            Tester._driver.FindElement(By.Id("RecipientAddress-x")).SendKeys("1371");
+            Tester._driver.FindElement(By.Id("RecipientAddress-y")).SendKeys("463");
+            Tester._driver.FindElement(By.Id("RecipientAddress-height")).SendKeys("260");
+            Tester._driver.FindElement(By.Id("RecipientAddress-width")).SendKeys("629");
             Tester._driver.FindElement(By.Id("NumberPlate-x")).SendKeys("1015");
             Tester._driver.FindElement(By.Id("NumberPlate-y")).SendKeys("1139");
             Tester._driver.FindElement(By.Id("NumberPlate-height")).SendKeys("42");
@@ -90,9 +90,9 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("TotalPrice-width")).SendKeys("1");
             Tester.ClickAndWaitForElement(By.Id("save"), By.XPath("//app-home"));
 
-            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='InvoiceNumber-x']"));
-            Tester._driver.FindElement(By.Id("CustomerNumber-width")).Clear();
-            Tester._driver.FindElement(By.Id("CustomerNumber-width")).SendKeys("134");
+            Tester.ClickAndWaitForElement(By.Id("Menu-Settings-InvoiceExtraction"), By.XPath("//input[@id='Number-x']"));
+            Tester._driver.FindElement(By.Id("RecipientNumber-width")).Clear();
+            Tester._driver.FindElement(By.Id("RecipientNumber-width")).SendKeys("134");
             Tester._driver.FindElement(By.Id("NumberPlate-width")).Clear();
             Tester._driver.FindElement(By.Id("NumberPlate-width")).SendKeys("212");
             Tester._driver.FindElement(By.Id("TotalPrice-width")).Clear();
@@ -147,9 +147,9 @@ namespace SeleniumApp
             Tester.ClickAndWaitForElement(By.Id("save"), By.Id("edit"));
 
             Helpers.Invoice.Open();
-            Tester.ClickAndWaitForElement(By.Id("create-invoice"), By.Id("InvoiceNumber"));
-            Tester._driver.FindElement(By.Id("InvoiceNumber")).SendKeys("IN0002");
-            Tester._driver.FindElement(By.Id("CustomerNumber")).SendKeys("CN0001");
+            Tester.ClickAndWaitForElement(By.Id("create-invoice"), By.Id("Number"));
+            Tester._driver.FindElement(By.Id("Number")).SendKeys("IN0002");
+            Tester._driver.FindElement(By.Id("RecipientNumber")).SendKeys("CN0001");
             Tester._driver.FindElement(By.XPath("//span[@class=\"mat-option-text\"][text()=\" CN0001 \"]")).Click();
             Tester._driver.FindElement(By.Id("NumberPlate")).SendKeys("DP-887-LW");
             Tester.ClickAndWaitForElement(By.Id("add-line"), By.Id("0-Reference"));
@@ -164,9 +164,9 @@ namespace SeleniumApp
             Tester._driver.FindElement(By.Id("1-TotalPrice")).SendKeys("5");
             Tester.ClickAndWaitForElement(By.Id("save"), By.Id("edit"));
 
-            Tester.ClickAndWaitForElement(By.Id("edit"), By.Id("InvoiceNumber"));
-            Tester._driver.FindElement(By.Id("InvoiceNumber")).Clear();
-            Tester._driver.FindElement(By.Id("InvoiceNumber")).SendKeys("IN0001");
+            Tester.ClickAndWaitForElement(By.Id("edit"), By.Id("Number"));
+            Tester._driver.FindElement(By.Id("Number")).Clear();
+            Tester._driver.FindElement(By.Id("Number")).SendKeys("IN0001");
             Tester._driver.FindElement(By.Id("NumberPlate")).Clear();
             Tester._driver.FindElement(By.Id("NumberPlate")).SendKeys("DP-886-LW");
             Tester._driver.FindElement(By.Id("1-TotalPrice")).Clear();
