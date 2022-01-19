@@ -2,4 +2,4 @@
 	<button class="btn btn-primary" [routerLink]="['Create']" id="create-invoice">{{ "Modules.Invoices.Create" | translate }}</button>
 	<button class="btn btn-primary" [routerLink]="['Import']" id="import-invoice">{{ "Modules.Invoices.Import" | translate }}</button>
 </div>
-<app-view-list [dataSource]="dataSource" [fields]="['InvoiceNumber','CustomerNumber','CustomerFirstName','CustomerLastName','CustomerAddress', 'FileName']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>
+<app-view-list [dataSource]="dataSource" [fields]="['Number','RecipientNumber','RecipientFirstName','RecipientLastName','RecipientAddress', 'FileName']" [linkable]="true" [linkRoute]="linkRoute"></app-view-list>

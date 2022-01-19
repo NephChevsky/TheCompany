@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbApp.Migrations
 {
     [DbContext(typeof(TheCompanyDbContext))]
-    [Migration("20211224011058_additional-field-definitions")]
-    partial class additionalfielddefinitions
+    [Migration("20220119212017_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -295,21 +295,6 @@ namespace DbApp.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CustomerAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerFirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CustomerLastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Deleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -333,9 +318,6 @@ namespace DbApp.Migrations
                     b.Property<DateTime>("GenerationDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("InvoiceNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool?>("IsExtracted")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -354,8 +336,26 @@ namespace DbApp.Migrations
                     b.Property<string>("LockedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("Owner")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecipientAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecipientFirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RecipientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecipientLastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecipientNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("ShouldBeExtracted")
                         .IsRequired()
@@ -469,6 +469,94 @@ namespace DbApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LineItemDefinitions");
+                });
+
+            modelBuilder.Entity("ModelsApp.DbModels.Quote", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("ExtractDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExtractId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("GenerationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsExtracted")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool?>("IsGenerated")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("LastModificationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LockedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Owner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecipientAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecipientFirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RecipientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RecipientLastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecipientNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ShouldBeExtracted")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool?>("ShouldBeGenerated")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Quotes");
                 });
 
             modelBuilder.Entity("ModelsApp.DbModels.User", b =>

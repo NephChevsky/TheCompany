@@ -18,7 +18,6 @@ using System.Security.Claims;
 using System.Text;
 using ModelsApp.Helpers;
 using OcrApp;
-using OcrApp.Models;
 using System.Text.Json;
 using ModelsApp.Models;
 

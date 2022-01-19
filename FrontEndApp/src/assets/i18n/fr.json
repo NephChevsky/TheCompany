@@ -96,11 +96,11 @@
 	},
 	"Fields": {
 		"Invoice": {
-			"InvoiceNumber": "Numéro de la facture",
-			"CustomerNumber": "Numéro du client",
-			"CustomerFirstName": "Prénom du client",
-			"CustomerLastName": "Nom de famille du client",
-			"CustomerAddress": "Adresse du client",
+			"Number": "Numéro de la facture",
+			"RecipientNumber": "Numéro du client",
+			"RecipientFirstName": "Prénom du client",
+			"RecipientLastName": "Nom de famille du client",
+			"RecipientAddress": "Adresse du client",
 			"FileName": "Nom du fichier"
 		},
 		"Individual": {

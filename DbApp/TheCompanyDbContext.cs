@@ -30,6 +30,7 @@ namespace DbApp.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Individual> Individuals { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
+        public virtual DbSet<Quote> Quotes { get; set; }
         public virtual DbSet<AdditionalFieldDefinition> AdditionalFieldDefinitions { get; set; }
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<ExtractionSettings> ExtractionSettings { get; set; }
@@ -91,19 +92,36 @@ namespace DbApp.Models
 
             modelBuilder.Entity<Invoice>(entity =>
             {
-                entity.Property(e => e.InvoiceNumber);
+                entity.Property(e => e.Number);
 
-                entity.Property(e => e.CustomerNumber);
+                entity.Property(e => e.RecipientNumber);
 
-                entity.Property(e => e.CustomerId);
+                entity.Property(e => e.RecipientId);
 
-                entity.Property(e => e.CustomerFirstName);
+                entity.Property(e => e.RecipientFirstName);
 
-                entity.Property(e => e.CustomerLastName);
+                entity.Property(e => e.RecipientLastName);
 
-                entity.Property(e => e.CustomerAddress);
+                entity.Property(e => e.RecipientAddress);
 
                 AddGenericFields<Invoice>(entity);
+            });
+
+            modelBuilder.Entity<Quote>(entity =>
+            {
+                entity.Property(e => e.Number);
+
+                entity.Property(e => e.RecipientNumber);
+
+                entity.Property(e => e.RecipientId);
+
+                entity.Property(e => e.RecipientFirstName);
+
+                entity.Property(e => e.RecipientLastName);
+
+                entity.Property(e => e.RecipientAddress);
+
+                AddGenericFields<Quote>(entity);
             });
 
             modelBuilder.Entity<AdditionalFieldDefinition>(entity =>

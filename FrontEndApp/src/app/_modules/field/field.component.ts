@@ -85,7 +85,7 @@ export class FieldComponent implements OnInit {
 				var obj = {
 					dataSource: this.field.bindings.dataSource,
 					name: this.field.bindings.name,
-					value: this.form.get(this.field.bindings.name).value
+					value: this.form.get(this.field.name).value
 				}
 				this.fieldService.getBindingValues(obj)
 					.subscribe((data: any) =>

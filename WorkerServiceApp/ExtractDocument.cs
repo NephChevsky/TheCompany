@@ -133,27 +133,27 @@ namespace WorkerServiceApp
                                 }
                             });
 
-                            if (!string.IsNullOrEmpty(invoice.CustomerNumber))
+                            if (!string.IsNullOrEmpty(invoice.RecipientNumber))
                             {
-                                Individual dbIndividual = db.Individuals.Where(x => x.CustomerNumber == invoice.CustomerNumber).SingleOrDefault();
+                                Individual dbIndividual = db.Individuals.Where(x => x.CustomerNumber == invoice.RecipientNumber).SingleOrDefault();
                                 if (dbIndividual == null)
                                 {
                                     dbIndividual = new Individual();
                                     Guid customerId = Guid.NewGuid();
                                     dbIndividual.Id = customerId;
-                                    dbIndividual.CustomerNumber = invoice.CustomerNumber;
-                                    dbIndividual.FirstName = invoice.CustomerFirstName;
-                                    dbIndividual.LastName = invoice.CustomerLastName;
-                                    if (!string.IsNullOrEmpty(invoice.CustomerAddress))
+                                    dbIndividual.CustomerNumber = invoice.RecipientNumber;
+                                    dbIndividual.FirstName = invoice.RecipientFirstName;
+                                    dbIndividual.LastName = invoice.RecipientLastName;
+                                    if (!string.IsNullOrEmpty(invoice.RecipientAddress))
                                     {
-                                        string address = String.Join(System.Environment.NewLine, invoice.CustomerAddress.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                                        string address = String.Join(System.Environment.NewLine, invoice.RecipientAddress.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
                                         address = String.Join(" ", address.Split(" ", StringSplitOptions.RemoveEmptyEntries));
                                         dbIndividual.Address = address;
                                     }
-                                    invoice.CustomerId = customerId;
+                                    invoice.RecipientId = customerId;
                                     db.Individuals.Add(dbIndividual);
                                 }
-                                invoice.CustomerId = dbIndividual.Id;
+                                invoice.RecipientId = dbIndividual.Id;
                             }
 
                             db.LineItems.RemoveRange(db.LineItems.Where(x => x.InvoiceId == invoice.Id));

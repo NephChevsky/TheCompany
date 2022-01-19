@@ -61,7 +61,7 @@ namespace BackEndApp.Controllers
                         values = FormatResultValues(individuals, query.Fields);
                         break;
                     case "Invoice":
-                        List<Invoice> invoices = db.Invoices.OrderBy(obj => obj.InvoiceNumber)
+                        List<Invoice> invoices = db.Invoices.OrderBy(obj => obj.Number)
                                                             .FilterDynamic(query.Filters)
                                                             .ToList();
                         values = FormatResultValues(invoices, query.Fields);

@@ -89,7 +89,7 @@ namespace WorkerServiceApp
                                 pdfEngine.InsertImage(logo, 20, y, 162, 127);
                             }
 
-                            pdfEngine.AddText("Invoice N°: " + dbInvoice.InvoiceNumber, 325, y+20);
+                            pdfEngine.AddText("Invoice N°: " + dbInvoice.RecipientNumber, 325, y+20);
                             pdfEngine.AddText("Creation Date: " + dbInvoice.CreationDateTime.ToString("yyyy-MM-dd"), 325, y+40);
 
                             y = 200;
@@ -106,7 +106,7 @@ namespace WorkerServiceApp
                             pdfEngine.AddText("Mobile: " + dbCompany.MobilePhoneNumber, 20, y+20);
                             pdfEngine.AddText("SIRET: " + dbCompany.Siret, 20, y+40);
 
-                            if (dbInvoice.CustomerId != Guid.Empty)
+                            if (dbInvoice.RecipientId != Guid.Empty)
                             {
                                 // TODO: write customer info
                             }
@@ -153,7 +153,7 @@ namespace WorkerServiceApp
                             }
 
                             dbInvoice.FileId = fileId;
-                            dbInvoice.FileName = "Invoice" + dbInvoice.InvoiceNumber + ".pdf";
+                            dbInvoice.FileName = "Invoice " + dbInvoice.RecipientNumber + ".pdf";
                             dbInvoice.FileSize = output.Length;
                             dbInvoice.LockedBy = null;
                             dbInvoice.IsGenerated = true;

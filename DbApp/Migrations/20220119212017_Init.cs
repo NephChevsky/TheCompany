@@ -3,17 +3,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DbApp.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AdditionalFields",
+                name: "AdditionalFieldDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     DataSource = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdditionalFieldDefinitions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdditionalFields",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    SourceId = table.Column<Guid>(nullable: false),
+                    FieldId = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
                     Owner = table.Column<Guid>(nullable: false),
                     Deleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreationDateTime = table.Column<DateTime>(nullable: false),
@@ -51,8 +69,7 @@ namespace DbApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     DataSource = table.Column<string>(nullable: false),
-                    IsLineItem = table.Column<bool>(nullable: false),
-                    Field = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     X = table.Column<int>(nullable: false),
                     Y = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
@@ -128,12 +145,12 @@ namespace DbApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    InvoiceNumber = table.Column<string>(nullable: true),
-                    CustomerNumber = table.Column<string>(nullable: true),
-                    CustomerId = table.Column<Guid>(nullable: false),
-                    CustomerFirstName = table.Column<string>(nullable: true),
-                    CustomerLastName = table.Column<string>(nullable: true),
-                    CustomerAddress = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: true),
+                    RecipientNumber = table.Column<string>(nullable: true),
+                    RecipientId = table.Column<Guid>(nullable: false),
+                    RecipientFirstName = table.Column<string>(nullable: true),
+                    RecipientLastName = table.Column<string>(nullable: true),
+                    RecipientAddress = table.Column<string>(nullable: true),
                     LockedBy = table.Column<string>(nullable: true),
                     FileId = table.Column<Guid>(nullable: false),
                     FileName = table.Column<string>(nullable: true),
@@ -156,28 +173,7 @@ namespace DbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LineItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    InvoiceId = table.Column<Guid>(nullable: false),
-                    Reference = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Quantity = table.Column<double>(nullable: false),
-                    UnitaryPrice = table.Column<double>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    Owner = table.Column<Guid>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
-                    CreationDateTime = table.Column<DateTime>(nullable: false),
-                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LineItems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LineItemsDefinitions",
+                name: "LineItemDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -194,7 +190,63 @@ namespace DbApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LineItemsDefinitions", x => x.Id);
+                    table.PrimaryKey("PK_LineItemDefinitions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LineItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    InvoiceId = table.Column<Guid>(nullable: false),
+                    Reference = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Quantity = table.Column<double>(nullable: false),
+                    Unit = table.Column<string>(nullable: true),
+                    VAT = table.Column<double>(nullable: true),
+                    PriceNoVAT = table.Column<double>(nullable: true),
+                    PriceVAT = table.Column<double>(nullable: true),
+                    TotalPrice = table.Column<double>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Quotes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Number = table.Column<string>(nullable: true),
+                    RecipientNumber = table.Column<string>(nullable: true),
+                    RecipientId = table.Column<Guid>(nullable: false),
+                    RecipientFirstName = table.Column<string>(nullable: true),
+                    RecipientLastName = table.Column<string>(nullable: true),
+                    RecipientAddress = table.Column<string>(nullable: true),
+                    LockedBy = table.Column<string>(nullable: true),
+                    FileId = table.Column<Guid>(nullable: false),
+                    FileName = table.Column<string>(nullable: true),
+                    FileSize = table.Column<long>(nullable: false),
+                    ShouldBeExtracted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsExtracted = table.Column<bool>(nullable: false, defaultValue: false),
+                    ShouldBeGenerated = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsGenerated = table.Column<bool>(nullable: false, defaultValue: false),
+                    GenerationDateTime = table.Column<DateTime>(nullable: false),
+                    ExtractId = table.Column<Guid>(nullable: false),
+                    ExtractDateTime = table.Column<DateTime>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: false),
+                    Deleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreationDateTime = table.Column<DateTime>(nullable: false),
+                    LastModificationDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quotes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,6 +277,9 @@ namespace DbApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AdditionalFieldDefinitions");
+
+            migrationBuilder.DropTable(
                 name: "AdditionalFields");
 
             migrationBuilder.DropTable(
@@ -246,10 +301,13 @@ namespace DbApp.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
+                name: "LineItemDefinitions");
+
+            migrationBuilder.DropTable(
                 name: "LineItems");
 
             migrationBuilder.DropTable(
-                name: "LineItemsDefinitions");
+                name: "Quotes");
 
             migrationBuilder.DropTable(
                 name: "Users");
